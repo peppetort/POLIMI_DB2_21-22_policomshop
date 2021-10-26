@@ -5,6 +5,6 @@
              version="8">
 
     <module id="DB2-project-2021-backend-EJB">
-        <ejb>ejb.jar</ejb>
+        <ejb>DB2-project-2021-backend_EJB.jar</ejb>
     </module>
 </application>
