@@ -22,6 +22,7 @@ public class UserService {
             em.persist(newUsr);
             em.flush();
         }catch (Exception e){
+            //TODO da sistemare non si può lasciare cosi
             System.out.println(e.getMessage());
             return null;
         }
