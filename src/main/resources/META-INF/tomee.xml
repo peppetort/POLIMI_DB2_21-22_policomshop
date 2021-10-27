@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tomee>
- <!--
- TUTTO IL TAG RESOURCE VA INSERITO NEL FILE DI CONFIGURAZIONE DI TOMEE, {tomee installation dir}/conf/tomee.xml
- -->
-<Resource id="db2_project" type="DataSource">
- JdbcDriver org.mariadb.jdbc.Driver
- JdbcUrl jdbc:mariadb://localhost:3306/db2_project
- UserName <!-- SET YOUR USERNAME -->
- Password <!-- SET YOUR PASSWORD -->
-</Resource>
+    <!--
+    TUTTO IL TAG RESOURCE VA INSERITO NEL FILE DI CONFIGURAZIONE DI TOMEE, {tomee installation dir}/conf/tomee.xml
+    -->
+    <Resource id="db2_project" type="DataSource">
+        JdbcDriver com.mysql.cj.jdbc.Driver
+        JdbcUrl jdbc:mysql://localhost:3306/db2_project
+        UserName admin
+        Password admin
+    </Resource>
 </tomee>
