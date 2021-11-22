@@ -7,6 +7,17 @@
                     transaction-type="JTA">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <jta-data-source>db2_project</jta-data-source>
-    <class>entities.User</class>
+    <class>entities.AuditCustomer</class>
+    <class>entities.Customer</class>
+    <class>entities.Employee</class>
+    <class>entities.FixedInternet</class>
+    <class>entities.FixedPhone</class>
+    <class>entities.MobileInternet</class>
+    <class>entities.MobilePhone</class>
+    <class>entities.Order</class>
+    <class>entities.Offer</class>
+    <class>entities.OptionalProduct</class>
+    <class>entities.ServicePackage</class>
+    <class>entities.Service</class>
   </persistence-unit>
 </persistence>
