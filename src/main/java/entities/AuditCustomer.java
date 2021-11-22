@@ -9,6 +9,8 @@ import java.sql.Timestamp;
 public class AuditCustomer implements Serializable {
     private double amount;
     private Timestamp lastRejection;
+
+    //Same Id of the customer and each customer has one and only one entry in AuditCustomer
     @Id
     @OneToOne
     @JoinColumn(name = "id_user")

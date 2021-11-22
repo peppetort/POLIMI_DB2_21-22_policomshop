@@ -21,7 +21,6 @@ public class ServicePackage implements Serializable {
     @JoinTable(name = "service_package_to_service", joinColumns = @JoinColumn(name = "id_package"), inverseJoinColumns = @JoinColumn(name = "id_service"))
     private List<Service> serviceList;
 
-    @Id
     @Column(name = "id")
     public int getId() {
         return id;

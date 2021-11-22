@@ -7,7 +7,6 @@ import java.util.List;
 @Entity
 @Table(name = "optional_product", schema = "db2_project")
 public class OptionalProduct implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -20,7 +19,7 @@ public class OptionalProduct implements Serializable {
     @JoinTable(name = "service_package_to_optional_product", joinColumns = @JoinColumn(name = "id_optional_product"), inverseJoinColumns = @JoinColumn(name = "id_service_package"))
     private List<ServicePackage> servicePackagesList;
 
-    @Id
+
     @Column(name = "id")
     public int getId() {
         return id;

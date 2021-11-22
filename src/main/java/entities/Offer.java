@@ -20,7 +20,6 @@ public class Offer implements Serializable {
             CascadeType.REFRESH})
     private List<Order> orders;
 
-    @Id
     @Column(name = "id")
     public int getId() {
         return id;

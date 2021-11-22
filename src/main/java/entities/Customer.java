@@ -7,7 +7,6 @@ import java.util.List;
 @Entity
 @Table(name = "customer", schema = "db2_project")
 public class Customer implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -18,10 +17,9 @@ public class Customer implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = {CascadeType.PERSIST, CascadeType.REMOVE,
             CascadeType.REFRESH})
     private List<Order> orders;
-    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "customer", orphanRemoval = true)
     private AuditCustomer auditCustomer;
 
-    @Id
     @Column(name = "id")
     public int getId() {
         return id;

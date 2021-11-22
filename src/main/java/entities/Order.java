@@ -2,7 +2,7 @@ package entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -12,10 +12,10 @@ public class Order implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp creationDate;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp startDate;
+    @Temporal(TemporalType.DATE)
+    private Date creationDate;
+    @Temporal(TemporalType.DATE)
+    private Date startDate;
     private double totalMonthlyFee;
     private byte status;
     @ManyToOne
@@ -40,21 +40,21 @@ public class Order implements Serializable {
 
     @Basic
     @Column(name = "creation_date")
-    public Timestamp getCreationDate() {
+    public Date getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Timestamp creationDate) {
+    public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
     }
 
     @Basic
     @Column(name = "start_date")
-    public Timestamp getStartDate() {
+    public Date getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Timestamp startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 

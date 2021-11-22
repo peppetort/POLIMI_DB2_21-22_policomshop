@@ -1,6 +1,6 @@
 package controllers;
 
-import entities.User;
+import entities.Customer;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -51,7 +51,7 @@ public class SignUp extends HttpServlet {
         }
 
 
-        User newUser = usrService.registerNewUser(username, email, password);
+        Customer newUser = usrService.registerNewUser(username, email, password);
         if (newUser == null) {
             ctx.setVariable("errorMsg", "Invalid data, username or password already present");
             templateEngine.process(path, ctx, response.getWriter());

@@ -1,6 +1,6 @@
 package services;
 
-import entities.User;
+import entities.Customer;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -13,8 +13,8 @@ public class UserService {
     public UserService() {
     }
 
-    public User registerNewUser(String usrname, String email, String psw){
-        User newUsr = new User();
+    public Customer registerNewUser(String usrname, String email, String psw){
+        Customer newUsr = new Customer();
         newUsr.setEmail(email);
         newUsr.setPassword(psw);
         newUsr.setUsername(usrname);

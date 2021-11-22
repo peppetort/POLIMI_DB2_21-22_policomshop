@@ -6,7 +6,6 @@ import java.io.Serializable;
 @Entity
 @Table(name = "customer", schema = "db2_project")
 public class Employee implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -14,7 +13,6 @@ public class Employee implements Serializable {
     private String username;
     private String password;
 
-    @Id
     @Column(name = "id")
     public int getId() {
         return id;

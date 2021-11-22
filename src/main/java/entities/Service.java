@@ -24,7 +24,6 @@ public class Service implements Serializable {
     @OneToOne(mappedBy = "service", cascade = CascadeType.ALL, orphanRemoval = true)
     private MobilePhone mobilePhone;
 
-    @Id
     @Column(name = "id")
     public int getId() {
         return id;
