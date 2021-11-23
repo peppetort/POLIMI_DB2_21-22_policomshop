@@ -8,5 +8,10 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <jta-data-source>db2_project</jta-data-source>
     <class>entities.User</class>
+    <properties>
+      <property name="openjpa.ConnectionURL" value="jdbc:mysql://localhost:3306"/>
+      <property name="eclipselink.target-database" value="MySQL4"/>
+    </properties>
+
   </persistence-unit>
 </persistence>
