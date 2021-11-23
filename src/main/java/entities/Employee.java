@@ -8,12 +8,16 @@ import java.io.Serializable;
 public class Employee implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
+    @Column(name = "email")
     private String email;
+    @Column(name = "username")
     private String username;
+    @Column(name = "password")
     private String password;
 
-    @Column(name = "id")
+
     public int getId() {
         return id;
     }
@@ -22,8 +26,7 @@ public class Employee implements Serializable {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "email")
+
     public String getEmail() {
         return email;
     }
@@ -32,8 +35,7 @@ public class Employee implements Serializable {
         this.email = email;
     }
 
-    @Basic
-    @Column(name = "username")
+
     public String getUsername() {
         return username;
     }
@@ -42,8 +44,6 @@ public class Employee implements Serializable {
         this.username = username;
     }
 
-    @Basic
-    @Column(name = "password")
     public String getPassword() {
         return password;
     }

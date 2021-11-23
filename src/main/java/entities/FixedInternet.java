@@ -7,15 +7,16 @@ import java.util.List;
 @Entity
 @Table(name = "fixed_internet", schema = "db2_project")
 public class FixedInternet implements Serializable {
+    @Column(name = "n_gigabytes")
     private int nGigabytes;
+    @Column(name = "fee_gigabytes")
     private double feeGigabytes;
     @Id
     @OneToOne
     @JoinColumn(name = "id_service")
     private Service service;
 
-    @Basic
-    @Column(name = "n_gigabytes")
+    
     public int getnGigabytes() {
         return nGigabytes;
     }
@@ -24,8 +25,6 @@ public class FixedInternet implements Serializable {
         this.nGigabytes = nGigabytes;
     }
 
-    @Basic
-    @Column(name = "fee_gigabytes")
     public double getFeeGigabytes() {
         return feeGigabytes;
     }

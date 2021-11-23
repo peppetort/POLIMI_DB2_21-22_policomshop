@@ -9,8 +9,11 @@ import java.util.List;
 public class OptionalProduct implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
+    @Column(name = "name")
     private String name;
+    @Column(name = "monthly_fee")
     private double monthlyFee;
     @ManyToMany(mappedBy = "optionalProductList")
     @JoinTable(name = "order_to_optional_product", joinColumns = @JoinColumn(name = "id_optional_product"), inverseJoinColumns = @JoinColumn(name = "id_order"))
@@ -20,7 +23,6 @@ public class OptionalProduct implements Serializable {
     private List<ServicePackage> servicePackagesList;
 
 
-    @Column(name = "id")
     public int getId() {
         return id;
     }
@@ -29,8 +31,7 @@ public class OptionalProduct implements Serializable {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "name")
+
     public String getName() {
         return name;
     }
@@ -39,8 +40,7 @@ public class OptionalProduct implements Serializable {
         this.name = name;
     }
 
-    @Basic
-    @Column(name = "monthly_fee")
+
     public double getMonthlyFee() {
         return monthlyFee;
     }

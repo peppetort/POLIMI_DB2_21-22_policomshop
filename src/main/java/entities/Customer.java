@@ -9,10 +9,15 @@ import java.util.List;
 public class Customer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
+    @Column(name = "email")
     private String email;
+    @Column(name = "username")
     private String username;
+    @Column(name = "password")
     private String password;
+    @Column(name = "n_payment_attemps")
     private int nPaymentAttemps;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = {CascadeType.PERSIST, CascadeType.REMOVE,
             CascadeType.REFRESH})
@@ -20,7 +25,7 @@ public class Customer implements Serializable {
     @OneToOne(mappedBy = "customer", orphanRemoval = true)
     private AuditCustomer auditCustomer;
 
-    @Column(name = "id")
+
     public int getId() {
         return id;
     }
@@ -29,8 +34,7 @@ public class Customer implements Serializable {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "email")
+
     public String getEmail() {
         return email;
     }
@@ -39,8 +43,6 @@ public class Customer implements Serializable {
         this.email = email;
     }
 
-    @Basic
-    @Column(name = "username")
     public String getUsername() {
         return username;
     }
@@ -49,8 +51,6 @@ public class Customer implements Serializable {
         this.username = username;
     }
 
-    @Basic
-    @Column(name = "password")
     public String getPassword() {
         return password;
     }
@@ -59,8 +59,6 @@ public class Customer implements Serializable {
         this.password = password;
     }
 
-    @Basic
-    @Column(name = "n_payment_attemps")
     public int getnPaymentAttemps() {
         return nPaymentAttemps;
     }

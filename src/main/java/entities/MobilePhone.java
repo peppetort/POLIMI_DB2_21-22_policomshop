@@ -6,17 +6,21 @@ import java.io.Serializable;
 @Entity
 @Table(name = "mobile_phone", schema = "db2_project")
 public class MobilePhone implements Serializable {
+    @Column(name = "n_minutes")
     private int nMinutes;
+    @Column(name = "fee_minutes")
     private double feeMinutes;
+    @Column(name = "n_sms")
     private int nSms;
+    @Column(name = "fee_sms")
     private double feeSms;
     @Id
     @OneToOne
     @JoinColumn(name = "id_service")
     private Service service;
 
-    @Basic
-    @Column(name = "n_minutes")
+    
+
     public int getnMinutes() {
         return nMinutes;
     }
@@ -25,8 +29,8 @@ public class MobilePhone implements Serializable {
         this.nMinutes = nMinutes;
     }
 
-    @Basic
-    @Column(name = "fee_minutes")
+    
+
     public double getFeeMinutes() {
         return feeMinutes;
     }
@@ -35,8 +39,8 @@ public class MobilePhone implements Serializable {
         this.feeMinutes = feeMinutes;
     }
 
-    @Basic
-    @Column(name = "n_sms")
+    
+
     public int getnSms() {
         return nSms;
     }
@@ -45,8 +49,8 @@ public class MobilePhone implements Serializable {
         this.nSms = nSms;
     }
 
-    @Basic
-    @Column(name = "fee_sms")
+    
+
     public double getFeeSms() {
         return feeSms;
     }

@@ -11,12 +11,17 @@ public class Order implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
     @Temporal(TemporalType.DATE)
+    @Column(name = "creation_date")
     private Date creationDate;
     @Temporal(TemporalType.DATE)
+    @Column(name = "start_date")
     private Date startDate;
+    @Column(name = "total_monthly_fee")
     private double totalMonthlyFee;
+    @Column(name = "status")
     private byte status;
     @ManyToOne
     @JoinColumn(name = "id_user")
@@ -28,8 +33,6 @@ public class Order implements Serializable {
     @JoinTable(name = "order_to_optional_product", joinColumns = @JoinColumn(name = "id_order"), inverseJoinColumns = @JoinColumn(name = "id_optional_product"))
     private List<OptionalProduct> optionalProductList;
 
-    @Id
-    @Column(name = "id")
     public int getId() {
         return id;
     }
@@ -38,8 +41,6 @@ public class Order implements Serializable {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "creation_date")
     public Date getCreationDate() {
         return creationDate;
     }
@@ -48,8 +49,6 @@ public class Order implements Serializable {
         this.creationDate = creationDate;
     }
 
-    @Basic
-    @Column(name = "start_date")
     public Date getStartDate() {
         return startDate;
     }
@@ -58,8 +57,8 @@ public class Order implements Serializable {
         this.startDate = startDate;
     }
 
-    @Basic
-    @Column(name = "total_monthly_fee")
+    
+
     public double getTotalMonthlyFee() {
         return totalMonthlyFee;
     }
@@ -68,8 +67,6 @@ public class Order implements Serializable {
         this.totalMonthlyFee = totalMonthlyFee;
     }
 
-    @Basic
-    @Column(name = "status")
     public byte getStatus() {
         return status;
     }

@@ -9,7 +9,9 @@ import java.util.List;
 public class Service implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
+    @Column(name = "type")
     private String type;
     @ManyToMany(mappedBy = "serviceList")
     @JoinTable(name = "service_package_to_service", joinColumns = @JoinColumn(name = "id_service"), inverseJoinColumns = @JoinColumn(name = "id_package"))
@@ -24,7 +26,7 @@ public class Service implements Serializable {
     @OneToOne(mappedBy = "service", cascade = CascadeType.ALL, orphanRemoval = true)
     private MobilePhone mobilePhone;
 
-    @Column(name = "id")
+
     public int getId() {
         return id;
     }
@@ -33,8 +35,6 @@ public class Service implements Serializable {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "type")
     public String getType() {
         return type;
     }

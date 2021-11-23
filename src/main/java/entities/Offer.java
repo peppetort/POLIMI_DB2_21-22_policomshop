@@ -9,9 +9,13 @@ import java.util.List;
 public class Offer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
+    @Column(name = "validity_period")
     private int validityPeriod;
+    @Column(name = "monthly_fee")
     private double monthlyFee;
+    @Column(name = "is_active")
     private byte isActive;
     @ManyToOne
     @JoinColumn(name = "id_package")
@@ -20,7 +24,7 @@ public class Offer implements Serializable {
             CascadeType.REFRESH})
     private List<Order> orders;
 
-    @Column(name = "id")
+
     public int getId() {
         return id;
     }
@@ -29,8 +33,8 @@ public class Offer implements Serializable {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "validity_period")
+    
+
     public int getValidityPeriod() {
         return validityPeriod;
     }
@@ -39,8 +43,8 @@ public class Offer implements Serializable {
         this.validityPeriod = validityPeriod;
     }
 
-    @Basic
-    @Column(name = "monthly_fee")
+    
+
     public double getMonthlyFee() {
         return monthlyFee;
     }
@@ -49,8 +53,8 @@ public class Offer implements Serializable {
         this.monthlyFee = monthlyFee;
     }
 
-    @Basic
-    @Column(name = "is_active")
+    
+
     public byte getIsActive() {
         return isActive;
     }

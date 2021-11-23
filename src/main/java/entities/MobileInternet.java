@@ -6,15 +6,17 @@ import java.io.Serializable;
 @Entity
 @Table(name = "mobile_internet", schema = "db2_project")
 public class MobileInternet implements Serializable {
+    @Column(name = "n_gigabytes")
     private int nGigabytes;
+    @Column(name = "fee_gigabytes")
     private double feeGigabytes;
     @Id
     @OneToOne
     @JoinColumn(name = "id_service")
     private Service service;
 
-    @Basic
-    @Column(name = "n_gigabytes")
+    
+
     public int getnGigabytes() {
         return nGigabytes;
     }
@@ -23,8 +25,8 @@ public class MobileInternet implements Serializable {
         this.nGigabytes = nGigabytes;
     }
 
-    @Basic
-    @Column(name = "fee_gigabytes")
+    
+
     public double getFeeGigabytes() {
         return feeGigabytes;
     }

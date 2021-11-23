@@ -9,7 +9,9 @@ import java.util.List;
 public class ServicePackage implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
+    @Column(name = "name")
     private String name;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "servicePackage", cascade = {CascadeType.PERSIST, CascadeType.REMOVE,
             CascadeType.REFRESH})
@@ -21,7 +23,7 @@ public class ServicePackage implements Serializable {
     @JoinTable(name = "service_package_to_service", joinColumns = @JoinColumn(name = "id_package"), inverseJoinColumns = @JoinColumn(name = "id_service"))
     private List<Service> serviceList;
 
-    @Column(name = "id")
+
     public int getId() {
         return id;
     }
@@ -30,8 +32,7 @@ public class ServicePackage implements Serializable {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "name")
+
     public String getName() {
         return name;
     }

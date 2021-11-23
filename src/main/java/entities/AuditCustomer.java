@@ -7,7 +7,9 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "audit_customer", schema = "db2_project")
 public class AuditCustomer implements Serializable {
+    @Column(name = "amount")
     private double amount;
+    @Column(name = "last_rejection")
     private Timestamp lastRejection;
 
     //Same Id of the customer and each customer has one and only one entry in AuditCustomer
@@ -16,8 +18,6 @@ public class AuditCustomer implements Serializable {
     @JoinColumn(name = "id_user")
     private Customer customer;
 
-    @Basic
-    @Column(name = "amount")
     public double getAmount() {
         return amount;
     }
@@ -26,8 +26,7 @@ public class AuditCustomer implements Serializable {
         this.amount = amount;
     }
 
-    @Basic
-    @Column(name = "last_rejection")
+
     public Timestamp getLastRejection() {
         return lastRejection;
     }
