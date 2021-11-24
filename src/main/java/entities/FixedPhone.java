@@ -5,17 +5,12 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "fixed_phone", schema = "db2_project")
-public class FixedPhone implements Serializable {
+@DiscriminatorValue("2")
+public class FixedPhone extends Service implements Serializable {
     @Column(name = "n_gigabytes")
     private int nGigabytes;
     @Column(name = "fee_gigabytes")
     private double feeGigabytes;
-    @Id
-    @OneToOne
-    @JoinColumn(name = "id_service")
-    private Service service;
-
-    
 
     public int getnGigabytes() {
         return nGigabytes;
@@ -24,8 +19,6 @@ public class FixedPhone implements Serializable {
     public void setnGigabytes(int nGigabytes) {
         this.nGigabytes = nGigabytes;
     }
-
-    
 
     public double getFeeGigabytes() {
         return feeGigabytes;
