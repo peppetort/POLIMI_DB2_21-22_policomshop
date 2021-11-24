@@ -9,22 +9,22 @@ import java.util.Objects;
 @Table(name = "service", schema = "db2_project")
 @Inheritance(strategy=InheritanceType.JOINED)
 @DiscriminatorColumn(name="type", discriminatorType=DiscriminatorType.INTEGER)
-public class Service implements Serializable {
+public abstract class Service implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Long id;
     @Column(name = "type")
     private String type;
     @ManyToMany(mappedBy = "serviceList")
     @JoinTable(name = "service_package_to_service", joinColumns = @JoinColumn(name = "id_service"), inverseJoinColumns = @JoinColumn(name = "id_package"))
     private List<ServicePackage> servicePackagesList;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -47,8 +47,6 @@ public class Service implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        return result;
+        return Objects.hash(id, type, servicePackagesList);
     }
 }
