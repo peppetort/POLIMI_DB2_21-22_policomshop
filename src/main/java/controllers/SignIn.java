@@ -1,6 +1,8 @@
 package controllers;
 
 import entities.Customer;
+import entities.Employee;
+import exception.UserNotFound;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -23,6 +25,8 @@ public class SignIn extends HttpServlet {
     @EJB(beanName = "UserService")
     UserService userService;
 
+    Customer customer = null;
+    Employee employee = null;
     @Override
     public void init() {
         ServletContext servletContext = getServletContext();
@@ -34,25 +38,31 @@ public class SignIn extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String email = request.getParameter("email"), //email is the id of the field in the form
-                pwd = request.getParameter("password"); //same as above
-
+                pwd = request.getParameter("password"), //same as above
+                role = request.getParameter("employee_role");
         if (email == null || email.isEmpty() ||
                 pwd == null || pwd.isEmpty()) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
 
-        Customer customer = userService.checkCredentialsCustomer(email, pwd);
-
-        if (customer == null) {
+        try {
+            String servlet;
+            if (role == null) {
+                customer = userService.checkCredentialsCustomer(email, pwd);
+                servlet = "UserHomePage";
+                request.getSession().setAttribute("user", customer);
+            } else {
+                employee = userService.checkCredentialsEmployee(email, pwd);
+                servlet = "EmployeeHomePage";
+                request.getSession().setAttribute("user", employee);
+            }
+            response.sendRedirect(servlet);
+        }catch (UserNotFound e) {
             final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
             ctx.setVariable("errorMsg", "Invalid Credentials");
             String path = "index";
             templateEngine.process(path, ctx, response.getWriter());
-            return;
         }
-        request.getSession().setAttribute("user", customer);
-        String servlet = "UserHomePage";
-        response.sendRedirect(servlet);
     }
 }

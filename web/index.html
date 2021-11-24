@@ -10,27 +10,29 @@
     <title>SignIn</title>
 </head>
 <body>
-<div class="row mt-5 justify-content-center">
-    <div class="col-5 mx-5">
-        <form action="SignIn" method="post">
-            <div class="row mb-3 mt-3">
-                <label for="email" class="col-sm-2 col-form-label">Email</label>
-                <div class="col-sm-10">
-                    <input type="email" class="form-control" id="email" name="email">
+
+    <div class="row mt-5 justify-content-center">
+        <div class="col-5 mx-5">
+            <form action="SignIn" method="post">
+                <div class="form-group">
+                    <label for="email">Email address</label>
+                    <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" name="email">
+                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
                 </div>
-            </div>
-            <div class="row mb-3">
-                <label for="password" class="col-sm-2 col-form-label">Password</label>
-                <div class="col-sm-10">
-                    <input type="password" class="form-control" id="password" name="password">
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" placeholder="Password" name="password">
                 </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Sign in</button>
-        </form>
-        <p class="mt-3">You're not registered?
-            <a href="SignUp" >Click here to Sign Up</a></p>
-        <p class = "text-danger" th:text="${errorMsg}"></p>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="employee" name="employee_role">
+                    <label class="form-check-label" for="employee">I am an employee</label>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            <p class="mt-3">You're not registered?
+                <a href="SignUp" >Click here to Sign Up</a></p>
+            <p class = "text-danger" th:text="${errorMsg}"></p>
+        </div>
     </div>
-</div>
 </body>
 </html>
