@@ -3,6 +3,7 @@ package entities;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "optional_product", schema = "db2_project")
@@ -58,9 +59,7 @@ public class OptionalProduct implements Serializable {
 
         if (id != that.id) return false;
         if (Double.compare(that.monthlyFee, monthlyFee) != 0) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-
-        return true;
+        return Objects.equals(name, that.name);
     }
 
     @Override

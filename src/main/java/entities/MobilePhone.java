@@ -6,7 +6,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "mobile_phone", schema = "db2_project")
 @DiscriminatorValue("4")
-public class MobilePhone extends Service implements Serializable {
+public class MobilePhone extends Service {
     @Column(name = "n_minutes")
     private int nMinutes;
     @Column(name = "fee_minutes")

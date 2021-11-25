@@ -6,7 +6,8 @@ import java.util.Objects;
 
 @MappedSuperclass
 @Inheritance(strategy= InheritanceType.TABLE_PER_CLASS)
-public abstract class User implements Serializable {
+public abstract class
+User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

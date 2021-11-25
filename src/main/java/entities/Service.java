@@ -8,7 +8,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "service", schema = "db2_project")
 @Inheritance(strategy=InheritanceType.JOINED)
-@DiscriminatorColumn(name="type", discriminatorType=DiscriminatorType.INTEGER)
+@DiscriminatorColumn(name="type", discriminatorType=DiscriminatorType.INTEGER, columnDefinition = "TINYINT(1)")
 public abstract class Service implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,7 +41,7 @@ public abstract class Service implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Service service = (Service) o;
-        if (id != service.id) return false;
+        if (!Objects.equals(id, service.id)) return false;
         return Objects.equals(type, service.type);
     }
 

@@ -6,7 +6,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "mobile_internet", schema = "db2_project")
 @DiscriminatorValue("3")
-public class MobileInternet extends Service implements Serializable {
+public class MobileInternet extends Service {
     @Column(name = "n_gigabytes")
     private int nGigabytes;
     @Column(name = "fee_gigabytes")

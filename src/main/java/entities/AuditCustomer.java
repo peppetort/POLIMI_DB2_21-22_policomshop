@@ -6,17 +6,12 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "audit_customer", schema = "db2_project")
-public class AuditCustomer implements Serializable {
+@DiscriminatorValue("1")
+public class AuditCustomer extends Customer {
     @Column(name = "amount")
     private double amount;
     @Column(name = "last_rejection")
     private Timestamp lastRejection;
-
-    //Same Id of the customer and each customer has one and only one entry in AuditCustomer
-    @Id
-    @OneToOne
-    @JoinColumn(name = "id_user")
-    private Customer customer;
 
     public double getAmount() {
         return amount;

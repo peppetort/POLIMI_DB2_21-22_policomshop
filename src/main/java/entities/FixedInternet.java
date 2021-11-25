@@ -7,7 +7,7 @@ import java.util.List;
 @Entity
 @Table(name = "fixed_internet", schema = "db2_project")
 @DiscriminatorValue("1")
-public class FixedInternet extends Service implements Serializable {
+public class FixedInternet extends Service {
     @Column(name = "n_gigabytes")
     private int nGigabytes;
     @Column(name = "fee_gigabytes")

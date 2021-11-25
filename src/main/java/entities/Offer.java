@@ -24,7 +24,6 @@ public class Offer implements Serializable {
             CascadeType.REFRESH})
     private List<Order> orders;
 
-
     public int getId() {
         return id;
     }
@@ -32,8 +31,6 @@ public class Offer implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
-
-    
 
     public int getValidityPeriod() {
         return validityPeriod;
@@ -43,8 +40,6 @@ public class Offer implements Serializable {
         this.validityPeriod = validityPeriod;
     }
 
-    
-
     public double getMonthlyFee() {
         return monthlyFee;
     }
@@ -52,8 +47,6 @@ public class Offer implements Serializable {
     public void setMonthlyFee(double monthlyFee) {
         this.monthlyFee = monthlyFee;
     }
-
-    
 
     public byte getIsActive() {
         return isActive;
@@ -73,9 +66,7 @@ public class Offer implements Serializable {
         if (id != offer.id) return false;
         if (validityPeriod != offer.validityPeriod) return false;
         if (Double.compare(offer.monthlyFee, monthlyFee) != 0) return false;
-        if (isActive != offer.isActive) return false;
-
-        return true;
+        return isActive == offer.isActive;
     }
 
     @Override

@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "order", schema = "db2_project")
@@ -85,10 +86,8 @@ public class Order implements Serializable {
         if (id != order.id) return false;
         if (Double.compare(order.totalMonthlyFee, totalMonthlyFee) != 0) return false;
         if (status != order.status) return false;
-        if (creationDate != null ? !creationDate.equals(order.creationDate) : order.creationDate != null) return false;
-        if (startDate != null ? !startDate.equals(order.startDate) : order.startDate != null) return false;
-
-        return true;
+        if (!Objects.equals(creationDate, order.creationDate)) return false;
+        return Objects.equals(startDate, order.startDate);
     }
 
     @Override
