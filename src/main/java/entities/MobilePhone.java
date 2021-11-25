@@ -5,7 +5,8 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "mobile_phone", schema = "db2_project")
-public class MobilePhone implements Serializable {
+@DiscriminatorValue("4")
+public class MobilePhone extends Service {
     @Column(name = "n_minutes")
     private int nMinutes;
     @Column(name = "fee_minutes")
@@ -14,12 +15,6 @@ public class MobilePhone implements Serializable {
     private int nSms;
     @Column(name = "fee_sms")
     private double feeSms;
-    @Id
-    @OneToOne
-    @JoinColumn(name = "id_service")
-    private Service service;
-
-    
 
     public int getnMinutes() {
         return nMinutes;
@@ -29,8 +24,6 @@ public class MobilePhone implements Serializable {
         this.nMinutes = nMinutes;
     }
 
-    
-
     public double getFeeMinutes() {
         return feeMinutes;
     }
@@ -39,8 +32,6 @@ public class MobilePhone implements Serializable {
         this.feeMinutes = feeMinutes;
     }
 
-    
-
     public int getnSms() {
         return nSms;
     }
@@ -48,8 +39,6 @@ public class MobilePhone implements Serializable {
     public void setnSms(int nSms) {
         this.nSms = nSms;
     }
-
-    
 
     public double getFeeSms() {
         return feeSms;

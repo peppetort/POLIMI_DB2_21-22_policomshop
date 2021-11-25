@@ -6,17 +6,12 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "audit_customer", schema = "db2_project")
-public class AuditCustomer implements Serializable {
+@DiscriminatorValue("1")
+public class AuditCustomer extends Customer {
     @Column(name = "amount")
     private double amount;
     @Column(name = "last_rejection")
     private Timestamp lastRejection;
-
-    //Same Id of the customer and each customer has one and only one entry in AuditCustomer
-    @Id
-    @OneToOne
-    @JoinColumn(name = "id_user")
-    private Customer customer;
 
     public double getAmount() {
         return amount;
@@ -26,7 +21,6 @@ public class AuditCustomer implements Serializable {
         this.amount = amount;
     }
 
-
     public Timestamp getLastRejection() {
         return lastRejection;
     }
@@ -35,27 +29,4 @@ public class AuditCustomer implements Serializable {
         this.lastRejection = lastRejection;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        AuditCustomer that = (AuditCustomer) o;
-
-        if (Double.compare(that.amount, amount) != 0) return false;
-        if (lastRejection != null ? !lastRejection.equals(that.lastRejection) : that.lastRejection != null)
-            return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result;
-        long temp;
-        temp = Double.doubleToLongBits(amount);
-        result = (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (lastRejection != null ? lastRejection.hashCode() : 0);
-        return result;
-    }
 }

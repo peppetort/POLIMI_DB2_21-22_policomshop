@@ -3,35 +3,28 @@ package entities;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "service", schema = "db2_project")
-public class Service implements Serializable {
+@Inheritance(strategy=InheritanceType.JOINED)
+@DiscriminatorColumn(name="type", discriminatorType=DiscriminatorType.INTEGER, columnDefinition = "TINYINT(1)")
+public abstract class Service implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Long id;
     @Column(name = "type")
     private String type;
     @ManyToMany(mappedBy = "serviceList")
     @JoinTable(name = "service_package_to_service", joinColumns = @JoinColumn(name = "id_service"), inverseJoinColumns = @JoinColumn(name = "id_package"))
     private List<ServicePackage> servicePackagesList;
-    //TODO: rivedere. non sono sicuro sia il modo corretto
-    @OneToOne(mappedBy = "service", cascade = CascadeType.ALL, orphanRemoval = true)
-    private FixedInternet fixedInternet;
-    @OneToOne(mappedBy = "service", cascade = CascadeType.ALL, orphanRemoval = true)
-    private FixedPhone fixedPhone;
-    @OneToOne(mappedBy = "service", cascade = CascadeType.ALL, orphanRemoval = true)
-    private MobileInternet mobileInternet;
-    @OneToOne(mappedBy = "service", cascade = CascadeType.ALL, orphanRemoval = true)
-    private MobilePhone mobilePhone;
 
-
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -47,19 +40,13 @@ public class Service implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Service service = (Service) o;
-
-        if (id != service.id) return false;
-        if (type != null ? !type.equals(service.type) : service.type != null) return false;
-
-        return true;
+        if (!Objects.equals(id, service.id)) return false;
+        return Objects.equals(type, service.type);
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        return result;
+        return Objects.hash(id, type, servicePackagesList);
     }
 }
