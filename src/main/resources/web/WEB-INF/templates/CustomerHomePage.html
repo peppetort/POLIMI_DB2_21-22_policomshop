@@ -30,7 +30,7 @@
                 <th th:text="${offer.validityPeriod}"></th>
                 <th th:text="${offer.monthlyFee}"></th>
                 <th>
-                    <button type="button" class="btn btn-primary">$$$</button>
+                    <a th:href="@{/BuyOffer(id_offer=${offer.id})}" type="button" class="btn btn-primary">$$$</a>
                 </th>
             </tr>
             </tbody>
