@@ -57,7 +57,7 @@ public class SignUp extends HttpServlet {
             templateEngine.process(path, ctx, response.getWriter());
             return;
         }
-        response.sendRedirect("index.html");
+        response.sendRedirect("SignInPage.html");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

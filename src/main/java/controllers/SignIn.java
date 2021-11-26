@@ -59,7 +59,7 @@ public class SignIn extends HttpServlet {
         }catch (UserNotFound e) {
             final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
             ctx.setVariable("errorMsg", "Invalid Credentials");
-            String path = "index";
+            String path = "/WEB-INF/templates/SignInPage.html";
             templateEngine.process(path, ctx, response.getWriter());
         }
     }
