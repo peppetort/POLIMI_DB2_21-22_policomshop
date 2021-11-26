@@ -19,7 +19,7 @@ public class PackageService {
 
     public List<Offer> getAvailableOffer() {
         List<Offer> availableOffer;
-        availableOffer = em.createQuery("SELECT o FROM Offer o WHERE o.isActive = 1", Offer.class).getResultList();
+        availableOffer = em.createQuery("SELECT o FROM Offer o WHERE o.active = true", Offer.class).getResultList();
         return availableOffer;
     }
 
