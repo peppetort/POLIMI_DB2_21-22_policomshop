@@ -23,13 +23,13 @@ DROP TABLE IF EXISTS `mobile_phone`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `mobile_phone` (
-  `id_service` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `n_minutes` int(11) NOT NULL,
   `fee_minutes` double NOT NULL,
   `n_sms` int(11) NOT NULL,
   `fee_sms` double NOT NULL,
-  KEY `fk_mobile_phone_1_idx` (`id_service`),
-  CONSTRAINT `fk_mobile_phone_1` FOREIGN KEY (`id_service`) REFERENCES `service` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
+  KEY `fk_mobile_phone_1_idx` (`id`),
+  CONSTRAINT `fk_mobile_phone_1` FOREIGN KEY (`id`) REFERENCES `service` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -51,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-11-26 14:30:39
+-- Dump completed on 2021-11-26 18:35:35
