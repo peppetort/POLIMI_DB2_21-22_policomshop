@@ -14,7 +14,7 @@ import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "GetCustomerHome", value = "/GetCustomerHome")
+@WebServlet(name = "GetCustomerHome", value = "")
 public class GetCustomerHome extends HttpServlet {
 
     private final TemplateEngine templateEngine = new TemplateEngine();
@@ -35,7 +35,7 @@ public class GetCustomerHome extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Offer> offerList = packageService.getAvailableOffer();
 
-        String path = "/WEB-INF/templates/CustomerHome.html";
+        String path = "/WEB-INF/templates/CustomerHomePage.html";
         final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
         ctx.setVariable("offerList", offerList);
         templateEngine.process(path, ctx, response.getWriter());
