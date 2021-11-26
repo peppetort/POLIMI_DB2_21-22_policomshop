@@ -56,6 +56,10 @@ public class Offer implements Serializable {
         this.isActive = isActive;
     }
 
+    public ServicePackage getServicePackage(){
+        return servicePackage;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
