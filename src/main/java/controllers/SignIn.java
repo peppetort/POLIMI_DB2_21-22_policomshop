@@ -25,8 +25,6 @@ public class SignIn extends HttpServlet {
     @EJB(beanName = "UserService")
     UserService userService;
 
-    Customer customer = null;
-    Employee employee = null;
     @Override
     public void init() {
         ServletContext servletContext = getServletContext();
@@ -49,11 +47,11 @@ public class SignIn extends HttpServlet {
         try {
             String servlet;
             if (role == null) {
-                customer = userService.checkCredentialsCustomer(email, pwd);
+                Customer customer = userService.checkCredentialsCustomer(email, pwd);
                 servlet = "UserHomePage";
                 request.getSession().setAttribute("user", customer);
             } else {
-                employee = userService.checkCredentialsEmployee(email, pwd);
+                Employee employee = userService.checkCredentialsEmployee(email, pwd);
                 servlet = "EmployeeHomePage";
                 request.getSession().setAttribute("user", employee);
             }
