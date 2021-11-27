@@ -11,6 +11,7 @@ import services.UserService;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -34,6 +35,14 @@ public class SignIn extends HttpServlet {
         templateEngine.setTemplateResolver(templateResolver);
     }
 
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
+        String path = "/WEB-INF/templates/SignInPage.html";
+        templateEngine.process(path, ctx, response.getWriter());
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String email = request.getParameter("email"), //email is the id of the field in the form
                 pwd = request.getParameter("password"), //same as above
