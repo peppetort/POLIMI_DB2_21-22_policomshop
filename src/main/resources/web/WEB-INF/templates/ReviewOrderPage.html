@@ -31,7 +31,8 @@
         </div>
     </div>
 </div>
-<a class="btn btn-primary" th:href="@{/Payment}">Go to Payment</a>
+<a class="btn btn-primary" th:href="@{/Payment}" th:if="${isLoggedIn}">Go to Payment</a>
+<a class="btn btn-primary" th:href="@{/SignIn(paymentInProgress=true)}" th:unless="${isLoggedIn}">SignIn</a>
 <a class="btn btn-secondary" th:href="@{/CustomizeOrder}">Go to customize order</a>
 </body>
 </html>

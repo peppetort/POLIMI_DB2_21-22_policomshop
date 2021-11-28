@@ -1,5 +1,6 @@
 package controllers;
 
+import entities.Customer;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -16,6 +17,7 @@ import javax.ws.rs.BadRequestException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @WebServlet(name = "CustomizeOrder", value = "/CustomizeOrder")
 public class CustomizeOrder extends HttpServlet {
@@ -47,7 +49,8 @@ public class CustomizeOrder extends HttpServlet {
                 int newId = Integer.parseInt(idOffer);
                 if (buyService.getOrder() == null ||
                         (buyService.getOrder().getOffer() != null && buyService.getOrder().getOffer().getId() != newId)) {
-                    buyService.init();
+                    //TODO per far funionare questa cosa bisogna implmentare un filtro di accesso, a questa pagina non possono accedere gli employee
+                    buyService.init((Customer) request.getSession().getAttribute("user"));
                     buyService.setOffer(newId);
                 }
             }
@@ -64,7 +67,7 @@ public class CustomizeOrder extends HttpServlet {
         try {
             if (startDateString == null || startDateString.isEmpty())
                 throw new BadRequestException("Selezionare un valore valido per Start Date!");
-            java.util.Date d = new SimpleDateFormat("yyyy-MM-dd").parse(startDateString);
+            Date d = new SimpleDateFormat("yyyy-MM-dd").parse(startDateString);
             if (d.after(new java.util.Date()))
                 buyService.setStartDate(d);
             else {
@@ -75,8 +78,8 @@ public class CustomizeOrder extends HttpServlet {
                     buyService.addOptionalProduct(Integer.parseInt(opId));
                 }
             }
-            if (buyService.isCorrectFilled()) response.sendRedirect("ReviewOrder");
-            else renderPage(request, response, null);
+            if (buyService.isCorrectFilled(false)) response.sendRedirect("ReviewOrder");
+            else renderPage(request, response, "Your order is not correct filled, sorry");
         } catch (BadRequestException | NumberFormatException | IllegalAccessException | ParseException e) {
             renderPage(request, response, e.getMessage());
         }

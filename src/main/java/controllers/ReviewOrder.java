@@ -33,13 +33,11 @@ public class ReviewOrder extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String path = "/WEB-INF/templates/ReviewOrderPage";
+        //TODO ma quando viene tolto??
+        request.getSession().setAttribute("paymentInProgress", true);
         final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
+        ctx.setVariable("isLoggedIn", request.getSession().getAttribute("user") != null);
         ctx.setVariable("order", buyService.getOrder());
-        templateEngine.process(path, ctx, response.getWriter());
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+        templateEngine.process("/WEB-INF/templates/ReviewOrderPage", ctx, response.getWriter());
     }
 }

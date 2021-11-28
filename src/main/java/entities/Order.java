@@ -3,10 +3,7 @@ package entities;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "order", schema = "db2_project")
@@ -27,17 +24,21 @@ public class Order implements Serializable {
     @Column(name = "status")
     private State status = State.CREATED;
     @ManyToOne
-    @JoinColumn(name = "id_user")
+    @JoinColumn(name = "id_user", nullable = false)
     private Customer customer;
     @ManyToOne
-    @JoinColumn(name = "id_offer")
+    @JoinColumn(name = "id_offer", nullable = false)
     private Offer offer;
     @ManyToMany
     @JoinTable(name = "order_to_optional_product", joinColumns = @JoinColumn(name = "id_order"), inverseJoinColumns = @JoinColumn(name = "id_optional_product"))
     private List<OptionalProduct> optionalProductList;
 
-    public Order() {
+    public Order(Customer customer) {
+        this.customer = customer;
         optionalProductList = new ArrayList<>();
+    }
+
+    public Order() {
     }
 
     public int getId() {
@@ -65,6 +66,10 @@ public class Order implements Serializable {
         this.startDate = startDate;
     }
 
+    public void setStatus(State status) {
+        this.status = status;
+    }
+
     public void setTotalMonthlyFee(double totalMonthlyFee) {
         this.totalMonthlyFee = totalMonthlyFee;
     }
@@ -77,12 +82,22 @@ public class Order implements Serializable {
         this.offer = offer;
     }
 
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        if (this.customer != null) throw new IllegalArgumentException();
+        this.customer = customer;
+    }
+
     public List<OptionalProduct> getOptionalProductList() {
         return optionalProductList;
     }
 
-    public boolean isCorrectFilled() {
-        return creationDate != null && startDate != null && startDate.after(new Date()) && offer != null;
+    public boolean isCorrectFilled(boolean userIsImportant) {
+        boolean flag = creationDate != null && startDate != null && startDate.after(new Date()) && offer != null;
+        return flag && (!userIsImportant || customer != null);
     }
 
     @Override
@@ -99,8 +114,31 @@ public class Order implements Serializable {
     }
 
     public enum State {
-        CREATED,
-        PAYED,
-        PAYMENT_FAILED
+        CREATED(0),
+        PAID(1),
+        PAYMENT_FAILED(2);
+        int idDB;
+
+        State(int idDB) {
+            this.idDB = idDB;
+        }
+
+        public int getIdDB() {
+            return idDB;
+        }
+    }
+
+    @Converter(autoApply = true)
+    public static class StateConverter implements AttributeConverter<State, Integer> {
+
+        @Override
+        public Integer convertToDatabaseColumn(State state) {
+            return state.getIdDB();
+        }
+
+        @Override
+        public State convertToEntityAttribute(Integer integer) {
+            return Arrays.stream(State.values()).filter(x -> x.getIdDB() == integer).toList().get(0);
+        }
     }
 }

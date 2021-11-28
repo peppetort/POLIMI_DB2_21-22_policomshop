@@ -21,6 +21,7 @@
     <class>entities.Service</class>
     <properties>
       <property name="eclipselink.logging.level" value="INFO"/>
+      <property name="eclipselink.target-database" value="MySQL4"/>
     </properties>
   </persistence-unit>
 </persistence>

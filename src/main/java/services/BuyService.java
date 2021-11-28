@@ -1,5 +1,6 @@
 package services;
 
+import entities.Customer;
 import entities.Offer;
 import entities.OptionalProduct;
 import entities.Order;
@@ -10,11 +11,9 @@ import javax.enterprise.context.SessionScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
+import javax.ws.rs.BadRequestException;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Http Session is a perfect storage place where all request from same web client have access
@@ -33,12 +32,18 @@ public class BuyService implements Serializable {
     private EntityManager em;
     private Order order;
 
+    public void init(Customer customer) {
+        order = new Order(customer);
+        order.setCreationDate(new Date());
+        order.setTotalMonthlyFee(0);
+        optionalProductBooleanMap.clear();
+    }
+
     public void setOffer(int id) throws IllegalAccessException {
         Offer se = em.find(Offer.class, id);
         if (se == null || !se.isActive()) throw new IllegalAccessException();
         if (se.equals(order.getOffer())) return;
         order.setOffer(se);
-        optionalProductBooleanMap.clear();
         for (OptionalProduct o : order.getOffer().getServicePackage().getOptionalProductList()) {
             optionalProductBooleanMap.put(o, Boolean.FALSE);
         }
@@ -76,22 +81,32 @@ public class BuyService implements Serializable {
     }
 
     public Order getOrder() {
-        if(order != null) order.setTotalMonthlyFee(evaluateMonthlyFee());
+        if (order != null) order.setTotalMonthlyFee(evaluateMonthlyFee());
         return order;
     }
 
-    public boolean isCorrectFilled() {
-        return order.isCorrectFilled();
+    public boolean isCorrectFilled(boolean userIsImportant) {
+        return order.isCorrectFilled(userIsImportant);
     }
 
-    public void init() {
-        order = new Order();
-        order.setCreationDate(new Date());
-        order.setTotalMonthlyFee(evaluateMonthlyFee());
+    public boolean executePayment() {
+        if (!order.isCorrectFilled(true))
+            throw new BadRequestException("Non sei loggato / Il tuo utente non è legato all'ordine");
+        boolean flag = randomPayment();
+        if (flag) {
+            order.setStatus(Order.State.PAID);
+        } else {
+            order.setStatus(Order.State.PAYMENT_FAILED);
+        }
+        em.persist(order);
+        return flag;
+    }
+
+    private boolean randomPayment() {
+        return new Random().nextBoolean();
     }
 
     @Remove
     public void checkout() {
-        //TODO incoming...
     }
 }
