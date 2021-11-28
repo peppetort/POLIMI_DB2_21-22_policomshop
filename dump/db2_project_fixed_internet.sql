@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `fixed_internet`;
 CREATE TABLE `fixed_internet` (
   `id` int(11) NOT NULL,
   `n_gigabytes` int(11) NOT NULL,
-  `fee_gigabytes` double NOT NULL,
+  `fee` double NOT NULL,
   KEY `fk_fixed_internet_1_idx` (`id`),
   CONSTRAINT `fk_fixed_internet_1` FOREIGN KEY (`id`) REFERENCES `service` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -37,6 +37,7 @@ CREATE TABLE `fixed_internet` (
 
 LOCK TABLES `fixed_internet` WRITE;
 /*!40000 ALTER TABLE `fixed_internet` DISABLE KEYS */;
+INSERT INTO `fixed_internet` VALUES (1,21,14.3);
 /*!40000 ALTER TABLE `fixed_internet` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -49,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-11-26 18:35:35
+-- Dump completed on 2021-11-28 12:25:31

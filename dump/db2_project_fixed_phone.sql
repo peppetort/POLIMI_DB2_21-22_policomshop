@@ -24,8 +24,8 @@ DROP TABLE IF EXISTS `fixed_phone`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `fixed_phone` (
   `id` int(11) NOT NULL,
-  `n_gigabytes` int(11) NOT NULL,
-  `fee_gigabytes` double NOT NULL,
+  `n_minutes` int(11) NOT NULL,
+  `fee` double NOT NULL,
   KEY `fk_fixed_phone_1_idx` (`id`),
   CONSTRAINT `fk_fixed_phone_1` FOREIGN KEY (`id`) REFERENCES `service` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -49,4 +49,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-11-26 18:35:35
+-- Dump completed on 2021-11-28 12:25:31
