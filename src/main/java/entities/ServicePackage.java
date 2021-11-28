@@ -42,6 +42,14 @@ public class ServicePackage implements Serializable {
         this.name = name;
     }
 
+    public List<OptionalProduct> getOptionalProductList() {
+        return optionalProductList;
+    }
+
+    public List<Service> getServiceList() {
+        return serviceList;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

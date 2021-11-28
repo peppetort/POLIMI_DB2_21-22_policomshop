@@ -1,31 +1,34 @@
 package entities;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "fixed_phone", schema = "db2_project")
 @DiscriminatorValue("2")
 public class FixedPhone extends Service {
-    @Column(name = "n_gigabytes")
-    private int nGigabytes;
-    @Column(name = "fee_gigabytes")
-    private double feeGigabytes;
+    @Column(name = "n_minutes")
+    private int nMinutes;
+    @Column(name = "fee")
+    private double fee;
 
-    public int getnGigabytes() {
-        return nGigabytes;
+    public int getnMinutes() {
+        return nMinutes;
     }
 
-    public void setnGigabytes(int nGigabytes) {
-        this.nGigabytes = nGigabytes;
+    public void setnMinutes(int nMinutes) {
+        this.nMinutes = nMinutes;
     }
 
-    public double getFeeGigabytes() {
-        return feeGigabytes;
+    public double getFee() {
+        return fee;
     }
 
-    public void setFeeGigabytes(double feeGigabytes) {
-        this.feeGigabytes = feeGigabytes;
+    @Override
+    public String getHTMLFields() {
+        return "<li>" + "Number of minutes: " + nMinutes + "</li>" + "<li>" + "Fee" + fee + "</li>";
     }
 
     @Override
@@ -35,18 +38,16 @@ public class FixedPhone extends Service {
 
         FixedPhone that = (FixedPhone) o;
 
-        if (nGigabytes != that.nGigabytes) return false;
-        if (Double.compare(that.feeGigabytes, feeGigabytes) != 0) return false;
-
-        return true;
+        if (nMinutes != that.nMinutes) return false;
+        return Double.compare(that.fee, fee) == 0;
     }
 
     @Override
     public int hashCode() {
         int result;
         long temp;
-        result = nGigabytes;
-        temp = Double.doubleToLongBits(feeGigabytes);
+        result = nMinutes;
+        temp = Double.doubleToLongBits(fee);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }

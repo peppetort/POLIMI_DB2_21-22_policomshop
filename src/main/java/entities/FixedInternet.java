@@ -1,8 +1,9 @@
 package entities;
 
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "fixed_internet", schema = "db2_project")
@@ -10,7 +11,7 @@ import java.util.List;
 public class FixedInternet extends Service {
     @Column(name = "n_gigabytes")
     private int nGigabytes;
-    @Column(name = "fee_gigabytes")
+    @Column(name = "fee")
     private double feeGigabytes;
 
     public int getnGigabytes() {
@@ -27,6 +28,11 @@ public class FixedInternet extends Service {
 
     public void setFeeGigabytes(double feeGigabytes) {
         this.feeGigabytes = feeGigabytes;
+    }
+
+    @Override
+    public String getHTMLFields() {
+        return "<li>" + "Number of GigaBytes: " + nGigabytes + "</li>" + "<li>" + "Fee" + feeGigabytes + "</li>";
     }
 
     @Override

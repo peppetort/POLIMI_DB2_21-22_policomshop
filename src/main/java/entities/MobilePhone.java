@@ -1,7 +1,9 @@
 package entities;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "mobile_phone", schema = "db2_project")
@@ -46,6 +48,12 @@ public class MobilePhone extends Service {
 
     public void setFeeSms(double feeSms) {
         this.feeSms = feeSms;
+    }
+
+    @Override
+    public String getHTMLFields() {
+        return "<li>" + "Number of minutes: " + nMinutes + "</li>" + "<li>" + "Fee" + feeMinutes + "</li>"
+                + "<li>" + "Number of sms: " + nSms + "</li>" + "<li>" + "Fee" + feeSms + "</li>";
     }
 
     @Override
