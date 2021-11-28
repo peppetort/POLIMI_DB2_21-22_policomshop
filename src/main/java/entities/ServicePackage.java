@@ -24,7 +24,6 @@ public class ServicePackage implements Serializable {
     @JoinTable(name = "service_package_to_service", joinColumns = @JoinColumn(name = "id_package"), inverseJoinColumns = @JoinColumn(name = "id_service"))
     private List<Service> serviceList;
 
-
     public int getId() {
         return id;
     }
@@ -32,7 +31,6 @@ public class ServicePackage implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
-
 
     public String getName() {
         return name;
@@ -49,7 +47,6 @@ public class ServicePackage implements Serializable {
     public List<Service> getServiceList() {
         return serviceList;
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

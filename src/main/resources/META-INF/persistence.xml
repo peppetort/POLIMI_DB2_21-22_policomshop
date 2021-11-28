@@ -20,8 +20,7 @@
     <class>entities.ServicePackage</class>
     <class>entities.Service</class>
     <properties>
-      <property name="openjpa.ConnectionURL" value="jdbc:mysql://localhost:3306"/>
-      <property name="eclipselink.target-database" value="MySQL4"/>
+      <property name="eclipselink.logging.level" value="INFO"/>
     </properties>
   </persistence-unit>
 </persistence>

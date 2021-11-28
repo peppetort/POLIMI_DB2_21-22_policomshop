@@ -2,6 +2,8 @@ package entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -23,7 +25,7 @@ public class Order implements Serializable {
     @Column(name = "total_monthly_fee")
     private double totalMonthlyFee;
     @Column(name = "status")
-    private byte status;
+    private State status = State.CREATED;
     @ManyToOne
     @JoinColumn(name = "id_user")
     private Customer customer;
@@ -34,16 +36,16 @@ public class Order implements Serializable {
     @JoinTable(name = "order_to_optional_product", joinColumns = @JoinColumn(name = "id_order"), inverseJoinColumns = @JoinColumn(name = "id_optional_product"))
     private List<OptionalProduct> optionalProductList;
 
+    public Order() {
+        optionalProductList = new ArrayList<>();
+    }
+
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public Date getCreationDate() {
-        return creationDate;
     }
 
     public void setCreationDate(Date creationDate) {
@@ -54,52 +56,51 @@ public class Order implements Serializable {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
+    public String getStartDateString() {
+        if (startDate == null) return null;
+        return new SimpleDateFormat("yyyy-MM-dd").format(startDate);
     }
 
-    
-
-    public double getTotalMonthlyFee() {
-        return totalMonthlyFee;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
     public void setTotalMonthlyFee(double totalMonthlyFee) {
         this.totalMonthlyFee = totalMonthlyFee;
     }
 
-    public byte getStatus() {
-        return status;
+    public Offer getOffer() {
+        return offer;
     }
 
-    public void setStatus(byte status) {
-        this.status = status;
+    public void setOffer(Offer offer) {
+        this.offer = offer;
+    }
+
+    public List<OptionalProduct> getOptionalProductList() {
+        return optionalProductList;
+    }
+
+    public boolean isCorrectFilled() {
+        return creationDate != null && startDate != null && startDate.after(new Date()) && offer != null;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Order order = (Order) o;
-
-        if (id != order.id) return false;
-        if (Double.compare(order.totalMonthlyFee, totalMonthlyFee) != 0) return false;
-        if (status != order.status) return false;
-        if (!Objects.equals(creationDate, order.creationDate)) return false;
-        return Objects.equals(startDate, order.startDate);
+        return id == order.id && Double.compare(order.totalMonthlyFee, totalMonthlyFee) == 0 && Objects.equals(creationDate, order.creationDate) && Objects.equals(startDate, order.startDate) && status == order.status && Objects.equals(customer, order.customer) && Objects.equals(offer, order.offer) && Objects.equals(optionalProductList, order.optionalProductList);
     }
 
     @Override
     public int hashCode() {
-        int result;
-        long temp;
-        result = id;
-        result = 31 * result + (creationDate != null ? creationDate.hashCode() : 0);
-        result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
-        temp = Double.doubleToLongBits(totalMonthlyFee);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (int) status;
-        return result;
+        return Objects.hash(id, creationDate, startDate, totalMonthlyFee, status, customer, offer, optionalProductList);
+    }
+
+    public enum State {
+        CREATED,
+        PAYED,
+        PAYMENT_FAILED
     }
 }

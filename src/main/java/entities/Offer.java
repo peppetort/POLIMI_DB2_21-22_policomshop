@@ -3,6 +3,7 @@ package entities;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "offer", schema = "db2_project")
@@ -16,7 +17,7 @@ public class Offer implements Serializable {
     @Column(name = "monthly_fee")
     private double monthlyFee;
     @Column(name = "is_active")
-    private byte isActive;
+    private boolean active;
     @ManyToOne
     @JoinColumn(name = "id_package")
     private ServicePackage servicePackage;
@@ -48,36 +49,28 @@ public class Offer implements Serializable {
         this.monthlyFee = monthlyFee;
     }
 
-    public byte getIsActive() {
-        return isActive;
+    public boolean isActive() {
+        return active;
     }
 
-    public void setIsActive(byte isActive) {
-        this.isActive = isActive;
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public ServicePackage getServicePackage(){
+        return servicePackage;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Offer offer = (Offer) o;
-
-        if (id != offer.id) return false;
-        if (validityPeriod != offer.validityPeriod) return false;
-        if (Double.compare(offer.monthlyFee, monthlyFee) != 0) return false;
-        return isActive == offer.isActive;
+        return id == offer.id && validityPeriod == offer.validityPeriod && Double.compare(offer.monthlyFee, monthlyFee) == 0 && active == offer.active && Objects.equals(servicePackage, offer.servicePackage) && Objects.equals(orders, offer.orders);
     }
 
     @Override
     public int hashCode() {
-        int result;
-        long temp;
-        result = id;
-        result = 31 * result + validityPeriod;
-        temp = Double.doubleToLongBits(monthlyFee);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (int) isActive;
-        return result;
+        return Objects.hash(id, validityPeriod, monthlyFee, active, servicePackage, orders);
     }
 }
