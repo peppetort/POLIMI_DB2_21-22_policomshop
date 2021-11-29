@@ -45,7 +45,7 @@ public class Payment extends HttpServlet {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
-        String path = "/WEB-INF/templates/ReviewOrderPage";
+        String path = "/WEB-INF/templates/PaymentPage";
         final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
         ctx.setVariable("result", flag);
         templateEngine.process(path, ctx, response.getWriter());

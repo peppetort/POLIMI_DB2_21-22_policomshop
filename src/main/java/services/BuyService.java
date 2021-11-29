@@ -34,7 +34,6 @@ public class BuyService implements Serializable {
 
     public void init(Customer customer) {
         order = new Order(customer);
-        order.setCreationDate(new Date());
         order.setTotalMonthlyFee(0);
         optionalProductBooleanMap.clear();
     }
@@ -91,7 +90,8 @@ public class BuyService implements Serializable {
 
     public boolean executePayment() {
         if (!order.isCorrectFilled(true))
-            throw new BadRequestException("Non sei loggato / Il tuo utente non è legato all'ordine");
+            throw new BadRequestException("Non sei loggato / Il tuo ordine non è stato compilato correttamente");
+        order.setCreationDate(new Date());
         boolean flag = randomPayment();
         if (flag) {
             order.setStatus(Order.State.PAID);

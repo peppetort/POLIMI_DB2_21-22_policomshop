@@ -13,7 +13,7 @@ public class Order implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "creation_date")
     private Date creationDate;
     @Temporal(TemporalType.DATE)
@@ -50,6 +50,7 @@ public class Order implements Serializable {
     }
 
     public void setCreationDate(Date creationDate) {
+        if (this.creationDate != null) throw new IllegalCallerException();
         this.creationDate = creationDate;
     }
 
@@ -96,7 +97,7 @@ public class Order implements Serializable {
     }
 
     public boolean isCorrectFilled(boolean userIsImportant) {
-        boolean flag = creationDate != null && startDate != null && startDate.after(new Date()) && offer != null;
+        boolean flag = startDate != null && startDate.after(new Date()) && offer != null;
         return flag && (!userIsImportant || customer != null);
     }
 
