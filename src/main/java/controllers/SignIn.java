@@ -30,6 +30,7 @@ public class SignIn extends HttpServlet {
         ServletContext servletContext = getServletContext();
         ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
         templateResolver.setTemplateMode(TemplateMode.HTML);
+        templateResolver.setPrefix("/WEB-INF/templates/");
         templateResolver.setSuffix(".html");
         templateEngine.setTemplateResolver(templateResolver);
     }
@@ -76,7 +77,6 @@ public class SignIn extends HttpServlet {
         final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
         ctx.setVariable("errorMsg", errorMsg);
         ctx.setVariable("paymentInProgress", paymentInProgress);
-        String path = "/WEB-INF/templates/SignInPage.html";
-        templateEngine.process(path, ctx, response.getWriter());
+        templateEngine.process("SignInPage", ctx, response.getWriter());
     }
 }

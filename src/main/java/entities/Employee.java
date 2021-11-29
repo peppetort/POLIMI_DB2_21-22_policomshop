@@ -6,7 +6,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "employee", schema = "db2_project")
 @NamedQuery(name = "Employee.checkCredentials", query = "SELECT r FROM Employee r  WHERE r.email = ?1 and r.password = ?2")
-public class Employee {
+public class Employee implements User, Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -26,6 +26,7 @@ public class Employee {
         this.email = email;
     }
 
+    @Override
     public String getUsername() {
         return username;
     }

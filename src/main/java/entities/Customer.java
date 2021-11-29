@@ -10,7 +10,7 @@ import java.util.List;
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.INTEGER, name = "audit", columnDefinition = "TINYINT(1)")
 @DiscriminatorValue("0")
 @NamedQuery(name = "Customer.checkCredentials", query = "SELECT r FROM Customer r  WHERE r.email = ?1 and r.password = ?2")
-public class Customer implements Serializable {
+public class Customer implements User, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -35,6 +35,7 @@ public class Customer implements Serializable {
         this.email = email;
     }
 
+    @Override
     public String getUsername() {
         return username;
     }

@@ -27,6 +27,7 @@ public class ReviewOrder extends HttpServlet {
         ServletContext servletContext = getServletContext();
         ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
         templateResolver.setTemplateMode(TemplateMode.HTML);
+        templateResolver.setPrefix("/WEB-INF/templates/");
         templateResolver.setSuffix(".html");
         templateEngine.setTemplateResolver(templateResolver);
     }
@@ -36,8 +37,8 @@ public class ReviewOrder extends HttpServlet {
         //TODO ma quando viene tolto??
         request.getSession().setAttribute("paymentInProgress", true);
         final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
-        ctx.setVariable("isLoggedIn", request.getSession().getAttribute("user") != null);
+        ctx.setVariable("user", request.getSession().getAttribute("user"));
         ctx.setVariable("order", buyService.getOrder());
-        templateEngine.process("/WEB-INF/templates/ReviewOrderPage", ctx, response.getWriter());
+        templateEngine.process("ReviewOrderPage", ctx, response.getWriter());
     }
 }

@@ -13,8 +13,12 @@
 
     <title>Review Order</title>
 </head>
-<body class="justify-content-center">
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light"
+     th:replace="fragments/navbar :: navbar">
+</nav>
 <div class="row">
+    <div class="justify-content-center">
     <div th:text="${order.getStartDate()}">Prova</div>
     <div class="col-5 m-5">
         <div class="row">
@@ -30,9 +34,14 @@
             </div>
         </div>
     </div>
+    </div>
 </div>
-<a class="btn btn-primary" th:href="@{/Payment}" th:if="${isLoggedIn}">Go to Payment</a>
-<a class="btn btn-primary" th:href="@{/SignIn(paymentInProgress=true)}" th:unless="${isLoggedIn}">SignIn</a>
-<a class="btn btn-secondary" th:href="@{/CustomizeOrder}">Go to customize order</a>
+<div class="row">
+    <div class="justify-content-center">
+        <a class="btn btn-primary" th:href="@{/Payment}" th:if="${user!=null}">Go to Payment</a>
+        <a class="btn btn-primary" th:href="@{/SignIn(paymentInProgress=true)}" th:unless="${user!=null}">SignIn</a>
+        <a class="btn btn-secondary" th:href="@{/CustomizeOrder}">Go to customize order</a>
+    </div>
+</div>
 </body>
 </html>

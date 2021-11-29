@@ -32,6 +32,7 @@ public class CustomizeOrder extends HttpServlet {
         ServletContext servletContext = getServletContext();
         ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
         templateResolver.setTemplateMode(TemplateMode.HTML);
+        templateResolver.setPrefix("/WEB-INF/templates/");
         templateResolver.setSuffix(".html");
         templateEngine.setTemplateResolver(templateResolver);
     }
@@ -86,8 +87,9 @@ public class CustomizeOrder extends HttpServlet {
     }
 
     private void renderPage(HttpServletRequest request, HttpServletResponse response, String errorMes) throws IOException {
-        String path = "WEB-INF/templates/CustomizeOrderPage";
+        String path = "CustomizeOrderPage";
         final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
+        ctx.setVariable("user", request.getSession().getAttribute("user"));
         ctx.setVariable("order", buyService.getOrder());
         ctx.setVariable("optionalProductMap", buyService.getOptionalProduct());
         if (errorMes != null && !errorMes.isEmpty()) ctx.setVariable("errorMes", errorMes);

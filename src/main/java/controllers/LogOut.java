@@ -12,7 +12,7 @@ public class LogOut extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.getSession().invalidate();
-        response.sendRedirect("SignInPage.html");
+        response.sendRedirect(request.getContextPath());
     }
 
 }

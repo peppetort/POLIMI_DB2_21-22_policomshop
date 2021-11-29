@@ -29,6 +29,7 @@ public class Payment extends HttpServlet {
         ServletContext servletContext = getServletContext();
         ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
         templateResolver.setTemplateMode(TemplateMode.HTML);
+        templateResolver.setPrefix("/WEB-INF/templates/");
         templateResolver.setSuffix(".html");
         templateEngine.setTemplateResolver(templateResolver);
     }
@@ -45,8 +46,9 @@ public class Payment extends HttpServlet {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
-        String path = "/WEB-INF/templates/PaymentPage";
+        String path = "PaymentPage";
         final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
+        ctx.setVariable("user", request.getSession().getAttribute("user"));
         ctx.setVariable("result", flag);
         templateEngine.process(path, ctx, response.getWriter());
     }

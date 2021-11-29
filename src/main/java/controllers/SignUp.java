@@ -20,50 +20,46 @@ import java.io.IOException;
 public class SignUp extends HttpServlet {
 
     private final TemplateEngine templateEngine = new TemplateEngine();
-    private String path;
 
     @EJB(beanName = "UserService")
     UserService usrService;
 
     @Override
-    public void init() throws ServletException {
+    public void init() {
         ServletContext servletContext = getServletContext();
         ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
         templateResolver.setTemplateMode(TemplateMode.HTML);
+        templateResolver.setPrefix("/WEB-INF/templates/");
         templateResolver.setSuffix(".html");
         templateEngine.setTemplateResolver(templateResolver);
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
-        path = "/WEB-INF/templates/SignUpPage";
 
         String username = request.getParameter("username");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-
         if (username == null || email == null || password == null ||
                 username.isEmpty() || email.isEmpty() || password.isEmpty()) {
             ctx.setVariable("errorMsg", "Invalid inserted credentials");
-            templateEngine.process(path, ctx, response.getWriter());
+            templateEngine.process("SignUpPage", ctx, response.getWriter());
             return;
         }
-
 
         Customer newUser = usrService.registerNewUser(username, email, password);
         if (newUser == null) {
             ctx.setVariable("errorMsg", "Invalid data, username or password already present");
-            templateEngine.process(path, ctx, response.getWriter());
+            templateEngine.process("SignUpPage", ctx, response.getWriter());
             return;
         }
         response.sendRedirect("SignInPage.html");
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //when the servlet is called with a DoGet, it's display the sign up form
-        path = "/WEB-INF/templates/SignUpPage.html";
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        //when the servlet is called with a DoGet, it's display the SignUp form
         final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
-        templateEngine.process(path, ctx, response.getWriter());
+        templateEngine.process("SignUpPage", ctx, response.getWriter());
     }
 }
