@@ -1,3 +1,64 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en"-->
+<!--      th:lang="it" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    &lt;!&ndash; Meta tag required for boostrap &ndash;&gt;-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta content="width=device-width, initial-scale=1" name="viewport">-->
+<!--    &lt;!&ndash; Bootstrap CSS &ndash;&gt;-->
+<!--    <link crossorigin="anonymous"-->
+<!--          href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"-->
+<!--          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"-->
+<!--          rel="stylesheet">-->
+
+<!--    <title>Optional Product</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<nav class="navbar navbar-expand-lg navbar-light bg-light"-->
+<!--     th:replace="fragments/navbar :: navbar">-->
+<!--</nav>-->
+<!--<div class="row mt-5 justify-content-center">-->
+<!--    <div class="col-5 mx-5">-->
+<!--        <div class="row">-->
+<!--            <h1 th:text="${order.offer.getServicePackage().name}">Title h1</h1>-->
+<!--            <div class="col-6"><span th:text="'Validity period: ' + ${order.offer.getValidityPeriod()} + ' mesi'">12 mesi</span>-->
+<!--            </div>-->
+<!--            <div class="col-6">-->
+<!--                <ul th:each="service : ${order.offer.servicePackage.getServiceList()}">-->
+<!--                    <li th:text="${service.getReadableType()}"></li>-->
+<!--                </ul>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <form method="post" th:action="@{/CustomizeOrder}">-->
+<!--            <label for="start_date">Start Date:</label>-->
+<!--            <input id="start_date" name="start_date" th:value="${order.getStartDateString()}" type="date">-->
+<!--            <div th:if="${optionalProductMap.size() > 0}">-->
+<!--                <div class="form-check form-switch" th:each="entry : ${optionalProductMap.entrySet()}">-->
+<!--                    <input class="form-check-input" id="flexSwitchCheckDefault" name="opProd"-->
+<!--                           role="switch" th:checked="${entry.getValue().booleanValue()}"-->
+<!--                           th:id="switch_ + ${entry.getKey().id}"-->
+<!--                           th:value="${entry.getKey().id}" type="checkbox">-->
+<!--                    <label class="form-check-label" for="flexSwitchCheckDefault" th:for="switch_ + ${entry.getKey().id}"-->
+<!--                           th:text="${entry.getKey().name}">Default switch checkbox-->
+<!--                        input</label>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div th:unless="${optionalProductMap.size() > 0 }">-->
+<!--                <div class="alert alert-success" role="alert">-->
+<!--                    <h6 class="alert-heading">Per l'offerta selezionata non ci sono prodotti opzionali-->
+<!--                        disponibili!!</h6>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <button class="btn btn-primary" type="submit">Submit</button>-->
+<!--        </form>-->
+<!--        <h5 th:text="${errorMes}"></h5>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->
+
 <!DOCTYPE html>
 <html lang="en"
       th:lang="it" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
@@ -11,50 +72,158 @@
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
           rel="stylesheet">
 
-    <title>Optional Product</title>
+    <title>PoliComShop - Buy service</title>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light"
      th:replace="fragments/navbar :: navbar">
 </nav>
-<div class="row mt-5 justify-content-center">
-    <div class="col-5 mx-5">
-        <div class="row">
-            <h1 th:text="${order.offer.getServicePackage().name}">Title h1</h1>
-            <div class="col-6"><span th:text="'Validity period: ' + ${order.offer.getValidityPeriod()} + ' mesi'">12 mesi</span>
-            </div>
-            <div class="col-6">
-                <ul th:each="service : ${order.offer.servicePackage.getServiceList()}">
-                    <li th:text="${service.getReadableType()}"></li>
+<h1 th:text="${order.offer.getServicePackage().name}">Package name</h1>
+<div class="accordion" id="accordionExample" style="margin: 20px">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                    aria-expanded="true" aria-controls="collapseOne">
+                Fixed Phone
+            </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+             data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+                <ul>
+                    <li>Minutes: <span>10/month</span></li>
+                    <li>Extra fee: <span>0.1€/minute</span></li>
                 </ul>
             </div>
         </div>
-
-        <form method="post" th:action="@{/CustomizeOrder}">
-            <label for="start_date">Start Date:</label>
-            <input id="start_date" name="start_date" th:value="${order.getStartDateString()}" type="date">
-            <div th:if="${optionalProductMap.size() > 0}">
-                <div class="form-check form-switch" th:each="entry : ${optionalProductMap.entrySet()}">
-                    <input class="form-check-input" id="flexSwitchCheckDefault" name="opProd"
-                           role="switch" th:checked="${entry.getValue().booleanValue()}"
-                           th:id="switch_ + ${entry.getKey().id}"
-                           th:value="${entry.getKey().id}" type="checkbox">
-                    <label class="form-check-label" for="flexSwitchCheckDefault" th:for="switch_ + ${entry.getKey().id}"
-                           th:text="${entry.getKey().name}">Default switch checkbox
-                        input</label>
-                </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingTwo">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                Mobile Phone
+            </button>
+        </h2>
+        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+             data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+                <ul>
+                    <li>Minutes: <span>10/month</span></li>
+                    <li>SMS: <span>500/month</span></li>
+                    <li>Extra minutes fee: <span>0.1€/minute</span></li>
+                    <li>Extra sms fee: <span>0.1€/minute</span></li>
+                </ul>
             </div>
-            <div th:unless="${optionalProductMap.size() > 0 }">
-                <div class="alert alert-success" role="alert">
-                    <h6 class="alert-heading">Per l'offerta selezionata non ci sono prodotti opzionali
-                        disponibili!!</h6>
-                </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingThree">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                Fixed Internet
+            </button>
+        </h2>
+        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+             data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+                <ul>
+                    <li>Gigabytes: <span>100/month</span></li>
+                    <li>Extra fee: <span>0.5€/minute</span></li>
+                </ul>
             </div>
-            <button class="btn btn-primary" type="submit">Submit</button>
-        </form>
-        <h5 th:text="${errorMes}"></h5>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingFour">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                Mobile Internet
+            </button>
+        </h2>
+        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingThree"
+             data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+                <ul>
+                    <li>Gigabytes: <span>100/month</span></li>
+                    <li>Extra fee: <span>0.5€/minute</span></li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
+
+<form method="post" th:action="@{/CustomizeOrder}">
+    <hr>
+    <h3>Step 1</h3>
+    <h5>choose the validity period among those available</h5>
+
+    <hr>
+    <h3>Step 2</h3>
+    <h5>choose the start date</h5>
+    <input id="start_date" name="start_date" th:value="${order.getStartDateString()}" type="date">
+
+    <hr>
+    <h3>Step 3</h3>
+    <h5>choose the optional products to add</h5>
+    <div class="container">
+        <div class="row">
+            <div class="card w-50">
+                <div class="card-body">
+                    <h5 class="card-title">Optional prod name</h5>
+                    <p class="card-text">10€/month</p>
+                    <a href="#" class="btn btn-primary">Add</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+
+<!--    <div style="background-color: grey; position: absolute; bottom: 0; width: 100%; padding: 10px;">-->
+<!--        <span><b>0€</b>/mont</span>-->
+<!--        <a href="#" class="btn btn-primary">Buy</a>-->
+<!--    </div>-->
+</form>
+
+
+<!--<div class="row mt-5 justify-content-center">-->
+<!--    <div class="col-5 mx-5">-->
+<!--        <div class="row">-->
+<!--            <h1 th:text="${order.offer.getServicePackage().name}">Title h1</h1>-->
+<!--            <div class="col-6"><span th:text="'Validity period: ' + ${order.offer.getValidityPeriod()} + ' mesi'">12 mesi</span>-->
+<!--            </div>-->
+<!--            <div class="col-6">-->
+<!--                <ul th:each="service : ${order.offer.servicePackage.getServiceList()}">-->
+<!--                    <li th:text="${service.getReadableType()}"></li>-->
+<!--                </ul>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <form method="post" th:action="@{/CustomizeOrder}">-->
+<!--            <label for="start_date">Start Date:</label>-->
+<!--            <input id="start_date" name="start_date" th:value="${order.getStartDateString()}" type="date">-->
+<!--            <div th:if="${optionalProductMap.size() > 0}">-->
+<!--                <div class="form-check form-switch" th:each="entry : ${optionalProductMap.entrySet()}">-->
+<!--                    <input class="form-check-input" id="flexSwitchCheckDefault" name="opProd"-->
+<!--                           role="switch" th:checked="${entry.getValue().booleanValue()}"-->
+<!--                           th:id="switch_ + ${entry.getKey().id}"-->
+<!--                           th:value="${entry.getKey().id}" type="checkbox">-->
+<!--                    <label class="form-check-label" for="flexSwitchCheckDefault" th:for="switch_ + ${entry.getKey().id}"-->
+<!--                           th:text="${entry.getKey().name}">Default switch checkbox-->
+<!--                        input</label>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div th:unless="${optionalProductMap.size() > 0 }">-->
+<!--                <div class="alert alert-success" role="alert">-->
+<!--                    <h6 class="alert-heading">Per l'offerta selezionata non ci sono prodotti opzionali-->
+<!--                        disponibili!!</h6>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <button class="btn btn-primary" type="submit">Submit</button>-->
+<!--        </form>-->
+<!--        <h5 th:text="${errorMes}"></h5>-->
+<!--    </div>-->
+<!--</div>-->
+
 
 </body>
 </html>
