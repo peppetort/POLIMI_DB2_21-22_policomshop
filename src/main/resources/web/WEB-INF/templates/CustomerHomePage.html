@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       lang="en" th:lang="it" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -11,32 +11,39 @@
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
           rel="stylesheet">
 
-    <title>Home</title>
+    <title>PoliComShop - Home</title>
 </head>
-<body>
-<div class="row mt-5 justify-content-center">
-    <div class="col-5 mx-5">
-        <h1>Customer home</h1>
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">Package Name</th>
-                <th scope="col">Validity</th>
-                <th scope="col">Fee</th>
-                <th scope="col">Buy</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="offer: ${offerList}">
-                <th th:text="${offer.servicePackage.name}"></th>
-                <th th:text="${offer.validityPeriod}"></th>
-                <th th:text="${offer.monthlyFee}"></th>
-                <th>
-                    <a class="btn btn-primary" th:href="@{/CustomizeOrder(id_offer=${offer.id})}" type="button">$$$</a>
-                </th>
-            </tr>
-            </tbody>
-        </table>
+<body style="margin-left:40px; margin-right:40px">
+<nav class="navbar navbar-expand-lg navbar-light bg-light"
+     th:replace="fragments/navbar :: navbar">
+</nav>
+<h2>Rejected orders</h2>
+<div style="margin:20px">
+    <div class="list-group">
+        <a href="#" class="list-group-item list-group-item-action"><b>Packge name</b> - 12/11/2021</a>
+    </div>
+</div>
+<h2>Our service package</h2>
+<div class="container">
+    <div class="row">
+        <div th:each="offer: ${offerList}" class="card" style="width: 18rem;margin: 10px">
+            <div class="card-body">
+                <h5 class="card-title" th:text="${offer.servicePackage.name}"><b>Package name</b></h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Fixed phone</li>
+                    <li class="list-group-item">Mobile phone</li>
+                    <li class="list-group-item">Fixed internet</li>
+                    <li class="list-group-item">Mobile internet</li>
+                </ul>
+                <div style="display: flex;justify-content: space-between; margin-top:10px">
+                    <span><b th:text="${offer.monthlyFee}€">0€</b>/month</span>
+                    <a href="#" class="btn btn-primary">Select</a>
+                </div>
+            </div>
+
+
+        </div>
+
     </div>
 </div>
 </body>
