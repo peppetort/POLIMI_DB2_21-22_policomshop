@@ -27,6 +27,10 @@ public class Customer implements User, Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH})
     private List<Order> orders;
 
+    public Long getId() {
+        return id;
+    }
+
     public String getEmail() {
         return email;
     }

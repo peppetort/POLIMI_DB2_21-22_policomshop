@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light" th:fragment="navbar">
+<nav class="navbar navbar-expand-lg navbar-light bg-primary" th:fragment="navbar">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/" th:href="@{/}">Home</a>
+        <a class="navbar-brand bg-white" href="/" th:href="@{/}"><b>PoliComShop</b></a>
         <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
                 data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">
             <span class="navbar-toggler-icon"></span>
@@ -9,15 +9,15 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav" th:unless="${user!=null}">
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/SignIn}">SignIn</a>
+                        <a class="nav-link" th:href="@{/SignIn}"><span style="color: white">Login</span></a>
                     </li>
                 </ul>
                 <ul class="navbar-nav" th:if="${user!=null}">
                     <li class="nav-item">
-                        <a class="nav-link" th:text="${user.getUsername()}">Paolo</a>
+                        <a class="nav-link" ><span style="color: white" th:text="${user.getUsername()}">Pippo</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/Logout}">Logout</a>
+                        <a class="nav-link" th:href="@{/Logout}"><span style="color: white">Logout</span></a>
                     </li>
                 </ul>
             </div>

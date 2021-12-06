@@ -9,9 +9,9 @@ import javax.persistence.Table;
 @Table(name = "fixed_phone", schema = "db2_project")
 @DiscriminatorValue("2")
 public class FixedPhone extends Service {
-    @Column(name = "n_minutes")
+    @Column(name = "n_gigabytes")
     private int nMinutes;
-    @Column(name = "fee")
+    @Column(name = "fee_gigabytes")
     private double fee;
 
     public int getnMinutes() {

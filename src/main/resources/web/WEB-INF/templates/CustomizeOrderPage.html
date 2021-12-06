@@ -1,64 +1,3 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="en"-->
-<!--      th:lang="it" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">-->
-<!--<head>-->
-<!--    &lt;!&ndash; Meta tag required for boostrap &ndash;&gt;-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta content="width=device-width, initial-scale=1" name="viewport">-->
-<!--    &lt;!&ndash; Bootstrap CSS &ndash;&gt;-->
-<!--    <link crossorigin="anonymous"-->
-<!--          href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"-->
-<!--          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"-->
-<!--          rel="stylesheet">-->
-
-<!--    <title>Optional Product</title>-->
-<!--</head>-->
-<!--<body>-->
-<!--<nav class="navbar navbar-expand-lg navbar-light bg-light"-->
-<!--     th:replace="fragments/navbar :: navbar">-->
-<!--</nav>-->
-<!--<div class="row mt-5 justify-content-center">-->
-<!--    <div class="col-5 mx-5">-->
-<!--        <div class="row">-->
-<!--            <h1 th:text="${order.offer.getServicePackage().name}">Title h1</h1>-->
-<!--            <div class="col-6"><span th:text="'Validity period: ' + ${order.offer.getValidityPeriod()} + ' mesi'">12 mesi</span>-->
-<!--            </div>-->
-<!--            <div class="col-6">-->
-<!--                <ul th:each="service : ${order.offer.servicePackage.getServiceList()}">-->
-<!--                    <li th:text="${service.getReadableType()}"></li>-->
-<!--                </ul>-->
-<!--            </div>-->
-<!--        </div>-->
-
-<!--        <form method="post" th:action="@{/CustomizeOrder}">-->
-<!--            <label for="start_date">Start Date:</label>-->
-<!--            <input id="start_date" name="start_date" th:value="${order.getStartDateString()}" type="date">-->
-<!--            <div th:if="${optionalProductMap.size() > 0}">-->
-<!--                <div class="form-check form-switch" th:each="entry : ${optionalProductMap.entrySet()}">-->
-<!--                    <input class="form-check-input" id="flexSwitchCheckDefault" name="opProd"-->
-<!--                           role="switch" th:checked="${entry.getValue().booleanValue()}"-->
-<!--                           th:id="switch_ + ${entry.getKey().id}"-->
-<!--                           th:value="${entry.getKey().id}" type="checkbox">-->
-<!--                    <label class="form-check-label" for="flexSwitchCheckDefault" th:for="switch_ + ${entry.getKey().id}"-->
-<!--                           th:text="${entry.getKey().name}">Default switch checkbox-->
-<!--                        input</label>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div th:unless="${optionalProductMap.size() > 0 }">-->
-<!--                <div class="alert alert-success" role="alert">-->
-<!--                    <h6 class="alert-heading">Per l'offerta selezionata non ci sono prodotti opzionali-->
-<!--                        disponibili!!</h6>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <button class="btn btn-primary" type="submit">Submit</button>-->
-<!--        </form>-->
-<!--        <h5 th:text="${errorMes}"></h5>-->
-<!--    </div>-->
-<!--</div>-->
-
-<!--</body>-->
-<!--</html>-->
-
 <!DOCTYPE html>
 <html lang="en"
       th:lang="it" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
@@ -73,157 +12,122 @@
           rel="stylesheet">
 
     <title>PoliComShop - Buy service</title>
+    <style>
+        .divider:after,
+        .divider:before {
+            content: "";
+            flex: 1;
+            height: 2px;
+            background: #eee;
+        }
+
+        .h-custom {
+            height: calc(100% - 73px);
+        }
+
+        @media (max-width: 450px) {
+            .h-custom {
+                height: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light"
-     th:replace="fragments/navbar :: navbar">
-</nav>
-<h1 th:text="${order.offer.getServicePackage().name}">Package name</h1>
-<div class="accordion" id="accordionExample" style="margin: 20px">
-    <div class="accordion-item">
-        <h2 class="accordion-header" id="headingOne">
-            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
-                    aria-expanded="true" aria-controls="collapseOne">
-                Fixed Phone
-            </button>
-        </h2>
-        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
-             data-bs-parent="#accordionExample">
-            <div class="accordion-body">
-                <ul>
-                    <li>Minutes: <span>10/month</span></li>
-                    <li>Extra fee: <span>0.1€/minute</span></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="accordion-item">
-        <h2 class="accordion-header" id="headingTwo">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                Mobile Phone
-            </button>
-        </h2>
-        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-             data-bs-parent="#accordionExample">
-            <div class="accordion-body">
-                <ul>
-                    <li>Minutes: <span>10/month</span></li>
-                    <li>SMS: <span>500/month</span></li>
-                    <li>Extra minutes fee: <span>0.1€/minute</span></li>
-                    <li>Extra sms fee: <span>0.1€/minute</span></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="accordion-item">
-        <h2 class="accordion-header" id="headingThree">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                Fixed Internet
-            </button>
-        </h2>
-        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
-             data-bs-parent="#accordionExample">
-            <div class="accordion-body">
-                <ul>
-                    <li>Gigabytes: <span>100/month</span></li>
-                    <li>Extra fee: <span>0.5€/minute</span></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="accordion-item">
-        <h2 class="accordion-header" id="headingFour">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                Mobile Internet
-            </button>
-        </h2>
-        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingThree"
-             data-bs-parent="#accordionExample">
-            <div class="accordion-body">
-                <ul>
-                    <li>Gigabytes: <span>100/month</span></li>
-                    <li>Extra fee: <span>0.5€/minute</span></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
+<section class="vh-100">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light"
+         th:replace="fragments/navbar :: navbar">
+    </nav>
+    <div class="container-fluid h-auto w-75">
+        <h1 style="margin-bottom: 20px; margin-top: 20px" th:text="${order.offer.getServicePackage().name}">Package
+            name</h1>
+        <p>This package include the following services:</p>
+        <ul>
+            <li th:each="service: ${order.offer.servicePackage.serviceList}" class="list-group-item">
+                <span th:if="${service.type == 1}" th:inline="text"><b>Fixed Internet</b>: come ottengo le info?</span>
+                <span th:if="${service.type == 2}"><b>Fixed Phone</b>: 100 minutes/month <small>(0.5€/minute fee)</small></span>
+                <span th:if="${service.type == 3}"><b>Mobile Internet</b>:</span>
+                <span th:if="${service.type == 4}"><b>Mobile Phone</b>:</span>
+            </li>
+        </ul>
 
-<form method="post" th:action="@{/CustomizeOrder}">
-    <hr>
-    <h3>Step 1</h3>
-    <h5>choose the validity period among those available</h5>
+        <div class="divider d-flex align-items-center my-4" style="margin-top: 20px; margin-bottom: 20px">
+            <p class="text-center mx-3 mb-0">continue shopping</p>
+        </div>
 
-    <hr>
-    <h3>Step 2</h3>
-    <h5>choose the start date</h5>
-    <input id="start_date" name="start_date" th:value="${order.getStartDateString()}" type="date">
+        <form method="post" th:action="@{/CustomizeOrder}">
 
-    <hr>
-    <h3>Step 3</h3>
-    <h5>choose the optional products to add</h5>
-    <div class="container">
-        <div class="row">
-            <div class="card w-50">
-                <div class="card-body">
-                    <h5 class="card-title">Optional prod name</h5>
-                    <p class="card-text">10€/month</p>
-                    <a href="#" class="btn btn-primary">Add</a>
+            <span><span style="font-size: 35px;">Step 1</span> <span style="font-size: 28px"> - choose the validity period among those available</span> </span>
+            <div style="margin: 20px">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                    <label class="form-check-label" for="flexRadioDefault1">
+                        Default radio
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+                    <label class="form-check-label" for="flexRadioDefault2">
+                        Default checked radio
+                    </label>
                 </div>
             </div>
+
+            <span><span style="font-size: 35px;">Step 2</span> <span
+                    style="font-size: 28px"> - choose the start date</span> </span>
+            <br>
+            <input style="margin: 20px" id="start_date" name="start_date"
+                   th:value="${order.getStartDateString()}" type="date">
+            <br>
+
+            <div th:if="${optionalProductMap.size() > 0 }">
+                <span><span style="font-size: 35px;">Step 3</span> <span style="font-size: 28px"> - choose the optional products to add</span> </span>
+
+                <div class="container" style="margin-top: 20px">
+                    <div class="row">
+                        <div class="card w-auto" th:each="optProd : ${optionalProductMap}"
+                             style="margin-left: 10px; margin-right: 10px">
+                            <div class="card-body">
+                                <span><b style="font-size: 20px" th:text="${optProd.key.name}">Optional product name</b> &nbsp;&nbsp; <span
+                                        th:text="${optProd.key.monthlyFee}">10</span>€/month &nbsp;&nbsp;</span>
+                                <a href="#CHANGE ME" th:if="${!optProd.value}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                         class="bi bi-plus-circle" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                                    </svg>
+                                </a>
+                                <a href="# CHANGE ME" class="btn btn-primary" th:if="${optProd.value}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                         color="red"
+                                         class="bi bi-dash-circle" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                        <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <hr>
+            <div class=" text-center text-lg-start mt-4 pt-2" style="display: flex;justify-content: space-between;">
+
+                <span style="font-size: 35px"><b th:text="${order.totalMonthlyFee}">35€</b>/month</span>
+                <button type="submit" class="btn btn-primary btn-lg"
+                        style="padding-left: 2.5rem; padding-right: 2.5rem;">Checkout
+                </button>
+            </div>
+            <hr>
+        </form>
+        <div th:unless="${errorMes == null }" style="margin-top: 20px">
+            <div class="alert alert-danger" role="alert">
+                <h6 class="alert-heading" th:text="${errorMes}">Error</h6>
+            </div>
         </div>
+
     </div>
-    <hr>
-
-<!--    <div style="background-color: grey; position: absolute; bottom: 0; width: 100%; padding: 10px;">-->
-<!--        <span><b>0€</b>/mont</span>-->
-<!--        <a href="#" class="btn btn-primary">Buy</a>-->
-<!--    </div>-->
-</form>
-
-
-<!--<div class="row mt-5 justify-content-center">-->
-<!--    <div class="col-5 mx-5">-->
-<!--        <div class="row">-->
-<!--            <h1 th:text="${order.offer.getServicePackage().name}">Title h1</h1>-->
-<!--            <div class="col-6"><span th:text="'Validity period: ' + ${order.offer.getValidityPeriod()} + ' mesi'">12 mesi</span>-->
-<!--            </div>-->
-<!--            <div class="col-6">-->
-<!--                <ul th:each="service : ${order.offer.servicePackage.getServiceList()}">-->
-<!--                    <li th:text="${service.getReadableType()}"></li>-->
-<!--                </ul>-->
-<!--            </div>-->
-<!--        </div>-->
-
-<!--        <form method="post" th:action="@{/CustomizeOrder}">-->
-<!--            <label for="start_date">Start Date:</label>-->
-<!--            <input id="start_date" name="start_date" th:value="${order.getStartDateString()}" type="date">-->
-<!--            <div th:if="${optionalProductMap.size() > 0}">-->
-<!--                <div class="form-check form-switch" th:each="entry : ${optionalProductMap.entrySet()}">-->
-<!--                    <input class="form-check-input" id="flexSwitchCheckDefault" name="opProd"-->
-<!--                           role="switch" th:checked="${entry.getValue().booleanValue()}"-->
-<!--                           th:id="switch_ + ${entry.getKey().id}"-->
-<!--                           th:value="${entry.getKey().id}" type="checkbox">-->
-<!--                    <label class="form-check-label" for="flexSwitchCheckDefault" th:for="switch_ + ${entry.getKey().id}"-->
-<!--                           th:text="${entry.getKey().name}">Default switch checkbox-->
-<!--                        input</label>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div th:unless="${optionalProductMap.size() > 0 }">-->
-<!--                <div class="alert alert-success" role="alert">-->
-<!--                    <h6 class="alert-heading">Per l'offerta selezionata non ci sono prodotti opzionali-->
-<!--                        disponibili!!</h6>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <button class="btn btn-primary" type="submit">Submit</button>-->
-<!--        </form>-->
-<!--        <h5 th:text="${errorMes}"></h5>-->
-<!--    </div>-->
-<!--</div>-->
-
-
+</section>
 </body>
 </html>

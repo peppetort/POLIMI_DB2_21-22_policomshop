@@ -7,6 +7,7 @@ import java.util.*;
 
 @Entity
 @Table(name = "order", schema = "db2_project")
+@NamedQuery(name = "Order.rejectedOrders", query = "SELECT r FROM Order r  WHERE r.customer.id = ?1 and r.status = ?2")
 public class Order implements Serializable {
 
     @Id
@@ -73,6 +74,14 @@ public class Order implements Serializable {
 
     public void setTotalMonthlyFee(double totalMonthlyFee) {
         this.totalMonthlyFee = totalMonthlyFee;
+    }
+
+    public double getTotalMonthlyFee(){
+        return totalMonthlyFee;
+    }
+
+    public Date getCreationDate(){
+        return creationDate;
     }
 
     public Offer getOffer() {

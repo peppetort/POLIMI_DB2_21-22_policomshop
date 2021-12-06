@@ -11,7 +11,7 @@ import javax.persistence.Table;
 public class MobileInternet extends Service {
     @Column(name = "n_gigabytes")
     private int nGigabytes;
-    @Column(name = "fee")
+    @Column(name = "fee_gigabytes")
     private double feeGigabytes;
     public int getnGigabytes() {
         return nGigabytes;

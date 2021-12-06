@@ -11,37 +11,70 @@
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
           rel="stylesheet">
 
-    <title>Review Order</title>
+    <title>PoliComShop - Order</title>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light"
-     th:replace="fragments/navbar :: navbar">
-</nav>
-<div class="row">
-    <div class="justify-content-center">
-    <div th:text="${order.getStartDate()}">Prova</div>
-    <div class="col-5 m-5">
-        <div class="row">
-            <h1 th:text="${order.offer.getServicePackage().name}">Title h1</h1>
-            <div class="col-6">
-                <div th:text="'Validity period: ' + ${order.offer.getValidityPeriod()} + ' mesi'">12 mesi</div>
-                <div th:text="'Start date: ' + ${order.startDate}"></div>
-            </div>
-            <div class="col-6">
-                <ul th:each="service : ${order.offer.servicePackage.getServiceList()}">
-                    <li th:text="${service.getReadableType()}"></li>
-                </ul>
+<section class="vh-100 ">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light"
+         th:replace="fragments/navbar :: navbar">
+    </nav>
+    <div class="container py-5 h-auto">
+        <div class="row d-flex justify-content-center  h-auto">
+            <div class="col-12 col-md-8 col-lg-6 col-xxl-5">
+                <div class="card bg-white text-black" style="border-radius: 1rem;">
+                    <div class="card-body p-3">
+
+                        <div class="mb-md-2 mt-md-4 pb-2">
+
+                            <h2 class="fw-bold mb-2" th:text="${order.offer.getServicePackage().name}">Package name</h2>
+                            <span><b>Strat date:</b>&nbsp;<span
+                                    th:text="${#dates.format(order.startDate, 'dd/MM/yyyy')}">10/10/2020 </span> </span>
+                            <br>
+                            <span><b>Duration:</b>&nbsp;<span
+                                    th:text="${order.offer.validityPeriod}"> 10 </span> months </span>
+                            <br>
+                            <b>Services:</b>
+                            <ul>
+                                <li th:each="service: ${order.offer.servicePackage.serviceList}"
+                                    class="list-group-item">
+                                    <span th:if="${service.type == 1}" th:inline="text"><b>Fixed Internet</b>: come ottengo le info?</span>
+                                    <span th:if="${service.type == 2}"><b>Fixed Phone</b>: 100 minutes/month <small>(0.5€/minute fee)</small></span>
+                                    <span th:if="${service.type == 3}"><b>Mobile Internet</b>:</span>
+                                    <span th:if="${service.type == 4}"><b>Mobile Phone</b>:</span>
+                                </li>
+                            </ul>
+                            <div th:if="${!order.optionalProductList.isEmpty()}">
+                                <b>Optional products:</b>
+                                <ul>
+                                    <li th:each="optProd: ${order.optionalProductList}"
+                                        class="list-group-item">
+                                        <div style="display: flex;justify-content: space-between;">
+                                            <b th:text="${optProd.name}">Optional prod name</b>
+                                            <p>+<span th:text="${optProd.monthlyFee}"></span>€/month</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <a th:href="@{/CustomizeOrder}">Whant to change something? Go back</a>
+                            <div class=" text-center text-lg-start mt-4 pt-2"
+                                 style="display: flex;justify-content: space-between;">
+
+                                <span style="font-size: 35px"><b th:text="${order.totalMonthlyFee}">35€</b>/month</span>
+                                <button type="submit" class="btn btn-primary btn-lg" th:href="@{/Payment}"
+                                        th:if="${user!=null}"
+                                        style="padding-left: 2.5rem; padding-right: 2.5rem;">Buy
+                                </button>
+                                <a th:href="@{/SignIn(paymentInProgress=true)}" th:unless="${user!=null}">Login to
+                                    buy</a>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    </div>
-</div>
-<div class="row">
-    <div class="justify-content-center">
-        <a class="btn btn-primary" th:href="@{/Payment}" th:if="${user!=null}">Go to Payment</a>
-        <a class="btn btn-primary" th:href="@{/SignIn(paymentInProgress=true)}" th:unless="${user!=null}">SignIn</a>
-        <a class="btn btn-secondary" th:href="@{/CustomizeOrder}">Go to customize order</a>
-    </div>
-</div>
+</section>
 </body>
 </html>
