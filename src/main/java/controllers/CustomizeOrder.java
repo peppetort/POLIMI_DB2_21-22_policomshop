@@ -20,22 +20,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @WebServlet(name = "CustomizeOrder", value = "/CustomizeOrder")
-public class CustomizeOrder extends HttpServlet {
-
-    private final TemplateEngine templateEngine = new TemplateEngine();
+public class CustomizeOrder extends HttpServletThymeleaf {
 
     @Inject
     BuyService buyService;
-
-    @Override
-    public void init() {
-        ServletContext servletContext = getServletContext();
-        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
-        templateResolver.setTemplateMode(TemplateMode.HTML);
-        templateResolver.setPrefix("/WEB-INF/templates/");
-        templateResolver.setSuffix(".html");
-        templateEngine.setTemplateResolver(templateResolver);
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

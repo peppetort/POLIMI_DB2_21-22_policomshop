@@ -18,22 +18,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet(name = "SignIn", value = "/SignIn")
-public class SignIn extends HttpServlet {
-
-    private final TemplateEngine templateEngine = new TemplateEngine();
-
+public class SignIn extends HttpServletThymeleaf {
     @EJB(beanName = "UserService")
     UserService userService;
-
-    @Override
-    public void init() {
-        ServletContext servletContext = getServletContext();
-        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
-        templateResolver.setTemplateMode(TemplateMode.HTML);
-        templateResolver.setPrefix("/WEB-INF/templates/");
-        templateResolver.setSuffix(".html");
-        templateEngine.setTemplateResolver(templateResolver);
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

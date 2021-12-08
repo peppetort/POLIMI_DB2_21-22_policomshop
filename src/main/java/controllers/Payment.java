@@ -17,22 +17,9 @@ import javax.ws.rs.BadRequestException;
 import java.io.IOException;
 
 @WebServlet(name = "Payment", urlPatterns = "/Payment")
-public class Payment extends HttpServlet {
-
-    private final TemplateEngine templateEngine = new TemplateEngine();
-
+public class Payment extends HttpServletThymeleaf {
     @Inject
     BuyService buyService;
-
-    @Override
-    public void init() {
-        ServletContext servletContext = getServletContext();
-        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
-        templateResolver.setTemplateMode(TemplateMode.HTML);
-        templateResolver.setPrefix("/WEB-INF/templates/");
-        templateResolver.setSuffix(".html");
-        templateEngine.setTemplateResolver(templateResolver);
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

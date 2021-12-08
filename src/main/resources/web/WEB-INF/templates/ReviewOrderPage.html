@@ -23,9 +23,7 @@
             <div class="col-12 col-md-8 col-lg-6 col-xxl-5">
                 <div class="card bg-white text-black" style="border-radius: 1rem;">
                     <div class="card-body p-3">
-
                         <div class="mb-md-2 mt-md-4 pb-2">
-
                             <h2 class="fw-bold mb-2" th:text="${order.offer.getServicePackage().name}">Package name</h2>
                             <span><b>Strat date:</b>&nbsp;<span
                                     th:text="${#dates.format(order.startDate, 'dd/MM/yyyy')}">10/10/2020 </span> </span>
@@ -55,7 +53,7 @@
                                     </li>
                                 </ul>
                             </div>
-                            <a th:href="@{/CustomizeOrder}">Whant to change something? Go back</a>
+                            <a th:href="@{/CustomizeOrder}">Do you want to change something? Go back</a>
                             <div class=" text-center text-lg-start mt-4 pt-2"
                                  style="display: flex;justify-content: space-between;">
 
@@ -67,8 +65,6 @@
                                 <a th:href="@{/SignIn(paymentInProgress=true)}" th:unless="${user!=null}">Login to
                                     buy</a>
                             </div>
-
-
                         </div>
                     </div>
                 </div>

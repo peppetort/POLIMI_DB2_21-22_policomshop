@@ -17,22 +17,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet(name = "SignUp", value = "/SignUp")
-public class SignUp extends HttpServlet {
-
-    private final TemplateEngine templateEngine = new TemplateEngine();
-
+public class SignUp extends HttpServletThymeleaf {
     @EJB(beanName = "UserService")
     UserService usrService;
-
-    @Override
-    public void init() {
-        ServletContext servletContext = getServletContext();
-        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
-        templateResolver.setTemplateMode(TemplateMode.HTML);
-        templateResolver.setPrefix("/WEB-INF/templates/");
-        templateResolver.setSuffix(".html");
-        templateEngine.setTemplateResolver(templateResolver);
-    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 

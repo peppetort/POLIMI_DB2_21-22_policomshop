@@ -127,7 +127,7 @@ public class Order implements Serializable {
         CREATED(0),
         PAID(1),
         PAYMENT_FAILED(2);
-        int idDB;
+        final int idDB;
 
         State(int idDB) {
             this.idDB = idDB;

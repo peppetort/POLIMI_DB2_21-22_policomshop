@@ -22,23 +22,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "GetCustomerHome", value = "")
-public class GetCustomerHome extends HttpServlet {
-
-    private final TemplateEngine templateEngine = new TemplateEngine();
+public class GetCustomerHome extends HttpServletThymeleaf {
 
     @EJB(beanName = "PackageService")
     PackageService packageService;
     @EJB(beanName = "OrderService")
     OrderService orderService;
-
-    @Override
-    public void init() {
-        ServletContext servletContext = getServletContext();
-        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
-        templateResolver.setTemplateMode(TemplateMode.HTML);
-        templateResolver.setSuffix(".html");
-        templateEngine.setTemplateResolver(templateResolver);
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -49,8 +38,7 @@ public class GetCustomerHome extends HttpServlet {
             rejectedPayments = orderService.getRejectedOrdersByCustomer(customer.getId());
         }
 
-
-        String path = "/WEB-INF/templates/CustomerHomePage.html";
+        String path = "CustomerHomePage";
         final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
         ctx.setVariable("offerList", offerList);
         ctx.setVariable("rejPayments", rejectedPayments);

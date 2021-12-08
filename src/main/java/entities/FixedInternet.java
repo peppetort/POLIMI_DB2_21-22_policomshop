@@ -11,7 +11,7 @@ import javax.persistence.Table;
 public class FixedInternet extends Service {
     @Column(name = "n_gigabytes")
     private int nGigabytes;
-    @Column(name = "fee_gigabytes")
+    @Column(name = "fee")
     private double feeGigabytes;
 
     public int getnGigabytes() {
