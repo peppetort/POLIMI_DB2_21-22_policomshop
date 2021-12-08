@@ -66,9 +66,7 @@ public class MobilePhone extends Service {
         if (nMinutes != that.nMinutes) return false;
         if (Double.compare(that.feeMinutes, feeMinutes) != 0) return false;
         if (nSms != that.nSms) return false;
-        if (Double.compare(that.feeSms, feeSms) != 0) return false;
-
-        return true;
+        return Double.compare(that.feeSms, feeSms) == 0;
     }
 
     @Override

@@ -47,6 +47,11 @@ public class ServicePackage implements Serializable {
     public List<Service> getServiceList() {
         return serviceList;
     }
+
+    public List<Offer> getOffers() {
+        return offers;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

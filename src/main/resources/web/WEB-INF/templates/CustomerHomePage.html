@@ -51,15 +51,13 @@
         </div>
         <h1 style="margin-bottom: 20px; margin-top: 20px">Our Service Package</h1>
         <div class="row">
-            <div th:each="offer: ${offerList}" class="card" style="width: 18rem; margin: 20px">
+            <div th:each="sPackage: ${servicePackages}" class="card" style="width: 18rem; margin: 20px">
                 <div class="card-body">
-                    <h5 class="card-title" style="font-weight: bold" th:text="${offer.servicePackage.name}">Package
-                        name</h5>
-                    <p class="card-text"><b th:text="${offer.monthlyFee + '€'}">0</b>/month</p>
+                    <h5 class="card-title" style="font-weight: bold" th:text="${sPackage.getName()}">Package name</h5>
                 </div>
                 <div class="container h-custom">
                     <ul class="list-group">
-                        <li th:each="service: ${offer.servicePackage.serviceList}" class="list-group-item">
+                        <li th:each="service: ${sPackage.serviceList}" class="list-group-item">
                             <span th:if="${service.type == 1}">Fixed Internet</span>
                             <span th:if="${service.type == 2}">Fixed Phone</span>
                             <span th:if="${service.type == 3}">Mobile Internet</span>
@@ -68,7 +66,7 @@
                     </ul>
                 </div>
                 <div class="card-body">
-                    <a th:href="@{/CustomizeOrder(id_offer=${offer.id})}" class="card-link">View more</a>
+                    <a th:href="@{/CustomizeOrder(id_sp=${sPackage.id})}" class="card-link">View more</a>
                 </div>
             </div>
         </div>

@@ -43,9 +43,7 @@ public class FixedInternet extends Service {
         FixedInternet that = (FixedInternet) o;
 
         if (nGigabytes != that.nGigabytes) return false;
-        if (Double.compare(that.feeGigabytes, feeGigabytes) != 0) return false;
-
-        return true;
+        return Double.compare(that.feeGigabytes, feeGigabytes) == 0;
     }
 
     @Override

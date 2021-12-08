@@ -1,16 +1,11 @@
 package controllers;
 
 import entities.Customer;
-import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
-import org.thymeleaf.templatemode.TemplateMode;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 import services.BuyService;
 
 import javax.inject.Inject;
-import javax.servlet.ServletContext;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.BadRequestException;
@@ -28,19 +23,19 @@ public class CustomizeOrder extends HttpServletThymeleaf {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            String idOffer = request.getParameter("id_offer");
-            if (idOffer == null || idOffer.isEmpty()) {
-                if (buyService.getOrder() == null) {
+            String idServicePackage = request.getParameter("id_sp");
+            if (idServicePackage == null || idServicePackage.isEmpty()) {
+                if (buyService.getServicePackage() == null) {
                     response.sendRedirect(request.getContextPath());
                     return;
                 }
             } else {
-                int newId = Integer.parseInt(idOffer);
-                if (buyService.getOrder() == null ||
-                        (buyService.getOrder().getOffer() != null && buyService.getOrder().getOffer().getId() != newId)) {
+                int newId = Integer.parseInt(idServicePackage);
+                if (buyService.getServicePackage() == null ||
+                        (buyService.getServicePackage() != null && buyService.getServicePackage().getId() != newId)) {
                     //TODO per far funionare questa cosa bisogna implmentare un filtro di accesso, a questa pagina non possono accedere gli employee
                     buyService.init((Customer) request.getSession().getAttribute("user"));
-                    buyService.setOffer(newId);
+                    buyService.setServicePackage(newId);
                 }
             }
             renderPage(request, response, null);
@@ -51,9 +46,13 @@ public class CustomizeOrder extends HttpServletThymeleaf {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String offer = request.getParameter("offerRadio");
         String[] opProd = request.getParameterValues("opProd");
         String startDateString = request.getParameter("start_date");
         try {
+            if (offer == null || offer.isEmpty())
+                throw new BadRequestException("Choose an offer!");
+            buyService.setOffer(Integer.parseInt(offer));
             if (startDateString == null || startDateString.isEmpty())
                 throw new BadRequestException("Selezionare un valore valido per Start Date!");
             Date d = new SimpleDateFormat("yyyy-MM-dd").parse(startDateString);
@@ -63,9 +62,7 @@ public class CustomizeOrder extends HttpServletThymeleaf {
                 throw new BadRequestException("Start date must be after now");
             }
             if (opProd != null) {
-                for (String opId : opProd) {
-                    buyService.addOptionalProduct(Integer.parseInt(opId));
-                }
+                buyService.setOptionalProducts(opProd);
             }
             if (buyService.isCorrectFilled(false)) response.sendRedirect("ReviewOrder");
             else renderPage(request, response, "Your order is not correct filled, sorry");
@@ -78,6 +75,7 @@ public class CustomizeOrder extends HttpServletThymeleaf {
         String path = "CustomizeOrderPage";
         final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
         ctx.setVariable("user", request.getSession().getAttribute("user"));
+        ctx.setVariable("servicePackage", buyService.getServicePackage());
         ctx.setVariable("order", buyService.getOrder());
         ctx.setVariable("optionalProductMap", buyService.getOptionalProduct());
         if (errorMes != null && !errorMes.isEmpty()) ctx.setVariable("errorMes", errorMes);

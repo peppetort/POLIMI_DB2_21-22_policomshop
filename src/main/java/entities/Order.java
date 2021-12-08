@@ -32,11 +32,12 @@ public class Order implements Serializable {
     private Offer offer;
     @ManyToMany
     @JoinTable(name = "order_to_optional_product", joinColumns = @JoinColumn(name = "id_order"), inverseJoinColumns = @JoinColumn(name = "id_optional_product"))
-    private List<OptionalProduct> optionalProductList;
+    /*Ho scelto un set per evitare un inserimento doppio per lo stesso optional product*/
+    private Set<OptionalProduct> optionalProductList;
 
     public Order(Customer customer) {
         this.customer = customer;
-        optionalProductList = new ArrayList<>();
+        optionalProductList = new HashSet<>();
     }
 
     public Order() {
@@ -101,7 +102,7 @@ public class Order implements Serializable {
         this.customer = customer;
     }
 
-    public List<OptionalProduct> getOptionalProductList() {
+    public Set<OptionalProduct> getOptionalProductList() {
         return optionalProductList;
     }
 

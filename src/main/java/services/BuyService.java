@@ -1,9 +1,6 @@
 package services;
 
-import entities.Customer;
-import entities.Offer;
-import entities.OptionalProduct;
-import entities.Order;
+import entities.*;
 
 import javax.ejb.Remove;
 import javax.ejb.Stateful;
@@ -31,6 +28,7 @@ public class BuyService implements Serializable {
     @PersistenceContext(unitName = "db2_project", type = PersistenceContextType.EXTENDED)
     private EntityManager em;
     private Order order;
+    private ServicePackage se;
 
     public void init(Customer customer) {
         order = new Order(customer);
@@ -38,35 +36,50 @@ public class BuyService implements Serializable {
         optionalProductBooleanMap.clear();
     }
 
+    public ServicePackage getServicePackage() {
+        return se;
+    }
+
+    public void setServicePackage(int id) throws IllegalAccessException {
+        ServicePackage servicePackage = em.find(ServicePackage.class, id);
+        if (servicePackage == null) throw new IllegalAccessException();
+        se = servicePackage;
+        initOptionalProductBooleanMap();
+    }
+
+    private void initOptionalProductBooleanMap() {
+        for (OptionalProduct o : se.getOptionalProductList()) {
+            optionalProductBooleanMap.put(o, Boolean.FALSE);
+        }
+    }
+
     public void setOffer(int id) throws IllegalAccessException {
         Offer se = em.find(Offer.class, id);
         if (se == null || !se.isActive()) throw new IllegalAccessException();
         if (se.equals(order.getOffer())) return;
         order.setOffer(se);
-        for (OptionalProduct o : order.getOffer().getServicePackage().getOptionalProductList()) {
-            optionalProductBooleanMap.put(o, Boolean.FALSE);
-        }
     }
 
     public Map<OptionalProduct, Boolean> getOptionalProduct() {
         return optionalProductBooleanMap;
     }
 
-    public void addOptionalProduct(int idOpProd) throws IllegalAccessException {
-        Optional<OptionalProduct> optional = optionalProductBooleanMap.keySet().stream().filter(x -> x.getId() == idOpProd).findAny();
-        if (optional.isEmpty()) throw new IllegalAccessException();
-        OptionalProduct o = optional.get();
-        optionalProductBooleanMap.replace(o, Boolean.TRUE);
-        order.getOptionalProductList().add(o);
+    public void setOptionalProducts(String[] opProds) throws IllegalAccessException {
+        initOptionalProductBooleanMap();
+        order.getOptionalProductList().clear();
+        for (String opId : opProds) {
+            int idOpProd = Integer.parseInt(opId);
+            Optional<OptionalProduct> optional = optionalProductBooleanMap.keySet().stream().filter(x -> x.getId() == idOpProd).findAny();
+            if (optional.isEmpty()) throw new IllegalAccessException();
+            OptionalProduct o = optional.get();
+            optionalProductBooleanMap.replace(o, Boolean.TRUE);
+            order.getOptionalProductList().add(o);
+        }
     }
 
     public void setStartDate(Date date) throws IllegalAccessException {
         if (new Date().before(date)) order.setStartDate(date);
         else throw new IllegalAccessException();
-    }
-
-    public void removeItem(OptionalProduct op) {
-        optionalProductBooleanMap.replace(op, Boolean.FALSE);
     }
 
     private double evaluateMonthlyFee() {

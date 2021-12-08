@@ -1,5 +1,5 @@
 package entities;
 
 public interface User {
-    public String getUsername();
+    String getUsername();
 }

@@ -1,12 +1,10 @@
 package services;
 
 import entities.*;
-import exception.UserNotFound;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
 import java.util.List;
 
 @Stateless
@@ -21,6 +19,12 @@ public class PackageService {
         List<Offer> availableOffer;
         availableOffer = em.createQuery("SELECT o FROM Offer o WHERE o.active = true", Offer.class).getResultList();
         return availableOffer;
+    }
+
+    public List<ServicePackage> getAvailableServicePackages() {
+        List<ServicePackage> servicePackages;
+        servicePackages = em.createQuery("SELECT o.servicePackage from Offer o where o.active = true", ServicePackage.class).getResultList();
+        return servicePackages;
     }
 
     public Offer getOfferById(int offerId) {
