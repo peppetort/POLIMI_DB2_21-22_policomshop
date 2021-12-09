@@ -108,7 +108,14 @@ public class Order implements Serializable {
     }
 
     public boolean isCorrectFilled(boolean userIsImportant) {
-        boolean flag = startDate != null && startDate.after(new Date()) && offer != null;
+        Date now = new Date();
+        if(status.equals(State.PAYMENT_FAILED) && startDate.before(now)) {
+            Calendar c = Calendar.getInstance();
+            c.setTime(now);
+            c.add(Calendar.DAY_OF_MONTH, 1);
+            startDate= c.getTime();
+        }
+        boolean flag = startDate.after(now) && offer != null;
         return flag && (!userIsImportant || customer != null);
     }
 

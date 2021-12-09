@@ -6,7 +6,6 @@ import javax.ejb.EJB;
 import javax.ejb.Remove;
 import javax.ejb.Stateful;
 import javax.enterprise.context.SessionScoped;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
@@ -26,42 +25,48 @@ import java.util.*;
 @SessionScoped
 @Stateful
 public class BuyService implements Serializable {
-    private final Map<OptionalProduct, Boolean> optionalProductBooleanMap = new HashMap<>();
+
     @PersistenceContext(unitName = "db2_project", type = PersistenceContextType.EXTENDED)
     private EntityManager em;
     @EJB(beanName = "OrderService")
     OrderService orderService;
     private Order order;
-    private ServicePackage se;
+    private ServicePackage servicePackage;
+    private Customer customer;
+    private final Map<OptionalProduct, Boolean> optionalProductBooleanMap = new HashMap<>();
 
     public void init(Customer customer) {
-        order = new Order(customer);
-        order.setTotalMonthlyFee(0);
+        this.customer = customer;
+    }
+
+    public void initOrder(){
+        order = new Order();
         optionalProductBooleanMap.clear();
     }
 
     public ServicePackage getServicePackage() {
-        return se;
+        return servicePackage;
     }
 
     public void setServicePackage(int id) throws IllegalAccessException {
         ServicePackage servicePackage = em.find(ServicePackage.class, id);
         if (servicePackage == null) throw new IllegalAccessException();
-        se = servicePackage;
+        this.servicePackage = servicePackage;
         initOptionalProductBooleanMap();
     }
 
     private void initOptionalProductBooleanMap() {
-        for (OptionalProduct o : se.getOptionalProductList()) {
+        for (OptionalProduct o : servicePackage.getOptionalProductList()) {
             optionalProductBooleanMap.put(o, Boolean.FALSE);
         }
     }
 
     public void setOffer(int id) throws IllegalAccessException {
-        Offer se = em.find(Offer.class, id);
-        if (se == null || !se.isActive()) throw new IllegalAccessException();
-        if (se.equals(order.getOffer())) return;
-        order.setOffer(se);
+        Offer offer = em.find(Offer.class, id);
+        if (offer == null || !offer.isActive()) throw new IllegalAccessException();
+        if(!offer.getServicePackage().equals(this.servicePackage)) throw new BadRequestException();
+        if (offer.equals(order.getOffer())) return;
+        order.setOffer(offer);
     }
 
     public Map<OptionalProduct, Boolean> getOptionalProduct() {
