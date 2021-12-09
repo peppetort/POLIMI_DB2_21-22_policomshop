@@ -8,6 +8,7 @@ import java.util.*;
 @Entity
 @Table(name = "order", schema = "db2_project")
 @NamedQuery(name = "Order.rejectedOrders", query = "SELECT r FROM Order r  WHERE r.customer.id = ?1 and r.status = ?2")
+@NamedQuery(name = "Order.rejectedOrdersByID", query = "SELECT r FROM Order r  WHERE r.id = ?1 and r.customer.id = ?2 and r.status = ?3")
 public class Order implements Serializable {
 
     @Id

@@ -2,9 +2,11 @@ package services;
 
 import entities.*;
 
+import javax.ejb.EJB;
 import javax.ejb.Remove;
 import javax.ejb.Stateful;
 import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
@@ -27,6 +29,8 @@ public class BuyService implements Serializable {
     private final Map<OptionalProduct, Boolean> optionalProductBooleanMap = new HashMap<>();
     @PersistenceContext(unitName = "db2_project", type = PersistenceContextType.EXTENDED)
     private EntityManager em;
+    @EJB(beanName = "OrderService")
+    OrderService orderService;
     private Order order;
     private ServicePackage se;
 
@@ -104,7 +108,7 @@ public class BuyService implements Serializable {
     public boolean executePayment() {
         if (!order.isCorrectFilled(true))
             throw new BadRequestException("Non sei loggato / Il tuo ordine non è stato compilato correttamente");
-        order.setCreationDate(new Date());
+        if(order.getCreationDate() == null) order.setCreationDate(new Date());
         boolean flag = randomPayment();
         if (flag) {
             order.setStatus(Order.State.PAID);
@@ -112,11 +116,21 @@ public class BuyService implements Serializable {
             order.setStatus(Order.State.PAYMENT_FAILED);
         }
         em.persist(order);
+        checkout();
         return flag;
     }
 
     private boolean randomPayment() {
         return new Random().nextBoolean();
+    }
+
+    public boolean retryPayment(int idOrder, Customer customer) {
+        Order o = orderService.getRejectedOrderByIdAndUser(idOrder, customer.getId());
+        if (o!=null) {
+            order = o;
+            return executePayment();
+        }
+        throw new BadRequestException();
     }
 
     @Remove

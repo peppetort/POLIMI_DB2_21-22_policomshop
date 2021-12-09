@@ -21,6 +21,12 @@ public class OrderService {
                 .setParameter(1, customerId).setParameter(2, Order.State.PAYMENT_FAILED)
                 .getResultList();
         return rejectedOrder;
+    }
 
+    public Order getRejectedOrderByIdAndUser(int idOrder, Long idUser){
+        List<Order> rejectedOrder = em.createNamedQuery("Order.rejectedOrdersByID", Order.class)
+                .setParameter(1,idOrder).setParameter(2, idUser).setParameter(3, Order.State.PAYMENT_FAILED)
+                .getResultList();
+        return rejectedOrder.get(0);
     }
 }
