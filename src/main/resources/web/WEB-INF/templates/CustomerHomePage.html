@@ -40,13 +40,14 @@
         <div th:if="${rejPayments != null && #lists.size(rejPayments) > 0}">
             <h1 style="margin-bottom: 20px; margin-top: 20px">Rejected payments</h1>
             <div th:each="order: ${rejPayments}" class="list-group">
-                <a href="#" class="list-group-item list-group-item-action">
+                <div class="list-group-item list-group-item-action">
                     <div class="d-flex w-100 justify-content-between">
                         <h5 class="mb-1" th:text="${order.offer.servicePackage.name}">Package name</h5>
                         <b class="text-muted" th:text="${order.totalMonthlyFee +'€'}">0€</b>
                     </div>
                     <p class="mb-1" th:text="${#dates.format(order.creationDate, 'dd/MM/yyyy')}">12/10/2021</p>
-                </a>
+                    <a class="btn btn-primary float-end" th:href="@{Repay(id=${order.id})}" role="button">Repay</a>
+                </div>
             </div>
         </div>
         <h1 style="margin-bottom: 20px; margin-top: 20px">Our Service Package</h1>

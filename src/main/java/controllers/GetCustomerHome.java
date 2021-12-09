@@ -32,6 +32,7 @@ public class GetCustomerHome extends HttpServletThymeleaf {
 
         String path = "CustomerHomePage";
         final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
+        ctx.setVariable("user", customer);
         ctx.setVariable("servicePackages", servicePackages);
         ctx.setVariable("rejPayments", rejectedPayments);
         templateEngine.process(path, ctx, response.getWriter());

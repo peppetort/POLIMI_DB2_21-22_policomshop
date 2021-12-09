@@ -8,6 +8,7 @@ import java.util.*;
 @Entity
 @Table(name = "order", schema = "db2_project")
 @NamedQuery(name = "Order.rejectedOrders", query = "SELECT r FROM Order r  WHERE r.customer.id = ?1 and r.status = ?2")
+@NamedQuery(name = "Order.rejectedOrdersByID", query = "SELECT r FROM Order r  WHERE r.id = ?1 and r.customer.id = ?2 and r.status = ?3")
 public class Order implements Serializable {
 
     @Id
@@ -107,7 +108,14 @@ public class Order implements Serializable {
     }
 
     public boolean isCorrectFilled(boolean userIsImportant) {
-        boolean flag = startDate != null && startDate.after(new Date()) && offer != null;
+        Date now = new Date();
+        if(status.equals(State.PAYMENT_FAILED) && startDate.before(now)) {
+            Calendar c = Calendar.getInstance();
+            c.setTime(now);
+            c.add(Calendar.DAY_OF_MONTH, 1);
+            startDate= c.getTime();
+        }
+        boolean flag = startDate.after(now) && offer != null;
         return flag && (!userIsImportant || customer != null);
     }
 
