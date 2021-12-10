@@ -6,6 +6,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Set;
 
 @Stateless
 public class PackageService {
@@ -23,7 +24,7 @@ public class PackageService {
 
     public List<ServicePackage> getAvailableServicePackages() {
         List<ServicePackage> servicePackages;
-        servicePackages = em.createQuery("SELECT o.servicePackage from Offer o where o.active = true", ServicePackage.class).getResultList();
+        servicePackages = em.createQuery("SELECT distinct o.servicePackage from Offer o where o.active = true", ServicePackage.class).getResultList();
         return servicePackages;
     }
 

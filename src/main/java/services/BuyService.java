@@ -32,27 +32,27 @@ public class BuyService implements Serializable {
     OrderService orderService;
     private Order order;
     private ServicePackage servicePackage;
-    private Customer customer;
     private final Map<OptionalProduct, Boolean> optionalProductBooleanMap = new HashMap<>();
 
-    public void init(Customer customer) {
-        this.customer = customer;
+    public void init(Customer customer, int id_service) {
+        order = new Order(customer);
+        setServicePackage(id_service);
+        optionalProductBooleanMap.clear();
     }
 
-    public void initOrder(){
-        order = new Order();
-        optionalProductBooleanMap.clear();
+    public boolean isInitialized(){
+        return servicePackage != null;
+    }
+
+    private void setServicePackage(int id) {
+        ServicePackage servicePackage = em.find(ServicePackage.class, id);
+        if (servicePackage == null) throw new BadRequestException();
+        this.servicePackage = servicePackage;
+        initOptionalProductBooleanMap();
     }
 
     public ServicePackage getServicePackage() {
         return servicePackage;
-    }
-
-    public void setServicePackage(int id) throws IllegalAccessException {
-        ServicePackage servicePackage = em.find(ServicePackage.class, id);
-        if (servicePackage == null) throw new IllegalAccessException();
-        this.servicePackage = servicePackage;
-        initOptionalProductBooleanMap();
     }
 
     private void initOptionalProductBooleanMap() {

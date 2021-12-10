@@ -58,10 +58,10 @@
                                  style="display: flex;justify-content: space-between;">
 
                                 <span style="font-size: 35px"><b th:text="${order.totalMonthlyFee}">35€</b>/month</span>
-                                <button type="submit" class="btn btn-primary btn-lg" th:href="@{/Payment}"
+                                <a class="btn btn-primary btn-lg" th:href="@{/Payment}"
                                         th:if="${user!=null}"
                                         style="padding-left: 2.5rem; padding-right: 2.5rem;">Buy
-                                </button>
+                                </a>
                                 <a th:href="@{/SignIn(paymentInProgress=true)}" th:unless="${user!=null}">Login to
                                     buy</a>
                             </div>
