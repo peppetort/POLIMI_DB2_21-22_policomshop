@@ -55,17 +55,15 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="bootstrap" level="application" />
-    <orderEntry type="library" name="Maven: org.eclipse.persistence:eclipselink:2.7.9" level="project" />
-    <orderEntry type="library" name="Maven: org.eclipse.persistence:jakarta.persistence:2.2.3" level="project" />
-    <orderEntry type="library" name="Maven: org.eclipse.persistence:commonj.sdo:2.1.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.platform:jakarta.jakartaee-api:8.0.0" level="project" />
-    <orderEntry type="library" name="Maven: javax.ejb:ejb-api:3.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.mariadb.jdbc:mariadb-java-client:2.7.4" level="project" />
-    <orderEntry type="library" name="Maven: org.thymeleaf:thymeleaf:3.0.12.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.thymeleaf:thymeleaf:3.0.14.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: ognl:ognl:3.1.26" level="project" />
     <orderEntry type="library" name="Maven: org.javassist:javassist:3.20.0-GA" level="project" />
     <orderEntry type="library" name="Maven: org.attoparser:attoparser:2.0.5.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.unbescape:unbescape:1.1.6.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.25" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.platform:jakarta.jakartaee-api:8.0.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.eclipse.persistence:eclipselink:2.7.9" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.eclipse.persistence:jakarta.persistence:2.2.3" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.eclipse.persistence:commonj.sdo:2.1.1" level="project" />
   </component>
 </module>
