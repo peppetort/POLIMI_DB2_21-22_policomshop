@@ -39,6 +39,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.eclipse.persistence:eclipselink:2.7.9" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.eclipse.persistence:jakarta.persistence:2.2.3" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.eclipse.persistence:commonj.sdo:2.1.1" level="project" />
-    <orderEntry type="library" name="Maven: jakarta.platform:jakarta.jakartaee-api:8.0.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.platform:jakarta.jakartaee-api:8.0.0" level="project" />
   </component>
 </module>
