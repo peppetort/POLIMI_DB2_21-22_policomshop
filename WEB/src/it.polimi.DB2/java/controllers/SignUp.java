@@ -35,7 +35,7 @@ public class SignUp extends HttpServletThymeleaf {
             templateEngine.process("SignUpPage", ctx, response.getWriter());
             return;
         }
-        response.sendRedirect("SignInPage.html");
+        response.sendRedirect("SignInPage");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
