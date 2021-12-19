@@ -8,7 +8,6 @@ import javax.ejb.Stateful;
 import javax.enterprise.context.SessionScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
 import javax.ws.rs.BadRequestException;
 import java.io.Serializable;
 import java.util.*;
@@ -26,24 +25,34 @@ import java.util.*;
 @Stateful
 public class BuyService implements Serializable {
 
-    @PersistenceContext(unitName = "db2_project", type = PersistenceContextType.EXTENDED)
+    @PersistenceContext(unitName = "db2_project")
     private EntityManager em;
     @EJB(beanName = "OrderService")
     OrderService orderService;
+
+    /* ---- Object Status ---- */
     private Order order;
     private ServicePackage servicePackage;
     private final Map<OptionalProduct, Boolean> optionalProductBooleanMap = new HashMap<>();
 
+
+    /* -------- PUBLIC METHODS -------- */
     public void init(Customer customer, int id_service) {
         order = new Order(customer);
         setServicePackage(id_service);
+        /*A bean could be refreshed by  */
         optionalProductBooleanMap.clear();
     }
 
-    public boolean isInitialized(){
+    public boolean isInitialized() {
         return servicePackage != null;
     }
 
+    public ServicePackage getServicePackage() {
+        return servicePackage;
+    }
+
+    /* ----- PRIVATE METHODS ------ */
     private void setServicePackage(int id) {
         ServicePackage servicePackage = em.find(ServicePackage.class, id);
         if (servicePackage == null) throw new BadRequestException();
@@ -51,21 +60,14 @@ public class BuyService implements Serializable {
         initOptionalProductBooleanMap();
     }
 
-    public ServicePackage getServicePackage() {
-        return servicePackage;
-    }
-
-    private void initOptionalProductBooleanMap() {
-        for (OptionalProduct o : servicePackage.getOptionalProductList()) {
-            optionalProductBooleanMap.put(o, Boolean.FALSE);
-        }
-    }
-
-    public void setOffer(int id) throws IllegalAccessException {
+    public void setOffer(int id) {
+        /*The only valid flow to call this method is via the CustomizeOrder post method,
+        so the user must have already accessed the get method of the same controller -> This bean is already initialized*/
+        if (order == null) throw new BadRequestException();
         Offer offer = em.find(Offer.class, id);
-        if (offer == null || !offer.isActive()) throw new IllegalAccessException();
-        if(!offer.getServicePackage().equals(this.servicePackage)) throw new BadRequestException();
+        if (offer == null || !offer.isActive()) throw new BadRequestException();
         if (offer.equals(order.getOffer())) return;
+        if (!offer.getServicePackage().equals(this.servicePackage)) throw new BadRequestException();
         order.setOffer(offer);
     }
 
@@ -91,16 +93,6 @@ public class BuyService implements Serializable {
         else throw new IllegalAccessException();
     }
 
-    private double evaluateMonthlyFee() {
-        if (order.getOffer() == null) return 0;
-        double sum = 0;
-        sum = sum + order.getOffer().getMonthlyFee();
-        for (Map.Entry<OptionalProduct, Boolean> e : optionalProductBooleanMap.entrySet()) {
-            if (e.getValue()) sum = sum + e.getKey().getMonthlyFee();
-        }
-        return sum;
-    }
-
     public Order getOrder() {
         if (order != null) order.setTotalMonthlyFee(evaluateMonthlyFee());
         return order;
@@ -113,25 +105,27 @@ public class BuyService implements Serializable {
     public boolean executePayment() {
         if (!order.isCorrectFilled(true))
             throw new BadRequestException("Non sei loggato / Il tuo ordine non è stato compilato correttamente");
-        if(order.getCreationDate() == null) order.setCreationDate(new Date());
+        /*Specification: "When the user presses the BUY button, an order is created",
+         * so the creation date is set manually only in this method*/
+        if (order.getCreationDate() == null) order.setCreationDate(new Date());
         boolean flag = randomPayment();
         if (flag) {
             order.setStatus(Order.State.PAID);
         } else {
+            //TODO controllare che la chiamata a un altro metodo non cambi la transazione
             order.setStatus(Order.State.PAYMENT_FAILED);
+            updateFailedPayments(order.getCustomer());
         }
         em.persist(order);
+        //If payment was rejected I have to do a refresh, number of failed payment is updated
+        //TODO to fix if(!flag) em.refresh(order.getCustomer());
         checkout();
         return flag;
     }
 
-    private boolean randomPayment() {
-        return new Random().nextBoolean();
-    }
-
     public boolean retryPayment(int idOrder, Customer customer) {
         Order o = orderService.getRejectedOrderByIdAndUser(idOrder, customer.getId());
-        if (o!=null) {
+        if (o != null) {
             order = o;
             return executePayment();
         }
@@ -140,5 +134,37 @@ public class BuyService implements Serializable {
 
     @Remove
     public void checkout() {
+    }
+
+    private void initOptionalProductBooleanMap() {
+        for (OptionalProduct o : servicePackage.getOptionalProductList()) {
+            optionalProductBooleanMap.put(o, Boolean.FALSE);
+        }
+    }
+
+    private double evaluateMonthlyFee() {
+        if (order.getOffer() == null) return 0;
+        double sum = 0;
+        sum = sum + order.getOffer().getMonthlyFee();
+        for (Map.Entry<OptionalProduct, Boolean> e : optionalProductBooleanMap.entrySet()) {
+            if (e.getValue()) sum = sum + e.getKey().getMonthlyFee();
+        }
+        return sum;
+    }
+
+    /* I decided to implement this function in java business logic and not with a Trigger in the db,
+    because there are two main cases where a user can fail a payment:
+    1 - Create a new order
+    2 - Tries to refund a failed payment
+    In the second use case there is no query on any table, so the only method is to directly update the value with a query.
+    So I prefer to always use this java method and avoid the trigger to ensure code maintainability*/
+    private void updateFailedPayments(Customer c) {
+        em.createQuery("update Customer c set c.nPaymentAttempts = (c.nPaymentAttempts + 1) where c.id =?1 ")
+                .setParameter(1, c.getId())
+                .executeUpdate();
+    }
+
+    private boolean randomPayment() {
+        return new Random().nextBoolean();
     }
 }
