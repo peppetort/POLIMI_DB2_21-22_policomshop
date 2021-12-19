@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="ejb-jar" name="EJB:ejb">
+    <output-path>$PROJECT_DIR$/out/artifacts/</output-path>
+    <root id="archive" name="EJB_ejb.jar">
+      <element id="module-output" name="EJB" />
+      <element id="javaee-facet-resources" facet="EJB/ejb/EJB" />
+      <element id="jpa-descriptors" facet="EJB/jpa/JPA" />
+      <element id="library" level="project" name="Maven: jakarta.platform:jakarta.jakartaee-api:8.0.0" />
+    </root>
+  </artifact>
+</component>

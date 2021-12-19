@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="jpa" name="JPA">
+      <configuration>
+        <setting name="validation-enabled" value="true" />
+        <setting name="provider-name" value="EclipseLink" />
+        <datasource-mapping>
+          <factory-entry name="EJB" />
+          <factory-entry name="db2_project" value="ea36eaa4-8f53-4ccc-9435-ba21cc90e716" />
+        </datasource-mapping>
+        <naming-strategy-map />
+        <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/src/it.polimi.DB2/resources/META-INF/persistence.xml" />
+      </configuration>
+    </facet>
+    <facet type="ejb" name="EJB">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="ejb-jar.xml" url="file://$MODULE_DIR$/src/it.polimi.DB2/resources/META-INF/ejb-jar.xml" />
+        </descriptors>
+        <ejbRoots>
+          <root url="file://$MODULE_DIR$/src/it.polimi.DB2/java" />
+        </ejbRoots>
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_11">
+    <output url="file://$MODULE_DIR$/target/classes" />
+    <output-test url="file://$MODULE_DIR$/target/test-classes" />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/it.polimi.DB2/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/it.polimi.DB2/resources" type="java-resource" />
+      <excludeFolder url="file://$MODULE_DIR$/target" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.eclipse.persistence:eclipselink:2.7.9" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.eclipse.persistence:jakarta.persistence:2.2.3" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.eclipse.persistence:commonj.sdo:2.1.1" level="project" />
+    <orderEntry type="library" name="Maven: jakarta.platform:jakarta.jakartaee-api:8.0.0" level="project" />
+  </component>
+</module>
