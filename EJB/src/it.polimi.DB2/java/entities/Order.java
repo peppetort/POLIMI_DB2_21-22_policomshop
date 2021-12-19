@@ -157,10 +157,11 @@ public class Order implements Serializable {
 
         @Override
         public State convertToEntityAttribute(Integer integer) {
-            for (State s : State.values()) {
+            for (State s :
+                    State.values()) {
                 if (s.getIdDB() == integer) return s;
             }
-            throw new IllegalArgumentException();
+            return null;
         }
     }
 }

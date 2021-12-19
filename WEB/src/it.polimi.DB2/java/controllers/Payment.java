@@ -32,6 +32,7 @@ public class Payment extends HttpServletThymeleaf {
         final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
         ctx.setVariable("user", request.getSession().getAttribute("user"));
         ctx.setVariable("result", flag);
+        ctx.setVariable("nFailedPayments", ((Customer) request.getSession().getAttribute("user")).getNumFailedPayments());
         templateEngine.process(path, ctx, response.getWriter());
     }
 }

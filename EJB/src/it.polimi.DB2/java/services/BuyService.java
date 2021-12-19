@@ -52,14 +52,6 @@ public class BuyService implements Serializable {
         return servicePackage;
     }
 
-    /* ----- PRIVATE METHODS ------ */
-    private void setServicePackage(int id) {
-        ServicePackage servicePackage = em.find(ServicePackage.class, id);
-        if (servicePackage == null) throw new BadRequestException();
-        this.servicePackage = servicePackage;
-        initOptionalProductBooleanMap();
-    }
-
     public void setOffer(int id) {
         /*The only valid flow to call this method is via the CustomizeOrder post method,
         so the user must have already accessed the get method of the same controller -> This bean is already initialized*/
@@ -102,6 +94,14 @@ public class BuyService implements Serializable {
         return order.isCorrectFilled(userIsImportant);
     }
 
+    /* I decided to implement this function in java business logic and not with a Trigger in the db,
+    because there are two main cases where a user can fail a payment:
+    1 - Create a new order
+    2 - Tries to refund a failed payment
+    In the second use case there is no query on any table, so the only method is to directly update the value with a query.
+    So I prefer to always use this java method and avoid the trigger to ensure code maintainability
+    Also for performance reason*/
+
     public boolean executePayment() {
         if (!order.isCorrectFilled(true))
             throw new BadRequestException("Non sei loggato / Il tuo ordine non è stato compilato correttamente");
@@ -112,13 +112,15 @@ public class BuyService implements Serializable {
         if (flag) {
             order.setStatus(Order.State.PAID);
         } else {
-            //TODO controllare che la chiamata a un altro metodo non cambi la transazione
             order.setStatus(Order.State.PAYMENT_FAILED);
-            updateFailedPayments(order.getCustomer());
+            order.getCustomer().addOneFailedPayment();
+            if (order.getCustomer().getNumFailedPayments() >= 3) {
+                AuditCustomer a = new AuditCustomer(order.getCustomer(), order.getTotalMonthlyFee(), order.getCreationDate());
+                em.persist(a);
+            }
         }
         em.persist(order);
-        //If payment was rejected I have to do a refresh, number of failed payment is updated
-        //TODO to fix if(!flag) em.refresh(order.getCustomer());
+        em.merge(order.getCustomer());
         checkout();
         return flag;
     }
@@ -127,13 +129,30 @@ public class BuyService implements Serializable {
         Order o = orderService.getRejectedOrderByIdAndUser(idOrder, customer.getId());
         if (o != null) {
             order = o;
-            return executePayment();
+            boolean flag = executePayment();
+            if (flag) {
+                customer.removeOneFailedPayment();
+                if (customer.getNumFailedPayments() == 0) {
+                    em.remove(em.find(AuditCustomer.class, customer.getId()));
+                }
+                em.merge(customer);
+                return true;
+            }
+            return false;
         }
         throw new BadRequestException();
     }
 
     @Remove
     public void checkout() {
+    }
+
+    /* ----- PRIVATE METHODS ------ */
+    private void setServicePackage(int id) {
+        ServicePackage servicePackage = em.find(ServicePackage.class, id);
+        if (servicePackage == null) throw new BadRequestException();
+        this.servicePackage = servicePackage;
+        initOptionalProductBooleanMap();
     }
 
     private void initOptionalProductBooleanMap() {
@@ -150,18 +169,6 @@ public class BuyService implements Serializable {
             if (e.getValue()) sum = sum + e.getKey().getMonthlyFee();
         }
         return sum;
-    }
-
-    /* I decided to implement this function in java business logic and not with a Trigger in the db,
-    because there are two main cases where a user can fail a payment:
-    1 - Create a new order
-    2 - Tries to refund a failed payment
-    In the second use case there is no query on any table, so the only method is to directly update the value with a query.
-    So I prefer to always use this java method and avoid the trigger to ensure code maintainability*/
-    private void updateFailedPayments(Customer c) {
-        em.createQuery("update Customer c set c.nPaymentAttempts = (c.nPaymentAttempts + 1) where c.id =?1 ")
-                .setParameter(1, c.getId())
-                .executeUpdate();
     }
 
     private boolean randomPayment() {

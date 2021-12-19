@@ -1,16 +1,33 @@
 package entities;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.util.Date;
 
+/*Todo Derived Identifiers Pag. 434*/
 @Entity
 @Table(name = "audit_customer", schema = "db2_project")
-@DiscriminatorValue("1")
-public class AuditCustomer extends Customer {
+public class AuditCustomer {
+    @Id
+    @Column(name = "id")
+    Long id;
     @Column(name = "amount")
     private double amount;
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "last_rejection")
-    private Timestamp lastRejection;
+    private Date lastRejection;
+    @MapsId
+    @OneToOne
+    @JoinColumn(name = "id")
+    private Customer customer;
+
+    public AuditCustomer() {
+    }
+
+    public AuditCustomer(Customer customer, double amount, Date lastRejection) {
+        this.customer = customer;
+        this.amount = amount;
+        this.lastRejection = lastRejection;
+    }
 
     public double getAmount() {
         return amount;
@@ -20,12 +37,11 @@ public class AuditCustomer extends Customer {
         this.amount = amount;
     }
 
-    public Timestamp getLastRejection() {
+    public Date getLastRejection() {
         return lastRejection;
     }
 
-    public void setLastRejection(Timestamp lastRejection) {
+    public void setLastRejection(Date lastRejection) {
         this.lastRejection = lastRejection;
     }
-
 }
