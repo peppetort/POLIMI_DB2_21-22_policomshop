@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">
+  <persistence-unit name="db2_project"
+                    transaction-type="JTA">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <jta-data-source>db2_project</jta-data-source>
+    <class>entities.AuditCustomer</class>
+    <class>entities.Customer</class>
+    <class>entities.Employee</class>
+    <class>entities.FixedInternet</class>
+    <class>entities.FixedPhone</class>
+    <class>entities.MobileInternet</class>
+    <class>entities.MobilePhone</class>
+    <class>entities.Order</class>
+    <class>entities.Offer</class>
+    <class>entities.OptionalProduct</class>
+    <class>entities.ServicePackage</class>
+    <class>entities.Service</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="eclipselink.logging.level" value="FINE"/>
+      <property name="eclipselink.target-database" value="MySQL4"/>
+    </properties>
+  </persistence-unit>
+</persistence>

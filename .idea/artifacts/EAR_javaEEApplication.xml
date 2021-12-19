@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="ear" name="EAR:javaEEApplication">
+    <output-path>$PROJECT_DIR$/out/artifacts/</output-path>
+    <root id="archive" name="EAR_javaEEApplication.ear">
+      <element id="javaee-facet-resources" facet="EAR/javaeeApplication/javaEEApplication" />
+      <element id="directory" name="META-INF" />
+      <element id="artifact" artifact-name="EJB:ejb" />
+      <element id="artifact" artifact-name="WEB:Web" />
+    </root>
+  </artifact>
+</component>

@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="ejb-jar" name="PoliComShop:EJB">
-    <output-path>$PROJECT_DIR$/target/artifacts/PoliComShop_EJB</output-path>
-    <root id="archive" name="PoliComShop_EJB.jar">
-      <element id="javaee-facet-resources" facet="PoliComShop/ejb/EJB" />
-    </root>
-  </artifact>
-</component>
