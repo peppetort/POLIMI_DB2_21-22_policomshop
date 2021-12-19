@@ -19,7 +19,7 @@ public class Customer implements User, Serializable {
     @Column(name = "password")
     protected String password;
     @Column(name = "num_failed_payments")
-    private int nPaymentAttempts;
+    private int numFailedPayments;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH})
     private List<Order> orders;
@@ -53,8 +53,12 @@ public class Customer implements User, Serializable {
         this.password = password;
     }
 
-    public int getnPaymentAttempts() {
-        return nPaymentAttempts;
+    public int getNumFailedPayments() {
+        return numFailedPayments;
+    }
+
+    public void setNumFailedPayments(int numFailedPayments) {
+        this.numFailedPayments = numFailedPayments;
     }
 
     public void setnPaymentAttempts(int nPaymentAttempts) {
@@ -63,10 +67,6 @@ public class Customer implements User, Serializable {
 
     public int getnNPaymentAttempts() {
         return nPaymentAttempts;
-    }
-
-    public void setnNPaymentAttempts(int nPaymentAttemps) {
-        this.nPaymentAttempts = nPaymentAttemps;
     }
 
     public List<Order> getOrders() {
