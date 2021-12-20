@@ -4,7 +4,7 @@ import entities.Customer;
 import org.thymeleaf.context.WebContext;
 import services.BuyService;
 
-import javax.inject.Inject;
+import javax.ejb.EJB;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,8 +12,7 @@ import java.io.IOException;
 
 @WebServlet(name = "Repay", value = "/Repay")
 public class RepayRejectedOrder extends HttpServletThymeleaf{
-
-    @Inject
+    @EJB(name = "BuyService")
     BuyService buyService;
 
     @Override

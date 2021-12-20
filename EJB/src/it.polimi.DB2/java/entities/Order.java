@@ -74,15 +74,19 @@ public class Order implements Serializable {
         this.status = status;
     }
 
+    public State getStatus() {
+        return status;
+    }
+
     public void setTotalMonthlyFee(double totalMonthlyFee) {
         this.totalMonthlyFee = totalMonthlyFee;
     }
 
-    public double getTotalMonthlyFee(){
+    public double getTotalMonthlyFee() {
         return totalMonthlyFee;
     }
 
-    public Date getCreationDate(){
+    public Date getCreationDate() {
         return creationDate;
     }
 

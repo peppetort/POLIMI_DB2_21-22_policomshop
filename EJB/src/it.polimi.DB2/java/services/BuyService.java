@@ -7,6 +7,8 @@ import javax.ejb.Remove;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
+import javax.persistence.SynchronizationType;
 import javax.ws.rs.BadRequestException;
 import java.io.Serializable;
 import java.util.*;
@@ -24,7 +26,7 @@ import java.util.*;
 @Stateful
 public class BuyService implements Serializable {
 
-    @PersistenceContext(unitName = "db2_project")
+    @PersistenceContext(unitName = "db2_project", type = PersistenceContextType.EXTENDED, synchronization = SynchronizationType.UNSYNCHRONIZED)
     private EntityManager em;
     @EJB(beanName = "OrderService")
     OrderService orderService;
@@ -111,12 +113,7 @@ public class BuyService implements Serializable {
         if (flag) {
             order.setStatus(Order.State.PAID);
         } else {
-            order.setStatus(Order.State.PAYMENT_FAILED);
-            order.getCustomer().addOneFailedPayment();
-            if (order.getCustomer().getNumFailedPayments() >= 3) {
-                AuditCustomer a = new AuditCustomer(order.getCustomer(), order.getTotalMonthlyFee(), order.getCreationDate());
-                em.persist(a);
-            }
+            setAsInsolvent();
         }
         em.persist(order);
         em.merge(order.getCustomer());
@@ -144,6 +141,7 @@ public class BuyService implements Serializable {
 
     @Remove
     public void checkout() {
+        em.joinTransaction();
     }
 
     /* ----- PRIVATE METHODS ------ */
@@ -172,5 +170,21 @@ public class BuyService implements Serializable {
 
     private boolean randomPayment() {
         return new Random().nextBoolean();
+    }
+
+    private void setAsInsolvent() {
+        if (order.getStatus() == Order.State.PAYMENT_FAILED) return;
+        order.getCustomer().addOneFailedPayment();
+        if (order.getCustomer().getNumFailedPayments() >= 3) {
+            AuditCustomer a = em.find(AuditCustomer.class, order.getCustomer().getId());
+            if (a == null) {
+                a = new AuditCustomer(order.getCustomer(), order.getTotalMonthlyFee(), order.getCreationDate());
+                em.persist(a);
+            } else {
+                a.setAmount(order.getTotalMonthlyFee());
+                a.setLastRejection(order.getCreationDate());
+            }
+        }
+        order.setStatus(Order.State.PAYMENT_FAILED);
     }
 }
