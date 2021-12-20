@@ -23,9 +23,9 @@ DROP TABLE IF EXISTS `audit_customer`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `audit_customer` (
-  `id` int(11) NOT NULL,
   `amount` double NOT NULL,
   `last_rejection` datetime NOT NULL DEFAULT current_timestamp(),
+  `id` int(11) NOT NULL,
   UNIQUE KEY `id_user_UNIQUE` (`id`),
   CONSTRAINT `fk_audit_customer_1` FOREIGN KEY (`id`) REFERENCES `customer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -37,7 +37,7 @@ CREATE TABLE `audit_customer` (
 
 LOCK TABLES `audit_customer` WRITE;
 /*!40000 ALTER TABLE `audit_customer` DISABLE KEYS */;
-INSERT INTO `audit_customer` VALUES (13,20,'2021-11-25 17:46:02'),(15,100,'2021-12-19 18:51:56');
+INSERT INTO `audit_customer` VALUES (1234,'2021-12-19 22:47:24',14),(100,'2021-12-19 21:22:43',15);
 /*!40000 ALTER TABLE `audit_customer` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-12-19 19:01:55
+-- Dump completed on 2021-12-20  8:49:23
