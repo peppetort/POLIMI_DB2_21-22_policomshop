@@ -4,7 +4,7 @@ import entities.Customer;
 import org.thymeleaf.context.WebContext;
 import services.BuyService;
 
-import javax.inject.Inject;
+import javax.ejb.EJB;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,13 +17,14 @@ import java.util.Date;
 @WebServlet(name = "CustomizeOrder", value = "/CustomizeOrder")
 public class CustomizeOrder extends HttpServletThymeleaf {
 
-    @Inject
+    @EJB(name = "BuyService")
     BuyService buyService;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             String idServicePackage = request.getParameter("id_sp");
+            request.getSession().setAttribute("BuyService", buyService);
             if (idServicePackage == null || idServicePackage.isEmpty()) {
                 if (!buyService.isInitialized()) {
                     response.sendRedirect(request.getContextPath());
@@ -38,7 +39,7 @@ public class CustomizeOrder extends HttpServletThymeleaf {
                     buyService.init((Customer) request.getSession().getAttribute("user"), newId);
                 }
             }
-            renderPage(request, response, null);
+            renderPage(request, response, buyService, null);
         } catch (BadRequestException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
         }
@@ -46,6 +47,11 @@ public class CustomizeOrder extends HttpServletThymeleaf {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        BuyService buyService = (BuyService) request.getSession().getAttribute("BuyService");
+        if (buyService == null) {
+            response.sendRedirect(getServletContext().getContextPath());
+            return;
+        }
         String offer = request.getParameter("offerRadio");
         String[] opProd = request.getParameterValues("opProd");
         String startDateString = request.getParameter("start_date");
@@ -65,13 +71,13 @@ public class CustomizeOrder extends HttpServletThymeleaf {
                 buyService.setOptionalProducts(opProd);
             }
             if (buyService.isCorrectFilled(false)) response.sendRedirect("ReviewOrder");
-            else renderPage(request, response, "Your order is not correct filled, sorry");
+            else renderPage(request, response, buyService, "Your order is not correct filled, sorry");
         } catch (BadRequestException | NumberFormatException | IllegalAccessException | ParseException e) {
-            renderPage(request, response, e.getMessage());
+            renderPage(request, response, buyService, e.getMessage());
         }
     }
 
-    private void renderPage(HttpServletRequest request, HttpServletResponse response, String errorMes) throws IOException {
+    private void renderPage(HttpServletRequest request, HttpServletResponse response, BuyService buyService, String errorMes) throws IOException {
         String path = "CustomizeOrderPage";
         final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
         ctx.setVariable("user", request.getSession().getAttribute("user"));

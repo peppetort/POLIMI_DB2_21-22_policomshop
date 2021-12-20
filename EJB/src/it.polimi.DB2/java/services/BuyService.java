@@ -5,7 +5,6 @@ import entities.*;
 import javax.ejb.EJB;
 import javax.ejb.Remove;
 import javax.ejb.Stateful;
-import javax.enterprise.context.SessionScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.BadRequestException;
@@ -21,7 +20,7 @@ import java.util.*;
  * -> @Stateful EJBs can be also denoted with @SessionScoped annotation.
  * Then the active HTTP session becomes the "EJB client" and maintains the instances.
  */
-@SessionScoped
+
 @Stateful
 public class BuyService implements Serializable {
 
