@@ -1,13 +1,45 @@
-create trigger InsertAuditCustomer
-    after update on customer
+drop procedure if exists UpdateStatPurchases;
+drop trigger if exists UpdatePurchasesStatOnInsert;
+drop trigger if exists UpdatePurchasesStatOnUpdate;
+
+
+CREATE PROCEDURE UpdateStatPurchases (idOrder int, status int, idPackage int, validityPeriod int, total_monthly_fee double)
+    if(status = 1)
+    THEN
+        if(SELECT count(*) from stat_num_purchases_service_package where id_package = idPackage and validity_period = validityPeriod) > 0 THEN
+            if (select count(*) from order_to_optional_product where id_order = idPackage) > 0 then
+                update stat_num_purchases_service_package set num_purchases = num_purchases + 1, total_sales_with_optional = total_sales_with_optional + total_monthly_fee;
+            else
+                update stat_num_purchases_service_package set num_purchases = num_purchases + 1, total_sales_without_optional = total_sales_without_optional + total_monthly_fee;
+            end if;
+        else
+            if (select count(*) from order_to_optional_product where id_order = idOrder) > 0 then
+                insert into stat_num_purchases_service_package values (idPackage, 1, validityPeriod, total_monthly_fee, 0);
+            else
+                insert into stat_num_purchases_service_package values (idPackage, 1, validityPeriod, 0, total_monthly_fee);
+            end if;
+        end if;
+    end if;
+END;
+
+create trigger UpdatePurchasesStatOnInsert
+    after insert on `order`
     for each row
 begin
-    DECLARE last_amount double;
-    DECLARE last_rejection_date DATETIME;
-    if(SELECT new.num_failed_payments from customer where id=new.id) > 2 and (SELECT count(*) FROM audit_customer WHERE id=new.id) = 0
-    THEN
-        SELECT total_monthly_fee into last_amount  FROM `order` WHERE id_user = new.id order by creation_date DESC LIMIT 1;
-        SELECT creation_date into last_rejection_date  FROM `order` WHERE id_user = new.id order by creation_date DESC LIMIT 1;
-        insert into audit_customer values (new.id, last_amount, last_rejection_date);
-    end if;
+    declare idPackage int;
+    declare validityPeriod int;
+    select id_package into idPackage from offer where id = new.id_offer;
+    select validity_period into validityPeriod from offer where id = new.id_offer;
+    call UpdateStatPurchases(new.id, new.status, idPackage, validityPeriod, new.total_monthly_fee);
+end;
+
+create trigger UpdatePurchasesStatOnUpdate
+    after update on `order`
+    for each row
+begin
+    declare idPackage int;
+    declare validityPeriod int;
+    select id_package into idPackage from offer where id = new.id_offer;
+    select validity_period into validityPeriod from offer where id = new.id_offer;
+    call UpdateStatPurchases(new.id, new.status, idPackage, validityPeriod, new.total_monthly_fee);
 end;
