@@ -32,12 +32,7 @@ public class CustomizeOrder extends HttpServletThymeleaf {
                 }
             } else {
                 int newId = Integer.parseInt(idServicePackage);
-                if (!buyService.isInitialized() ||
-                        (buyService.isInitialized() && buyService.getServicePackage().getId() != newId)) {
-                    //TODO per far funionare questa cosa bisogna implmentare un filtro di accesso, a questa pagina non possono accedere gli employee
-                    //TODO come si richiede una nuova istanza di un beans??? Qua la cosa più pulità è ricominciare da capo
-                    buyService.init((Customer) request.getSession().getAttribute("user"), newId);
-                }
+                buyService.initOrder((Customer) request.getSession().getAttribute("user"), newId);
             }
             renderPage(request, response, buyService, null);
         } catch (BadRequestException e) {

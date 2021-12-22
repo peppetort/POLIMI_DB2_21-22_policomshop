@@ -8,7 +8,6 @@ import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
-import javax.persistence.SynchronizationType;
 import javax.ws.rs.BadRequestException;
 import java.io.Serializable;
 import java.util.*;
@@ -26,7 +25,7 @@ import java.util.*;
 @Stateful
 public class BuyService implements Serializable {
 
-    @PersistenceContext(unitName = "db2_project", type = PersistenceContextType.EXTENDED, synchronization = SynchronizationType.UNSYNCHRONIZED)
+    @PersistenceContext(unitName = "db2_project", type = PersistenceContextType.EXTENDED)
     private EntityManager em;
     @EJB(beanName = "OrderService")
     OrderService orderService;
@@ -38,11 +37,10 @@ public class BuyService implements Serializable {
 
 
     /* -------- PUBLIC METHODS -------- */
-    public void init(Customer customer, int id_service) {
+    public void initOrder(Customer customer, int idService) {
         order = new Order(customer);
-        setServicePackage(id_service);
-        /*A bean could be refreshed by  */
         optionalProductBooleanMap.clear();
+        setServicePackage(idService);
     }
 
     public boolean isInitialized() {
@@ -95,38 +93,36 @@ public class BuyService implements Serializable {
         return order.isCorrectFilled(userIsImportant);
     }
 
-    /* I decided to implement this function in java business logic and not with a Trigger in the db,
-    because there are two main cases where a user can fail a payment:
-    1 - Create a new order
-    2 - Tries to refund a failed payment
-    In the second use case there is no query on any table, so the only method is to directly update the value with a query.
-    So I prefer to always use this java method and avoid the trigger to ensure code maintainability
-    Also for performance reason*/
-
     public boolean executePayment() {
-        if (!order.isCorrectFilled(true))
-            throw new BadRequestException("Non sei loggato / Il tuo ordine non è stato compilato correttamente");
         /*Specification: "When the user presses the BUY button, an order is created",
          * so the creation date is set manually only in this method*/
         if (order.getCreationDate() == null) order.setCreationDate(new Date());
-        boolean flag = randomPayment();
-        if (flag) {
-            order.setStatus(Order.State.PAID);
-        } else {
-            setAsInsolvent();
+        boolean returnValue = true;
+        if (!pay()) {
+            Customer customer = order.getCustomer();
+            customer.addOneFailedPayment();
+            if (customer.getNumFailedPayments() >= 3) {
+                AuditCustomer a = em.find(AuditCustomer.class, customer.getId());
+                if (a == null) {
+                    a = new AuditCustomer(customer, order.getTotalMonthlyFee(), order.getCreationDate());
+                    em.persist(a);
+                } else {
+                    a.setAmount(order.getTotalMonthlyFee());
+                    a.setLastRejection(order.getCreationDate());
+                }
+                em.merge(customer);
+            }
+            returnValue = false;
         }
         em.persist(order);
-        em.merge(order.getCustomer());
-        checkout();
-        return flag;
+        return returnValue;
     }
 
     public boolean retryPayment(int idOrder, Customer customer) {
         Order o = orderService.getRejectedOrderByIdAndUser(idOrder, customer.getId());
         if (o != null) {
             order = o;
-            boolean flag = executePayment();
-            if (flag) {
+            if (pay()) {
                 customer.removeOneFailedPayment();
                 if (customer.getNumFailedPayments() == 0) {
                     em.remove(em.find(AuditCustomer.class, customer.getId()));
@@ -140,11 +136,21 @@ public class BuyService implements Serializable {
     }
 
     @Remove
-    public void checkout() {
-        em.joinTransaction();
+    public void remove() {
+        System.out.println("Removing......");
     }
 
     /* ----- PRIVATE METHODS ------ */
+    private boolean pay() {
+        boolean flag = new Random().nextBoolean();
+        if (flag) {
+            order.setStatus(Order.State.PAID);
+        } else {
+            order.setStatus(Order.State.PAYMENT_FAILED);
+        }
+        return flag;
+    }
+
     private void setServicePackage(int id) {
         ServicePackage servicePackage = em.find(ServicePackage.class, id);
         if (servicePackage == null) throw new BadRequestException();
@@ -166,25 +172,5 @@ public class BuyService implements Serializable {
             if (e.getValue()) sum = sum + e.getKey().getMonthlyFee();
         }
         return sum;
-    }
-
-    private boolean randomPayment() {
-        return new Random().nextBoolean();
-    }
-
-    private void setAsInsolvent() {
-        if (order.getStatus() == Order.State.PAYMENT_FAILED) return;
-        order.getCustomer().addOneFailedPayment();
-        if (order.getCustomer().getNumFailedPayments() >= 3) {
-            AuditCustomer a = em.find(AuditCustomer.class, order.getCustomer().getId());
-            if (a == null) {
-                a = new AuditCustomer(order.getCustomer(), order.getTotalMonthlyFee(), order.getCreationDate());
-                em.persist(a);
-            } else {
-                a.setAmount(order.getTotalMonthlyFee());
-                a.setLastRejection(order.getCreationDate());
-            }
-        }
-        order.setStatus(Order.State.PAYMENT_FAILED);
     }
 }

@@ -6,6 +6,11 @@
       <element id="directory" name="META-INF" />
       <element id="artifact" artifact-name="EJB:ejb" />
       <element id="artifact" artifact-name="WEB:Web" />
+      <element id="directory" name="lib">
+        <element id="archive" name="EAR.jar">
+          <element id="module-output" name="EAR" />
+        </element>
+      </element>
     </root>
   </artifact>
 </component>

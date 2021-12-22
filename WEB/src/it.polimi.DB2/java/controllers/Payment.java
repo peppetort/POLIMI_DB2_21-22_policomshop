@@ -27,7 +27,6 @@ public class Payment extends HttpServletThymeleaf {
             if (buyService.getOrder().getCustomer() == null)
                 buyService.getOrder().setCustomer((Customer) request.getSession().getAttribute("user"));
             flag = buyService.executePayment();
-            session.removeAttribute("BuyService");
         } catch (BadRequestException e) {
             e.getStackTrace();
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
