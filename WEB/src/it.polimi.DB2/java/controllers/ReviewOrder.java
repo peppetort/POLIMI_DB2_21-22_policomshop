@@ -15,10 +15,6 @@ public class ReviewOrder extends HttpServletThymeleaf {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         BuyService buyService = (BuyService) request.getSession().getAttribute("BuyService");
-        if (buyService == null) {
-            response.sendRedirect(getServletContext().getContextPath());
-            return;
-        }
         //TODO ma quando viene tolto??
         Customer customer = (Customer) request.getSession().getAttribute("user");
         if (customer == null) {

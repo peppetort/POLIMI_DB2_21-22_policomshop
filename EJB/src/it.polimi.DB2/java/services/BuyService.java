@@ -1,9 +1,8 @@
 package services;
 
 import entities.*;
-import exception.OrderNotFound;
+import utils.PaymentRevisionBot;
 
-import javax.ejb.EJB;
 import javax.ejb.Remove;
 import javax.ejb.Stateful;
 import javax.ejb.StatefulTimeout;
@@ -13,7 +12,6 @@ import javax.persistence.PersistenceContextType;
 import javax.ws.rs.BadRequestException;
 import java.io.Serializable;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Http Session is a perfect storage place where all request from same web client have access
@@ -31,8 +29,6 @@ public class BuyService implements Serializable {
 
     @PersistenceContext(unitName = "db2_project", type = PersistenceContextType.EXTENDED)
     private EntityManager em;
-    @EJB(beanName = "OrderService")
-    OrderService orderService;
 
     /* ---- Object Status ---- */
     private Order order;
@@ -87,7 +83,7 @@ public class BuyService implements Serializable {
     }
 
     public void setStartDate(Date date) {
-        order.setStartDate(date);
+        order.setActivationDate(date);
     }
 
     public Order getOrder() {
@@ -111,10 +107,20 @@ public class BuyService implements Serializable {
     public boolean executePayment(Customer customer) {
         /*Specification: "When the user presses the BUY button, an order is created",
          * so the creation date is set manually only in this method*/
+        if(order.getOffer() == null || order.getActivationDate() == null){
+            throw new BadRequestException();
+        }
+
         order.setCustomer(customer);
         order.setCreationDate(new Date());
-        boolean returnValue = true;
-        if (!pay()) {
+        //TODO: settare correttamente;
+        order.setDeactivationDate(new Date());
+        boolean isPaymentValid = PaymentRevisionBot.review();
+
+        if (isPaymentValid) {
+            order.setStatus(Order.State.PAID);
+        } else {
+            order.setStatus(Order.State.PAYMENT_FAILED);
             customer.addOneFailedPayment();
             //It's already an audit customer
             if (customer.isAuditCustomer()) {
@@ -128,29 +134,10 @@ public class BuyService implements Serializable {
                 em.persist(a);
             }
             em.merge(customer);
-            returnValue = false;
         }
-        em.persist(order);
-        return returnValue;
-    }
 
-    public boolean retryPayment(int idOrder, Customer customer) {
-        Order o = orderService.getRejectedOrderByIdAndUser(idOrder, customer.getId());
-        if (o != null) {
-            order = o;
-            if (pay()) {
-                customer.removeOneFailedPayment();
-                if(customer.isAuditCustomer() && customer.getNumFailedPayments() == 0) {
-                    customer.setAuditCustomer(false);
-                    AuditCustomer a = em.find(AuditCustomer.class, customer.getId());
-                    em.remove(a);
-                }
-                return false;
-            }
-        } catch (OrderNotFound e) {
-            throw new BadRequestException();
-        }
-        throw new BadRequestException();
+        em.persist(order);
+        return isPaymentValid;
     }
 
     @Remove
@@ -158,15 +145,6 @@ public class BuyService implements Serializable {
     }
 
     /* ----- PRIVATE METHODS ------ */
-    private boolean pay() {
-        boolean flag = new Random().nextBoolean();
-        if (flag) {
-            order.setStatus(Order.State.PAID);
-        } else {
-            order.setStatus(Order.State.PAYMENT_FAILED);
-        }
-        return flag;
-    }
 
     private void initOptionalProductBooleanMap() {
         for (OptionalProduct o : servicePackage.getOptionalProductList()) {

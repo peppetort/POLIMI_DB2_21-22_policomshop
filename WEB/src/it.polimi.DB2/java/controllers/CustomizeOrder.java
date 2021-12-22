@@ -6,6 +6,7 @@ import services.BuyService;
 import services.PackageService;
 
 import javax.ejb.EJB;
+import javax.naming.InitialContext;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,8 +19,6 @@ import java.util.Date;
 @WebServlet(name = "CustomizeOrder", value = "/CustomizeOrder")
 public class CustomizeOrder extends HttpServletThymeleaf {
 
-    @EJB(name = "BuyService")
-    BuyService buyService;
     @EJB(name = "PackageService")
     PackageService packageService;
 
@@ -35,18 +34,19 @@ public class CustomizeOrder extends HttpServletThymeleaf {
                 response.sendRedirect(request.getContextPath());
                 return;
             }
+            BuyService buyService;
+            InitialContext ic = new InitialContext();
+            // Retrieve the EJB using JNDI lookup
+            buyService = (BuyService) ic.lookup("java:module/BuyService");
             request.getSession().setAttribute("BuyService", buyService);
-            //TODO: verificare Perché controllare se è inizializzato?
-//                if (!buyService.isInitialized()) {
-//                    response.sendRedirect(request.getContextPath());
-//                    return;
-//                }
             buyService.initOrder(servicePackageId);
             renderPage(request, response, buyService, null);
         } catch (NumberFormatException e) {
             response.sendRedirect(request.getContextPath());
         } catch (BadRequestException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
 
@@ -83,18 +83,16 @@ public class CustomizeOrder extends HttpServletThymeleaf {
                 buyService.setOptionalProducts(optionalProductIdListParam);
             }
 
-            //TODO: a che serve?
-//            if (buyService.isCorrectFilled(false)) response.sendRedirect("ReviewOrder");
-//            else renderPage(request, response, buyService, "Your order is not correct filled, sorry");
             response.sendRedirect("ReviewOrder");
 
 
         } catch (NumberFormatException | ParseException | IllegalAccessException e) {
+            BuyService buyService = (BuyService) request.getSession().getAttribute("BuyService");
             buyService.stopProcess();
             response.sendRedirect(request.getContextPath());
         } catch (BadRequestException e) {
+            BuyService buyService = (BuyService) request.getSession().getAttribute("BuyService");
             renderPage(request, response, buyService, e.getMessage());
-            return;
         }
 
     }
