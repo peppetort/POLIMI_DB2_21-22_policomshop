@@ -116,18 +116,18 @@ public class BuyService implements Serializable {
         boolean returnValue = true;
         if (!pay()) {
             customer.addOneFailedPayment();
-            //TODO: trigger?
-            if (customer.getNumFailedPayments() >= 3) {
+            //It's already an audit customer
+            if (customer.isAuditCustomer()) {
                 AuditCustomer a = em.find(AuditCustomer.class, customer.getId());
-                if (a == null) {
-                    a = new AuditCustomer(customer, order.getTotalMonthlyFee(), order.getCreationDate());
-                    em.persist(a);
-                } else {
-                    a.setAmount(order.getTotalMonthlyFee());
-                    a.setLastRejection(order.getCreationDate());
-                }
-                em.merge(customer);
+                a.setAmount(order.getTotalMonthlyFee());
+                a.setLastRejection(order.getCreationDate());
+            } else if (customer.getNumFailedPayments() >= 3) {
+                //Here only if it's becoming an Audit Customer
+                customer.setAuditCustomer(true);
+                AuditCustomer a = new AuditCustomer(customer, order.getTotalMonthlyFee(), order.getCreationDate());
+                em.persist(a);
             }
+            em.merge(customer);
             returnValue = false;
         }
         em.persist(order);
@@ -135,18 +135,15 @@ public class BuyService implements Serializable {
     }
 
     public boolean retryPayment(int idOrder, Customer customer) {
-        try {
-            Order o = orderService.getRejectedOrderByIdAndUser(idOrder, customer.getId());
-            if (o != null) {
-                order = o;
-                if (pay()) {
-                    customer.removeOneFailedPayment();
-                    //TODO: trigger
-                    if (customer.getNumFailedPayments() == 0) {
-                        em.remove(em.find(AuditCustomer.class, customer.getId()));
-                    }
-                    em.merge(customer);
-                    return true;
+        Order o = orderService.getRejectedOrderByIdAndUser(idOrder, customer.getId());
+        if (o != null) {
+            order = o;
+            if (pay()) {
+                customer.removeOneFailedPayment();
+                if(customer.isAuditCustomer() && customer.getNumFailedPayments() == 0) {
+                    customer.setAuditCustomer(false);
+                    AuditCustomer a = em.find(AuditCustomer.class, customer.getId());
+                    em.remove(a);
                 }
                 return false;
             }

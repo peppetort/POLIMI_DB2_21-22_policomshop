@@ -1,0 +1,18 @@
+create procedure updateStatOptionalPackage(idOrder int, idOptionalProd int, idServicePackage int)
+    if(SELECT `status` from `order` where id = idOrder) = 1 then
+        if(select count(*) from stat_optional_service_package where id_optional_prod = idOptionalProd and id_service_package = idServicePackage) > 0 then
+            update stat_optional_service_package set num_purchases = num_purchases + 1;
+        else
+            insert into stat_optional_service_package values (idOptionalProd, idServicePackage, 1);
+        end if;
+    end if;
+end;
+
+create trigger UpdatePurchasesStatOnInsert
+    after insert on order_to_optional_product
+    for each row
+begin
+    declare idServicePackage int;
+    select id_package into idServicePackage from offer where id = (select id_offer  from `order` where id = new.id_order);
+
+end;

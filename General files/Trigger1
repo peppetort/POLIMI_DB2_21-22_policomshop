@@ -1,0 +1,45 @@
+drop procedure if exists UpdateStatPurchases;
+drop trigger if exists UpdatePurchasesStatOnInsert;
+drop trigger if exists UpdatePurchasesStatOnUpdate;
+
+
+CREATE PROCEDURE UpdateStatPurchases (idOrder int, status int, idPackage int, validityPeriod int, total_monthly_fee double)
+    if(status = 1)
+    THEN
+        if(SELECT count(*) from stat_num_purchases_service_package where id_package = idPackage and validity_period = validityPeriod) > 0 THEN
+            if (select count(*) from order_to_optional_product where id_order = idPackage) > 0 then
+                update stat_num_purchases_service_package set num_purchases = num_purchases + 1, total_sales_with_optional = total_sales_with_optional + total_monthly_fee;
+            else
+                update stat_num_purchases_service_package set num_purchases = num_purchases + 1, total_sales_without_optional = total_sales_without_optional + total_monthly_fee;
+            end if;
+        else
+            if (select count(*) from order_to_optional_product where id_order = idOrder) > 0 then
+                insert into stat_num_purchases_service_package values (idPackage, 1, validityPeriod, total_monthly_fee, 0);
+            else
+                insert into stat_num_purchases_service_package values (idPackage, 1, validityPeriod, 0, total_monthly_fee);
+            end if;
+        end if;
+    end if;
+END;
+
+create trigger UpdatePurchasesStatOnInsert
+    after insert on `order`
+    for each row
+begin
+    declare idPackage int;
+    declare validityPeriod int;
+    select id_package into idPackage from offer where id = new.id_offer;
+    select validity_period into validityPeriod from offer where id = new.id_offer;
+    call UpdateStatPurchases(new.id, new.status, idPackage, validityPeriod, new.total_monthly_fee);
+end;
+
+create trigger UpdatePurchasesStatOnUpdate
+    after update on `order`
+    for each row
+begin
+    declare idPackage int;
+    declare validityPeriod int;
+    select id_package into idPackage from offer where id = new.id_offer;
+    select validity_period into validityPeriod from offer where id = new.id_offer;
+    call UpdateStatPurchases(new.id, new.status, idPackage, validityPeriod, new.total_monthly_fee);
+end;
