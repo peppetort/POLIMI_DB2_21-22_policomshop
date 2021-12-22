@@ -80,7 +80,13 @@ public class BuyService implements Serializable {
     }
 
     public void setStartDate(Date date) throws IllegalAccessException {
-        if (new Date().before(date)) order.setStartDate(date);
+        if (new Date().before(date)) {
+            order.setActivationDate(date);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.add(Calendar.MONTH, order.getOffer().getValidityPeriod());
+            order.setDeactivationDate(cal.getTime());
+        }
         else throw new IllegalAccessException();
     }
 
@@ -101,17 +107,18 @@ public class BuyService implements Serializable {
         if (!pay()) {
             Customer customer = order.getCustomer();
             customer.addOneFailedPayment();
-            if (customer.getNumFailedPayments() >= 3) {
+            //It's already an audit customer
+            if (customer.isAuditCustomer()) {
                 AuditCustomer a = em.find(AuditCustomer.class, customer.getId());
-                if (a == null) {
-                    a = new AuditCustomer(customer, order.getTotalMonthlyFee(), order.getCreationDate());
-                    em.persist(a);
-                } else {
-                    a.setAmount(order.getTotalMonthlyFee());
-                    a.setLastRejection(order.getCreationDate());
-                }
-                em.merge(customer);
+                a.setAmount(order.getTotalMonthlyFee());
+                a.setLastRejection(order.getCreationDate());
+            } else if (customer.getNumFailedPayments() >= 3) {
+                //Here only if it's becoming an Audit Customer
+                customer.setAuditCustomer(true);
+                AuditCustomer a = new AuditCustomer(customer, order.getTotalMonthlyFee(), order.getCreationDate());
+                em.persist(a);
             }
+            em.merge(customer);
             returnValue = false;
         }
         em.persist(order);
@@ -124,9 +131,10 @@ public class BuyService implements Serializable {
             order = o;
             if (pay()) {
                 customer.removeOneFailedPayment();
-                if (customer.getNumFailedPayments() == 0) {
+                if(customer.isAuditCustomer() && customer.getNumFailedPayments() == 0) {
+                    customer.setAuditCustomer(false);
                     AuditCustomer a = em.find(AuditCustomer.class, customer.getId());
-                    if(a!= null) em.remove(a);
+                    em.remove(a);
                 }
                 em.merge(customer);
                 return true;

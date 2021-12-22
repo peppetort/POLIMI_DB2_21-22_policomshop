@@ -26,7 +26,7 @@
                         <div class="mb-md-2 mt-md-4 pb-2">
                             <h2 class="fw-bold mb-2" th:text="${order.offer.getServicePackage().name}">Package name</h2>
                             <span><b>Strat date:</b>&nbsp;<span
-                                    th:text="${#dates.format(order.startDate, 'dd/MM/yyyy')}">10/10/2020 </span> </span>
+                                    th:text="${#dates.format(order.activationDate, 'dd/MM/yyyy')}">10/10/2020 </span> </span>
                             <br>
                             <span><b>Duration:</b>&nbsp;<span
                                     th:text="${order.offer.validityPeriod}"> 10 </span> months </span>
