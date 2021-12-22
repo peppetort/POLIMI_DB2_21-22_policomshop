@@ -16,28 +16,29 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `fixed_phone`
+-- Table structure for table `stat_num_purchases_service_package`
 --
 
-DROP TABLE IF EXISTS `fixed_phone`;
+DROP TABLE IF EXISTS `stat_num_purchases_service_package`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `fixed_phone` (
-  `id` int(11) NOT NULL,
-  `n_minutes` int(11) NOT NULL,
-  `fee` double NOT NULL,
-  KEY `fk_fixed_phone_1_idx` (`id`),
-  CONSTRAINT `fk_fixed_phone_1` FOREIGN KEY (`id`) REFERENCES `service` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
+CREATE TABLE `stat_num_purchases_service_package` (
+  `id_package` int(11) NOT NULL,
+  `num_purchases` int(11) DEFAULT NULL,
+  `validity_period` int(11) DEFAULT NULL,
+  `amount_total_sales` double DEFAULT NULL,
+  UNIQUE KEY `stat_purchases_package_validity_unique` (`id_package`,`validity_period`),
+  CONSTRAINT `id_service_package_fk` FOREIGN KEY (`id_package`) REFERENCES `service_package` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `fixed_phone`
+-- Dumping data for table `stat_num_purchases_service_package`
 --
 
-LOCK TABLES `fixed_phone` WRITE;
-/*!40000 ALTER TABLE `fixed_phone` DISABLE KEYS */;
-/*!40000 ALTER TABLE `fixed_phone` ENABLE KEYS */;
+LOCK TABLES `stat_num_purchases_service_package` WRITE;
+/*!40000 ALTER TABLE `stat_num_purchases_service_package` DISABLE KEYS */;
+/*!40000 ALTER TABLE `stat_num_purchases_service_package` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -49,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-12-20  8:49:23
+-- Dump completed on 2021-12-22 18:46:52
