@@ -8,6 +8,7 @@ import java.util.*;
 @Entity
 @Table(name = "order", schema = "db2_project")
 @NamedQuery(name = "Order.rejectedOrders", query = "SELECT r FROM Order r  WHERE r.customer.id = ?1 and r.status = ?2")
+//TODO: rimuovere
 @NamedQuery(name = "Order.rejectedOrdersByID", query = "SELECT r FROM Order r  WHERE r.id = ?1 and r.customer.id = ?2 and r.status = ?3")
 public class Order implements Serializable {
 
@@ -19,8 +20,10 @@ public class Order implements Serializable {
     @Column(name = "creation_date")
     private Date creationDate;
     @Temporal(TemporalType.DATE)
-    @Column(name = "start_date")
-    private Date startDate;
+    @Column(name = "activation_date")
+    private Date activationDate;
+    @Column(name = "deactivation_date")
+    private Date deactivationDate;
     @Column(name = "total_monthly_fee")
     private double totalMonthlyFee;
     @Column(name = "status")
@@ -36,12 +39,8 @@ public class Order implements Serializable {
     /*Ho scelto un set per evitare un inserimento doppio per lo stesso optional product*/
     private Set<OptionalProduct> optionalProductList;
 
-    public Order(Customer customer) {
-        this.customer = customer;
-        optionalProductList = new HashSet<>();
-    }
-
     public Order() {
+        optionalProductList = new HashSet<>();
     }
 
     public int getId() {
@@ -57,17 +56,25 @@ public class Order implements Serializable {
         this.creationDate = creationDate;
     }
 
-    public Date getStartDate() {
-        return startDate;
+    public Date getActivationDate() {
+        return activationDate;
     }
 
     public String getStartDateString() {
-        if (startDate == null) return null;
-        return new SimpleDateFormat("yyyy-MM-dd").format(startDate);
+        if (activationDate == null) return null;
+        return new SimpleDateFormat("yyyy-MM-dd").format(activationDate);
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
+    public void setActivationDate(Date startDate) {
+        this.activationDate = startDate;
+    }
+
+    public Date getDeactivationDate() {
+        return deactivationDate;
+    }
+
+    public void setDeactivationDate(Date deactivationDate) {
+        this.deactivationDate = deactivationDate;
     }
 
     public void setStatus(State status) {
@@ -111,15 +118,16 @@ public class Order implements Serializable {
         return optionalProductList;
     }
 
+    //TODO: a che serve?
     public boolean isCorrectFilled(boolean userIsImportant) {
         Date now = new Date();
-        if(status.equals(State.PAYMENT_FAILED) && startDate.before(now)) {
+        if(status.equals(State.PAYMENT_FAILED) && activationDate.before(now)) {
             Calendar c = Calendar.getInstance();
             c.setTime(now);
             c.add(Calendar.DAY_OF_MONTH, 1);
-            startDate= c.getTime();
+            activationDate = c.getTime();
         }
-        boolean flag = startDate.after(now) && offer != null;
+        boolean flag = activationDate.after(now) && offer != null;
         return flag && (!userIsImportant || customer != null);
     }
 
@@ -128,12 +136,12 @@ public class Order implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return id == order.id && Double.compare(order.totalMonthlyFee, totalMonthlyFee) == 0 && Objects.equals(creationDate, order.creationDate) && Objects.equals(startDate, order.startDate) && status == order.status && Objects.equals(customer, order.customer) && Objects.equals(offer, order.offer) && Objects.equals(optionalProductList, order.optionalProductList);
+        return id == order.id && Double.compare(order.totalMonthlyFee, totalMonthlyFee) == 0 && Objects.equals(creationDate, order.creationDate) && Objects.equals(activationDate, order.activationDate) && status == order.status && Objects.equals(customer, order.customer) && Objects.equals(offer, order.offer) && Objects.equals(optionalProductList, order.optionalProductList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, creationDate, startDate, totalMonthlyFee, status, customer, offer, optionalProductList);
+        return Objects.hash(id, creationDate, activationDate, totalMonthlyFee, status, customer, offer, optionalProductList);
     }
 
     public enum State {

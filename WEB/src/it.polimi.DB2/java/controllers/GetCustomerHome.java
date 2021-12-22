@@ -1,6 +1,7 @@
 package controllers;
 
 import entities.*;
+import exception.OrderNotFound;
 import org.thymeleaf.context.WebContext;
 import services.OrderService;
 import services.PackageService;
@@ -27,7 +28,11 @@ public class GetCustomerHome extends HttpServletThymeleaf {
         List<Order> rejectedPayments = null;
         Customer customer = (Customer) request.getSession().getAttribute("user");
         if (customer != null) {
-            rejectedPayments = orderService.getRejectedOrdersByCustomer(customer.getId());
+            try {
+                rejectedPayments = orderService.getRejectedOrdersByCustomer(customer.getId());
+            } catch (OrderNotFound e) {
+                e.printStackTrace();
+            }
         }
 
         String path = "CustomerHomePage";
