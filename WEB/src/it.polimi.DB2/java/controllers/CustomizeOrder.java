@@ -1,8 +1,9 @@
 package controllers;
 
-import entities.Customer;
+import entities.ServicePackage;
 import org.thymeleaf.context.WebContext;
 import services.BuyService;
+import services.PackageService;
 
 import javax.ejb.EJB;
 import javax.servlet.annotation.WebServlet;
@@ -19,57 +20,83 @@ public class CustomizeOrder extends HttpServletThymeleaf {
 
     @EJB(name = "BuyService")
     BuyService buyService;
+    @EJB(name = "PackageService")
+    PackageService packageService;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            String idServicePackage = request.getParameter("id_sp");
-            request.getSession().setAttribute("BuyService", buyService);
-            if (idServicePackage == null || idServicePackage.isEmpty()) {
-                if (!buyService.isInitialized()) {
-                    response.sendRedirect(request.getContextPath());
-                    return;
-                }
-            } else {
-                int newId = Integer.parseInt(idServicePackage);
-                buyService.initOrder((Customer) request.getSession().getAttribute("user"), newId);
+            String servicePackageIdParam = request.getParameter("id_sp");
+
+            int servicePackageId = Integer.parseInt(servicePackageIdParam);
+
+            ServicePackage servicePackage = packageService.findById(servicePackageId);
+            if (servicePackage == null) {
+                response.sendRedirect(request.getContextPath());
+                return;
             }
+            request.getSession().setAttribute("BuyService", buyService);
+            //TODO: verificare Perché controllare se è inizializzato?
+//                if (!buyService.isInitialized()) {
+//                    response.sendRedirect(request.getContextPath());
+//                    return;
+//                }
+            buyService.initOrder(servicePackageId);
             renderPage(request, response, buyService, null);
+        } catch (NumberFormatException e) {
+            response.sendRedirect(request.getContextPath());
         } catch (BadRequestException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
         }
+
+
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        BuyService buyService = (BuyService) request.getSession().getAttribute("BuyService");
-        if (buyService == null) {
-            response.sendRedirect(getServletContext().getContextPath());
+        try {
+            BuyService buyService = (BuyService) request.getSession().getAttribute("BuyService");
+            if (buyService == null) {
+                response.sendRedirect(getServletContext().getContextPath());
+                return;
+            }
+
+            String offerIdParam = request.getParameter("offerRadio");
+            String[] optionalProductIdListParam = request.getParameterValues("opProd");
+            String startDateParam = request.getParameter("start_date");
+
+            if (offerIdParam == null || offerIdParam.isEmpty())
+                throw new BadRequestException("Choose an offer among those available");
+            int offerId = Integer.parseInt(offerIdParam);
+            buyService.setOffer(offerId);
+
+            if (startDateParam == null || startDateParam.isEmpty())
+                throw new BadRequestException("Please select a valid start date");
+            Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(startDateParam);
+            if (startDate.after(new java.util.Date()))
+                buyService.setStartDate(startDate);
+            else {
+                throw new BadRequestException("Selected date is too old");
+            }
+
+            if (optionalProductIdListParam != null) {
+                buyService.setOptionalProducts(optionalProductIdListParam);
+            }
+
+            //TODO: a che serve?
+//            if (buyService.isCorrectFilled(false)) response.sendRedirect("ReviewOrder");
+//            else renderPage(request, response, buyService, "Your order is not correct filled, sorry");
+            response.sendRedirect("ReviewOrder");
+
+
+        } catch (NumberFormatException | ParseException | IllegalAccessException e) {
+            buyService.stopProcess();
+            response.sendRedirect(request.getContextPath());
+        } catch (BadRequestException e) {
+            renderPage(request, response, buyService, e.getMessage());
             return;
         }
-        String offer = request.getParameter("offerRadio");
-        String[] opProd = request.getParameterValues("opProd");
-        String startDateString = request.getParameter("start_date");
-        try {
-            if (offer == null || offer.isEmpty())
-                throw new BadRequestException("Choose an offer!");
-            buyService.setOffer(Integer.parseInt(offer));
-            if (startDateString == null || startDateString.isEmpty())
-                throw new BadRequestException("Selezionare un valore valido per Start Date!");
-            Date d = new SimpleDateFormat("yyyy-MM-dd").parse(startDateString);
-            if (d.after(new java.util.Date()))
-                buyService.setStartDate(d);
-            else {
-                throw new BadRequestException("Start date must be after now");
-            }
-            if (opProd != null) {
-                buyService.setOptionalProducts(opProd);
-            }
-            if (buyService.isCorrectFilled(false)) response.sendRedirect("ReviewOrder");
-            else renderPage(request, response, buyService, "Your order is not correct filled, sorry");
-        } catch (BadRequestException | NumberFormatException | IllegalAccessException | ParseException e) {
-            renderPage(request, response, buyService, e.getMessage());
-        }
+
     }
 
     private void renderPage(HttpServletRequest request, HttpServletResponse response, BuyService buyService, String errorMes) throws IOException {

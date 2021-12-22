@@ -36,12 +36,8 @@ public class Order implements Serializable {
     /*Ho scelto un set per evitare un inserimento doppio per lo stesso optional product*/
     private Set<OptionalProduct> optionalProductList;
 
-    public Order(Customer customer) {
-        this.customer = customer;
-        optionalProductList = new HashSet<>();
-    }
-
     public Order() {
+        optionalProductList = new HashSet<>();
     }
 
     public int getId() {
@@ -111,6 +107,7 @@ public class Order implements Serializable {
         return optionalProductList;
     }
 
+    //TODO: a che serve?
     public boolean isCorrectFilled(boolean userIsImportant) {
         Date now = new Date();
         if(status.equals(State.PAYMENT_FAILED) && startDate.before(now)) {

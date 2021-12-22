@@ -22,40 +22,49 @@ public class UserService {
     public Customer checkCredentialsCustomer(String email, String password) throws UserNotFound {
         List<Customer> userList;
 
-        userList = em.createNamedQuery("Customer.checkCredentials", Customer.class)
-                .setParameter(1, email)
-                .setParameter(2, password)
-                .getResultList();
+        try {
+            userList = em.createNamedQuery("Customer.checkCredentials", Customer.class)
+                    .setParameter(1, email)
+                    .setParameter(2, password)
+                    .getResultList();
+        } catch (PersistenceException e) {
+            throw new UserNotFound("Error while checking credentials");
+        }
 
-        if(userList.size() == 1){
+        if (userList.size() == 1) {
             return userList.get(0);
         }
         throw new UserNotFound(null);
     }
+
     public Employee checkCredentialsEmployee(String email, String password) throws UserNotFound {
         List<Employee> userList;
 
-        userList = em.createNamedQuery("Employee.checkCredentials", Employee.class)
-                .setParameter(1, email)
-                .setParameter(2, password)
-                .getResultList();
+        try {
+            userList = em.createNamedQuery("Employee.checkCredentials", Employee.class)
+                    .setParameter(1, email)
+                    .setParameter(2, password)
+                    .getResultList();
+        } catch (PersistenceException e) {
+            throw new UserNotFound("Error while checking credentials");
+        }
 
-        if(userList.size() == 1){
+        if (userList.size() == 1) {
             return userList.get(0);
         }
         throw new UserNotFound(null);
     }
 
-    public Customer registerNewUser(String username, String email, String psw){
+    public Customer registerNewUser(String username, String email, String psw) {
         Customer newUser = new Customer();
         newUser.setEmail(email);
         newUser.setPassword(psw);
         newUser.setUsername(username);
-        try{
+        try {
             em.persist(newUser);
             em.flush();
-        }catch (PersistenceException e){
-            if(e.getCause().getMessage().contains("java.sql.SQLIntegrityConstraintViolationException")) return null;
+        } catch (PersistenceException e) {
+            if (e.getCause().getMessage().contains("java.sql.SQLIntegrityConstraintViolationException")) return null;
             throw e;
         }
         return newUser;

@@ -24,14 +24,18 @@ public class Payment extends HttpServletThymeleaf {
             return;
         }
         try {
-            if (buyService.getOrder().getCustomer() == null)
-                buyService.getOrder().setCustomer((Customer) request.getSession().getAttribute("user"));
-            flag = buyService.executePayment();
+            Customer customer = (Customer) request.getSession().getAttribute("user");
+            if(customer == null){
+                response.sendRedirect(getServletContext().getContextPath());
+                return;
+            }
+            flag = buyService.executePayment(customer);
         } catch (BadRequestException e) {
             e.getStackTrace();
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
+        session.removeAttribute("BuyService");
         String path = "PaymentPage";
         final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
         ctx.setVariable("user", request.getSession().getAttribute("user"));

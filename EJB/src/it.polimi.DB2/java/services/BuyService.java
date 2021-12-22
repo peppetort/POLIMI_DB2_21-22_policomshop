@@ -1,16 +1,19 @@
 package services;
 
 import entities.*;
+import exception.OrderNotFound;
 
 import javax.ejb.EJB;
 import javax.ejb.Remove;
 import javax.ejb.Stateful;
+import javax.ejb.StatefulTimeout;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 import javax.ws.rs.BadRequestException;
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Http Session is a perfect storage place where all request from same web client have access
@@ -23,6 +26,7 @@ import java.util.*;
  */
 
 @Stateful
+@StatefulTimeout(value = 10)
 public class BuyService implements Serializable {
 
     @PersistenceContext(unitName = "db2_project", type = PersistenceContextType.EXTENDED)
@@ -36,13 +40,16 @@ public class BuyService implements Serializable {
     private final Map<OptionalProduct, Boolean> optionalProductBooleanMap = new HashMap<>();
 
 
-    /* -------- PUBLIC METHODS -------- */
-    public void initOrder(Customer customer, int idService) {
-        order = new Order(customer);
+    public void initOrder(int idService) {
+        order = new Order();
         optionalProductBooleanMap.clear();
-        setServicePackage(idService);
+        ServicePackage servicePackage = em.find(ServicePackage.class, idService);
+        if (servicePackage == null) throw new BadRequestException();
+        this.servicePackage = servicePackage;
+        initOptionalProductBooleanMap();
     }
 
+    //TODO:remove
     public boolean isInitialized() {
         return servicePackage != null;
     }
@@ -66,7 +73,7 @@ public class BuyService implements Serializable {
         return optionalProductBooleanMap;
     }
 
-    public void setOptionalProducts(String[] opProds) throws IllegalAccessException {
+    public void setOptionalProducts(String[] opProds) throws IllegalAccessException, NumberFormatException {
         initOptionalProductBooleanMap();
         order.getOptionalProductList().clear();
         for (String opId : opProds) {
@@ -79,28 +86,37 @@ public class BuyService implements Serializable {
         }
     }
 
-    public void setStartDate(Date date) throws IllegalAccessException {
-        if (new Date().before(date)) order.setStartDate(date);
-        else throw new IllegalAccessException();
+    public void setStartDate(Date date) {
+        order.setStartDate(date);
     }
 
     public Order getOrder() {
-        if (order != null) order.setTotalMonthlyFee(evaluateMonthlyFee());
+        if (order != null && order.getOffer() != null) {
+            double sum = 0;
+            sum = sum + order.getOffer().getMonthlyFee();
+            for (Map.Entry<OptionalProduct, Boolean> e : optionalProductBooleanMap.entrySet()) {
+                if (e.getValue()) sum = sum + e.getKey().getMonthlyFee();
+                order.setTotalMonthlyFee(sum);
+            }
+        }
         return order;
     }
 
+    //TODO:remove
     public boolean isCorrectFilled(boolean userIsImportant) {
         return order.isCorrectFilled(userIsImportant);
     }
 
-    public boolean executePayment() {
+    @Remove
+    public boolean executePayment(Customer customer) {
         /*Specification: "When the user presses the BUY button, an order is created",
          * so the creation date is set manually only in this method*/
-        if (order.getCreationDate() == null) order.setCreationDate(new Date());
+        order.setCustomer(customer);
+        order.setCreationDate(new Date());
         boolean returnValue = true;
         if (!pay()) {
-            Customer customer = order.getCustomer();
             customer.addOneFailedPayment();
+            //TODO: trigger?
             if (customer.getNumFailedPayments() >= 3) {
                 AuditCustomer a = em.find(AuditCustomer.class, customer.getId());
                 if (a == null) {
@@ -119,25 +135,29 @@ public class BuyService implements Serializable {
     }
 
     public boolean retryPayment(int idOrder, Customer customer) {
-        Order o = orderService.getRejectedOrderByIdAndUser(idOrder, customer.getId());
-        if (o != null) {
-            order = o;
-            if (pay()) {
-                customer.removeOneFailedPayment();
-                if (customer.getNumFailedPayments() == 0) {
-                    em.remove(em.find(AuditCustomer.class, customer.getId()));
+        try {
+            Order o = orderService.getRejectedOrderByIdAndUser(idOrder, customer.getId());
+            if (o != null) {
+                order = o;
+                if (pay()) {
+                    customer.removeOneFailedPayment();
+                    //TODO: trigger
+                    if (customer.getNumFailedPayments() == 0) {
+                        em.remove(em.find(AuditCustomer.class, customer.getId()));
+                    }
+                    em.merge(customer);
+                    return true;
                 }
-                em.merge(customer);
-                return true;
+                return false;
             }
-            return false;
+        } catch (OrderNotFound e) {
+            throw new BadRequestException();
         }
         throw new BadRequestException();
     }
 
     @Remove
-    public void remove() {
-        System.out.println("Removing......");
+    public void stopProcess() {
     }
 
     /* ----- PRIVATE METHODS ------ */
@@ -151,26 +171,9 @@ public class BuyService implements Serializable {
         return flag;
     }
 
-    private void setServicePackage(int id) {
-        ServicePackage servicePackage = em.find(ServicePackage.class, id);
-        if (servicePackage == null) throw new BadRequestException();
-        this.servicePackage = servicePackage;
-        initOptionalProductBooleanMap();
-    }
-
     private void initOptionalProductBooleanMap() {
         for (OptionalProduct o : servicePackage.getOptionalProductList()) {
             optionalProductBooleanMap.put(o, Boolean.FALSE);
         }
-    }
-
-    private double evaluateMonthlyFee() {
-        if (order.getOffer() == null) return 0;
-        double sum = 0;
-        sum = sum + order.getOffer().getMonthlyFee();
-        for (Map.Entry<OptionalProduct, Boolean> e : optionalProductBooleanMap.entrySet()) {
-            if (e.getValue()) sum = sum + e.getKey().getMonthlyFee();
-        }
-        return sum;
     }
 }
