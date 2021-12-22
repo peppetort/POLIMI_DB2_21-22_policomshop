@@ -125,7 +125,8 @@ public class BuyService implements Serializable {
             if (pay()) {
                 customer.removeOneFailedPayment();
                 if (customer.getNumFailedPayments() == 0) {
-                    em.remove(em.find(AuditCustomer.class, customer.getId()));
+                    AuditCustomer a = em.find(AuditCustomer.class, customer.getId());
+                    if(a!= null) em.remove(a);
                 }
                 em.merge(customer);
                 return true;
