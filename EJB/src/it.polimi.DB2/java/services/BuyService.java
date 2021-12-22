@@ -80,7 +80,13 @@ public class BuyService implements Serializable {
     }
 
     public void setStartDate(Date date) throws IllegalAccessException {
-        if (new Date().before(date)) order.setStartDate(date);
+        if (new Date().before(date)) {
+            order.setActivationDate(date);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.add(Calendar.MONTH, order.getOffer().getValidityPeriod());
+            order.setDeactivationDate(cal.getTime());
+        }
         else throw new IllegalAccessException();
     }
 
