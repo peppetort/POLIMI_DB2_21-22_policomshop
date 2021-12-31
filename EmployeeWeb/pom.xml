@@ -7,7 +7,7 @@
     <groupId>it.polimi.DB2</groupId>
     <artifactId>WEB</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>CustomerWeb</name>
+    <name>EmployeeWeb</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

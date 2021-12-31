@@ -1,12 +1,12 @@
 <component name="ArtifactManager">
-  <artifact type="war" name="WEB:Web">
+  <artifact type="war" name="Customer:Web">
     <output-path>$PROJECT_DIR$/out/artifacts/</output-path>
-    <root id="archive" name="WEB_Web.war">
-      <element id="javaee-facet-resources" facet="WEB/web/Web" />
+    <root id="archive" name="Customer_Web.war">
+      <element id="javaee-facet-resources" facet="CustomerWeb/web/Web" />
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
-          <element id="javaee-facet-classes" facet="WEB/web/Web" />
-          <element id="module-output" name="WEB" />
+          <element id="javaee-facet-classes" facet="CustomerWeb/web/Web" />
+          <element id="module-output" name="CustomerWeb" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="Maven: ognl:ognl:3.1.26" />

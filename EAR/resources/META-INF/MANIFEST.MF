@@ -1,2 +1,2 @@
 Manifest-Version: 1.0
-Class-Path: EJB.jar, WEB.war
+Class-Path: EJB.jar, Customer_Web.war, Employee_Web.war

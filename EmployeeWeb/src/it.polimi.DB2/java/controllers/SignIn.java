@@ -1,6 +1,6 @@
 package controllers;
 
-import entities.Customer;
+import entities.Employee;
 import exception.UserNotFound;
 import org.thymeleaf.context.WebContext;
 import services.UserService;
@@ -18,14 +18,13 @@ public class SignIn extends HttpServletThymeleaf {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        renderPage(request, response, (request.getSession().getAttribute("user") != null ? "You are already logged in" : null), request.getParameter("paymentInProgress") != null);
+        renderPage(request, response, (request.getSession().getAttribute("user") != null ? "You are already logged in" : null));
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String email = request.getParameter("email"), //email is the id of the field in the form
-                pwd = request.getParameter("password"), //same as above
-                paymentInProgress = request.getParameter("paymentInProgress");
+                pwd = request.getParameter("password");
         if (email == null || email.isEmpty() ||
                 pwd == null || pwd.isEmpty()) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -33,24 +32,17 @@ public class SignIn extends HttpServletThymeleaf {
         }
 
         try {
-            String servlet;
-            Customer customer = userService.checkCredentialsCustomer(email, pwd);
-            request.getSession().setAttribute("user", customer);
-            if (paymentInProgress != null) {
-                servlet = "Payment";
-            } else {
-                servlet = request.getContextPath();
-            }
-            response.sendRedirect(servlet);
+            Employee employee = userService.checkCredentialsEmployee(email, pwd);
+            request.getSession().setAttribute("user", employee);
+            response.sendRedirect(request.getContextPath());
         } catch (UserNotFound e) {
-            renderPage(request, response, "Invalid Credentials", paymentInProgress != null);
+            renderPage(request, response, "Invalid Credentials");
         }
     }
 
-    private void renderPage(HttpServletRequest request, HttpServletResponse response, String errorMsg, boolean paymentInProgress) throws IOException {
+    private void renderPage(HttpServletRequest request, HttpServletResponse response, String errorMsg) throws IOException {
         final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
         ctx.setVariable("errorMsg", errorMsg);
-        ctx.setVariable("paymentInProgress", paymentInProgress);
         templateEngine.process("SignInPage", ctx, response.getWriter());
     }
 }

@@ -1,6 +1,8 @@
 package controllers;
 
-import entities.*;
+import entities.Customer;
+import entities.Order;
+import entities.ServicePackage;
 import exception.OrderNotFound;
 import org.thymeleaf.context.WebContext;
 import services.OrderService;
@@ -13,8 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "GetCustomerHome", value = "")
-public class GetCustomerHome extends HttpServletThymeleaf {
+@WebServlet(name = "Homepage", value = "")
+public class Homepage extends HttpServletThymeleaf {
 
     @EJB(beanName = "PackageService")
     PackageService packageService;
@@ -35,7 +37,7 @@ public class GetCustomerHome extends HttpServletThymeleaf {
             }
         }
 
-        String path = "CustomerHomePage";
+        String path = "Homepage";
         final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
         ctx.setVariable("user", customer);
         ctx.setVariable("servicePackages", servicePackages);
