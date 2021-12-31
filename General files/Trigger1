@@ -11,9 +11,9 @@ CREATE PROCEDURE UpdateStatPackagePurchases (idOrder int, idPackage int, validit
         end if;
     else
         if (select count(*) from order_to_optional_product where id_order = idOrder) > 0 then
-            insert into stat_service_package values (idPackage, validityPeriod, 1, total_monthly_fee, 0);
-        else
             insert into stat_service_package values (idPackage, validityPeriod, 1, 0, total_monthly_fee);
+        else
+            insert into stat_service_package values (idPackage, validityPeriod, 1, total_monthly_fee, 0);
         end if;
     end if;
 END;
