@@ -38,9 +38,31 @@ CREATE TABLE `order_to_optional_product` (
 
 LOCK TABLES `order_to_optional_product` WRITE;
 /*!40000 ALTER TABLE `order_to_optional_product` DISABLE KEYS */;
-INSERT INTO `order_to_optional_product` VALUES (112,2);
+INSERT INTO `order_to_optional_product` VALUES (112,2),(115,1);
 /*!40000 ALTER TABLE `order_to_optional_product` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`juri`@`localhost`*/ /*!50003 trigger UpdatePurchasesStatOptionalOnInsert
+    after insert on order_to_optional_product
+    for each row
+begin
+    declare idServicePackage int;
+    select id_package into idServicePackage from offer where id = (select id_offer  from `order` where id = new.id_order);
+    call updateStatOptionalPackage(new.id_optional_product, idServicePackage);
+end */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -51,4 +73,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-12-22 18:46:52
+-- Dump completed on 2021-12-31 10:18:08

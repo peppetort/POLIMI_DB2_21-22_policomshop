@@ -16,31 +16,28 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `stat_num_purchases_service_package`
+-- Table structure for table `activation_schedule`
 --
 
-DROP TABLE IF EXISTS `stat_num_purchases_service_package`;
+DROP TABLE IF EXISTS `activation_schedule`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `stat_num_purchases_service_package` (
-  `id_package` int(11) NOT NULL,
-  `validity_period` int(11) DEFAULT NULL,
-  `num_purchases` int(11) DEFAULT NULL,
-  `amount_with_optional` double DEFAULT NULL,
-  `amount_without_optional` double NOT NULL,
-  UNIQUE KEY `stat_purchases_package_validity_unique` (`id_package`,`validity_period`),
-  CONSTRAINT `id_service_package_fk` FOREIGN KEY (`id_package`) REFERENCES `service_package` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+CREATE TABLE `activation_schedule` (
+  `id_order` int(11) NOT NULL,
+  `date` date NOT NULL,
+  UNIQUE KEY `activation_schedule_id_order_uindex` (`id_order`),
+  CONSTRAINT `activation_schedule_order_id_fk` FOREIGN KEY (`id_order`) REFERENCES `order` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `stat_num_purchases_service_package`
+-- Dumping data for table `activation_schedule`
 --
 
-LOCK TABLES `stat_num_purchases_service_package` WRITE;
-/*!40000 ALTER TABLE `stat_num_purchases_service_package` DISABLE KEYS */;
-INSERT INTO `stat_num_purchases_service_package` VALUES (2,1,12,0,115.65);
-/*!40000 ALTER TABLE `stat_num_purchases_service_package` ENABLE KEYS */;
+LOCK TABLES `activation_schedule` WRITE;
+/*!40000 ALTER TABLE `activation_schedule` DISABLE KEYS */;
+INSERT INTO `activation_schedule` VALUES (115,'2022-01-01');
+/*!40000 ALTER TABLE `activation_schedule` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
