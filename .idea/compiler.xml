@@ -13,6 +13,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="Customer" target="1.8" />
       <module name="CustomerWeb" target="1.8" />
       <module name="EAR" target="1.8" />
       <module name="EJB" target="11" />

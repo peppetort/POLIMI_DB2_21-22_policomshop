@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/WEB/CustomerWeb.iml" filepath="$PROJECT_DIR$/WEB/CustomerWeb.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CustomerWeb/CustomerWeb.iml" filepath="$PROJECT_DIR$/CustomerWeb/CustomerWeb.iml" />
       <module fileurl="file://$PROJECT_DIR$/EAR/EAR.iml" filepath="$PROJECT_DIR$/EAR/EAR.iml" />
       <module fileurl="file://$PROJECT_DIR$/EJB/EJB.iml" filepath="$PROJECT_DIR$/EJB/EJB.iml" />
       <module fileurl="file://$PROJECT_DIR$/EmployeeWeb/EmployeeWeb.iml" filepath="$PROJECT_DIR$/EmployeeWeb/EmployeeWeb.iml" />
