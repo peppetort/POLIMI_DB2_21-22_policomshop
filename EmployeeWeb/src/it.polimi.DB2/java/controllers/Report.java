@@ -26,6 +26,7 @@ public class Report extends HttpServletThymeleaf {
         List<PackageStatistics> packageStatistics = reportService.getAllStatForPackage();
         Map<ServicePackage, Integer> numberPurchases = new HashMap<>();
         Map<Pair<ServicePackage, Integer>, Integer> numberPurchasesForValidityPeriod = new HashMap<>();
+        Map<ServicePackage, Pair<Double, Double>> amountPurchases = new HashMap<>();
 
         for (PackageStatistics s : packageStatistics) {
             //Number purchases
@@ -40,13 +41,21 @@ public class Report extends HttpServletThymeleaf {
              * Nel db c'è il constrain che la coppia sia unica*/
             numberPurchasesForValidityPeriod.put(new Pair<>(s.getServicePackage(), s.getValidityPeriod()), s.getNumPurchases());
 
-
+            if (amountPurchases.containsKey(s.getServicePackage())) {
+                Pair<Double, Double> temp = amountPurchases.get(s.getServicePackage());
+                Pair<Double, Double> newPair = new Pair(temp.getObject1() + s.getAmountWithOptional(), temp.getObject2() + s.getAmountWithoutOptional());
+                amountPurchases.put(s.getServicePackage(), newPair);
+            } else {
+                Pair<Double, Double> newPair = new Pair(s.getAmountWithOptional(), s.getAmountWithoutOptional());
+                amountPurchases.put(s.getServicePackage(), newPair);
+            }
         }
 
         final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
         ctx.setVariable("user", request.getSession().getAttribute("user"));
         ctx.setVariable("numberPurchases", numberPurchases);
         ctx.setVariable("numberPurchasesForValidityPeriod", numberPurchasesForValidityPeriod);
+        ctx.setVariable("amountPurchases", amountPurchases);
         templateEngine.process("ReportPage", ctx, response.getWriter());
     }
 }

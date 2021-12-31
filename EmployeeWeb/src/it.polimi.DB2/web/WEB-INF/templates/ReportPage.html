@@ -70,6 +70,37 @@
             </div>
         </div>
     </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingAmountPurchases">
+            <button aria-controls="collapseAmountPurchases" aria-expanded="false" class="accordion-button collapsed"
+                    data-bs-target="#collapseAmountPurchases" data-bs-toggle="collapse" type="button">
+                Total value of sales per package with and without the optional products
+            </button>
+        </h2>
+        <div aria-labelledby="headingAmountPurchases" class="accordion-collapse collapse" data-bs-parent="#accordion"
+             id="collapseAmountPurchases">
+            <div class="accordion-body">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">With optional prods</th>
+                        <th scope="col">Without optional prods</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="row, rowStat : ${amountPurchases}">
+                        <th scope="row" th:text="${rowStat.count}">1</th>
+                        <td th:text="${row.key.getName()}">Mark</td>
+                        <td th:text="${row.value.getObject1()}">Mark</td>
+                        <td th:text="${row.value.getObject2()}">Otto</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>
