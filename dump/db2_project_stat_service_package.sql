@@ -16,13 +16,13 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `stat_num_purchases_service_package`
+-- Table structure for table `stat_service_package`
 --
 
-DROP TABLE IF EXISTS `stat_num_purchases_service_package`;
+DROP TABLE IF EXISTS `stat_service_package`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `stat_num_purchases_service_package` (
+CREATE TABLE `stat_service_package` (
   `id_package` int(11) NOT NULL,
   `validity_period` int(11) DEFAULT NULL,
   `num_purchases` int(11) DEFAULT NULL,
@@ -34,13 +34,13 @@ CREATE TABLE `stat_num_purchases_service_package` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `stat_num_purchases_service_package`
+-- Dumping data for table `stat_service_package`
 --
 
-LOCK TABLES `stat_num_purchases_service_package` WRITE;
-/*!40000 ALTER TABLE `stat_num_purchases_service_package` DISABLE KEYS */;
-INSERT INTO `stat_num_purchases_service_package` VALUES (2,1,12,0,115.65);
-/*!40000 ALTER TABLE `stat_num_purchases_service_package` ENABLE KEYS */;
+LOCK TABLES `stat_service_package` WRITE;
+/*!40000 ALTER TABLE `stat_service_package` DISABLE KEYS */;
+INSERT INTO `stat_service_package` VALUES (2,45,1,1304.01,0);
+/*!40000 ALTER TABLE `stat_service_package` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-12-31 10:18:08
+-- Dump completed on 2021-12-31 18:44:39
