@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "Homepage", value = "")
-public class Homepage extends HttpServletThymeleaf {
+@WebServlet(name = "HomePage", value = "")
+public class HomePage extends HttpServletThymeleaf {
 
     @EJB(beanName = "PackageService")
     PackageService packageService;
@@ -37,12 +37,11 @@ public class Homepage extends HttpServletThymeleaf {
             }
         }
 
-        String path = "Homepage";
         final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
         ctx.setVariable("user", customer);
         ctx.setVariable("servicePackages", servicePackages);
         ctx.setVariable("rejPayments", rejectedPayments);
-        templateEngine.process(path, ctx, response.getWriter());
+        templateEngine.process("HomePage", ctx, response.getWriter());
     }
 
     @Override

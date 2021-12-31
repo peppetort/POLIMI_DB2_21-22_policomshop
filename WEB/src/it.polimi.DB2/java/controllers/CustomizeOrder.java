@@ -27,7 +27,7 @@ public class CustomizeOrder extends HttpServletThymeleaf {
         try {
             String servicePackageIdParam = request.getParameter("id_sp");
 
-            int servicePackageId = Integer.parseInt(servicePackageIdParam);
+            Long servicePackageId = Long.parseLong(servicePackageIdParam);
 
             ServicePackage servicePackage = packageService.findById(servicePackageId);
             if (servicePackage == null) {

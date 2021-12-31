@@ -11,7 +11,7 @@ public class ServicePackage implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Long id;
     @Column(name = "name")
     private String name;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "servicePackage", cascade = {CascadeType.PERSIST, CascadeType.REMOVE,
@@ -33,11 +33,11 @@ public class ServicePackage implements Serializable {
         this.serviceList = serviceList;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -68,14 +68,12 @@ public class ServicePackage implements Serializable {
 
         ServicePackage that = (ServicePackage) o;
 
-        if (id != that.id) return false;
+        if (!Objects.equals(id, that.id)) return false;
         return Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        return result;
+        return Objects.hash(id, name);
     }
 }

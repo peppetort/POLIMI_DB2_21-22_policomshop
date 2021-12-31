@@ -64,6 +64,6 @@ public class OptionalProduct implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, monthlyFee, orderList, servicePackagesList);
+        return Objects.hash(id, name, monthlyFee);
     }
 }

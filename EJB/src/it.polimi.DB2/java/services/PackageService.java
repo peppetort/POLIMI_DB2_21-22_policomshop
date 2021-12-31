@@ -1,10 +1,11 @@
 package services;
 
-import entities.*;
+import entities.OptionalProduct;
+import entities.Service;
+import entities.ServicePackage;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.LockModeType;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ public class PackageService {
     public PackageService() {
     }
 
-    public ServicePackage findById(int id) {
+    public ServicePackage findById(Long id) {
         return em.find(ServicePackage.class, id);
     }
 
@@ -27,7 +28,7 @@ public class PackageService {
         return servicePackages;
     }
 
-    public List<OptionalProduct> getAvailableOptionalProductByPackage(int servicePackageId) {
+    public List<OptionalProduct> getAvailableOptionalProductByPackage(Long servicePackageId) {
         ServicePackage servicePackage;
         servicePackage = em.find(ServicePackage.class, servicePackageId);
         return servicePackage.getOptionalProductList();

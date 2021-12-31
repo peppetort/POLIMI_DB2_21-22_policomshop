@@ -34,6 +34,7 @@ public class Homepage extends HttpServletThymeleaf{
         }
 
         final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
+        ctx.setVariable("user", request.getSession().getAttribute("user"));
         ctx.setVariable("fixedInternet", fixedInternetList);
         ctx.setVariable("mobileInternet", mobileInternetList);
         ctx.setVariable("fixedPhone", fixedPhone);
