@@ -1,0 +1,26 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-primary" th:fragment="navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand bg-white" href="/" th:href="@{/}"><b>PoliComShop</b></a>
+        <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+                data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="d-flex">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link"><span style="color: white" th:text="${user.getUsername()}">Pippo</span></a>
+                </li>
+                <li>
+                    <a class="nav-link" style="color: white" th:href="@{/ManagePackages}">Manage packages</a>
+                </li>
+                <li>
+                    <a class="nav-link" style="color: white" th:href="@{/Report}">Report Page</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/Logout}"><span style="color: white">Logout</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    </div>
+</nav>

@@ -11,7 +11,7 @@ public class OptionalProduct implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private long id;
     @Column(name = "name")
     private String name;
     @Column(name = "monthly_fee")
@@ -23,8 +23,15 @@ public class OptionalProduct implements Serializable {
     @JoinTable(name = "service_package_to_optional_product", joinColumns = @JoinColumn(name = "id_optional_product"), inverseJoinColumns = @JoinColumn(name = "id_service_package"))
     private List<ServicePackage> servicePackagesList;
 
+    public OptionalProduct() {
+    }
 
-    public int getId() {
+    public OptionalProduct(String name, double monthlyFee) {
+        this.name = name;
+        this.monthlyFee = monthlyFee;
+    }
+
+    public long getId() {
         return id;
     }
 
@@ -64,12 +71,6 @@ public class OptionalProduct implements Serializable {
 
     @Override
     public int hashCode() {
-        int result;
-        long temp;
-        result = id;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        temp = Double.doubleToLongBits(monthlyFee);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        return result;
+        return Objects.hash(id, name, monthlyFee);
     }
 }

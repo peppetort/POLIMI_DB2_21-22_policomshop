@@ -1,6 +1,7 @@
 package services;
 
-import entities.*;
+import entities.Offer;
+import entities.ServicePackage;
 import exception.OfferNotFound;
 
 import javax.ejb.Stateless;
@@ -31,4 +32,13 @@ public class OfferService {
         return em.find(Offer.class, offerId);
     }
 
+    public void saveNew(int idPackage, int validityPeriod, double monthlyFee) {
+        ServicePackage sp = em.find(ServicePackage.class, idPackage);
+        em.persist(new Offer(validityPeriod, monthlyFee, true, sp));
+    }
+
+    public void disable(int id) {
+        Offer o = em.find(Offer.class, id);
+        o.setActive(false);
+    }
 }

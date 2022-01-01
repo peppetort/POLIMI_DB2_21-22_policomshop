@@ -11,7 +11,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 import javax.ws.rs.BadRequestException;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * Http Session is a perfect storage place where all request from same web client have access
@@ -36,7 +39,7 @@ public class BuyService implements Serializable {
     private final Map<OptionalProduct, Boolean> optionalProductBooleanMap = new HashMap<>();
 
 
-    public void initOrder(int idService) {
+    public void initOrder(Long idService) {
         order = new Order();
         optionalProductBooleanMap.clear();
         ServicePackage servicePackage = em.find(ServicePackage.class, idService);

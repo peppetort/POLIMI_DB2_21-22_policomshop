@@ -1,0 +1,24 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="fragments/headerImport :: header"></div>
+    <title>PoliComShop - Employee Home</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light"
+     th:replace="fragments/navbar :: navbar">
+</nav>
+
+<form action="SaveOptionalProd" method="post">
+    <div class="form-group">
+        <label for="nameOptional">Name</label>
+        <input class="form-control" id="nameOptional" name="name" placeholder="Enter name" type="text">
+    </div>
+    <div class="form-group">
+        <label for="feeOptional">Fee</label>
+        <input class="form-control" id="feeOptional" name="monthly_fee" placeholder="Amount" type="text">
+        <small class="form-text text-muted">Ex. 10.05</small>
+    </div>
+    <button class="btn btn-primary" type="submit">Submit</button>
+</form>
+</body>
+</html>

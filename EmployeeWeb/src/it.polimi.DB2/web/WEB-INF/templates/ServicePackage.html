@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div th:replace="fragments/headerImport :: header"></div>
+    <title>Service Packages</title>
+</head>
+<body>
+
+<div class="row">
+    <div class="card" style="width: 18rem; margin: 20px" th:each="sPackage: ${servicePackages}">
+        <div class="card-body">
+            <h5 class="card-title" style="font-weight: bold" th:text="${sPackage.getName()}">Package name</h5>
+            <ul class="list-group">
+                <li class="list-group-item" th:each="o: ${sPackage.offers}">
+                    <span th:text="${'Validiity period: ' + o.validityPeriod}">Fixed Internet</span>
+                    <br>
+                    <span th:text="${'Fee: '+ o.monthlyFee}">Fixed Internet</span>
+                    <a class="btn btn-primary" role="button" th:href="@{/Offer/disable(id=${o.id})}">Disable</a>
+                </li>
+            </ul>
+            <form th:action="@{/Offer/new}">
+                <!--Todo implementare l'aggiunta di nuove offerte-->
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<form action="SaveServicePackage" method="post">
+    <div class="mb-3">
+        <label class="form-label" for="name_package">Email address</label>
+        <input class="form-control" id="name_package" name="name" placeholder="Name" type="text">
+    </div>
+    <h3>Fixed Internet</h3>
+    <div th:each="s :${fixedInternet}">
+        <div class="form-check">
+            <input class="form-check-input" name="serviceIDs" th:id="'service_'+${s.id}" th:value="${s.id}"
+                   type="checkbox">
+            <label class="form-check-label" th:for="'service_'+${s.id}"
+                   th:text="${'Number Gigabytes: '+s.nGigabytes+' Fee: '+s.feeGigabytes}">
+                Default checkbox
+            </label>
+        </div>
+    </div>
+    <h3>Mobile Internet</h3>
+    <div th:each="s :${mobileInternet}">
+        <div class="form-check">
+            <input class="form-check-input" name="serviceIDs" th:id="'service_'+${s.id}" th:value="${s.id}"
+                   type="checkbox">
+            <label class="form-check-label" th:for="'service_'+${s.id}"
+                   th:text="${'Number Gigabytes: '+s.nGigabytes+' Fee: '+s.feeGigabytes}">
+                Default checkbox
+            </label>
+        </div>
+    </div>
+    <h3>Mobile Phone</h3>
+    <div th:each="s :${mobilePhone}">
+        <div class="form-check">
+            <input class="form-check-input" name="serviceIDs" th:id="'service_'+${s.id}" th:value="${s.id}"
+                   type="checkbox">
+            <label class="form-check-label" th:for="'service_'+${s.id}"
+                   th:text="${'Number minutes: '+s.nMinutes+' Fee: '+s.feeMinutes+' - Number sms: '+ s.nSms + ' Fee: ' + s.feeSms}">
+                Default checkbox
+            </label>
+        </div>
+    </div>
+    <h3>Fixed Phone</h3>
+    <div th:if="${fixedPhone != null}">
+        <div class="form-check">
+            <input class="form-check-input" name="serviceIDs" th:id="'service_'+${fixedPhone.id}"
+                   th:value="${fixedPhone.id}"
+                   type="checkbox">
+            <label class="form-check-label" th:for="'service_'+${fixedPhone.id}" th:text="${'Unlimited'}">
+                Default checkbox
+            </label>
+        </div>
+    </div>
+    <h3>Optional Prods</h3>
+    <div th:each="optional :${optionals}">
+        <div class="form-check">
+            <input class="form-check-input" name="optionalIDs" th:id="'optional_' + ${optional.id}"
+                   th:value="${optional.id}"
+                   type="checkbox">
+            <label class="form-check-label" th:for="'optional_' + ${optional.id}" th:text="${optional.getName()}">
+                Default checkbox
+            </label>
+        </div>
+    </div>
+    <button class="btn btn-primary mb-3" type="submit">Submit</button>
+</form>
+</body>
+</html>
