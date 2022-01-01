@@ -23,6 +23,13 @@ public class OptionalProduct implements Serializable {
     @JoinTable(name = "service_package_to_optional_product", joinColumns = @JoinColumn(name = "id_optional_product"), inverseJoinColumns = @JoinColumn(name = "id_service_package"))
     private List<ServicePackage> servicePackagesList;
 
+    public OptionalProduct() {
+    }
+
+    public OptionalProduct(String name, double monthlyFee) {
+        this.name = name;
+        this.monthlyFee = monthlyFee;
+    }
 
     public long getId() {
         return id;

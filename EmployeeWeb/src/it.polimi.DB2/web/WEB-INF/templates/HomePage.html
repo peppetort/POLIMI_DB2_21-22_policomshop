@@ -49,13 +49,27 @@
 
     <div th:each="optional :${optionals}">
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="optionalIDs" th:value="${optional.id}" th:id="'optional_' + ${optional.id}">
+            <input class="form-check-input" type="checkbox" name="optionalIDs" th:value="${optional.id}"
+                   th:id="'optional_' + ${optional.id}">
             <label class="form-check-label" th:for="'optional_' + ${optional.id}" th:text="${optional.getName()}">
                 Default checkbox
             </label>
         </div>
     </div>
     <button type="submit" class="btn btn-primary mb-3">Submit</button>
+</form>
+
+<form action="SaveOptionalProd" method="post">
+    <div class="form-group">
+        <label for="nameOptional">Name</label>
+        <input class="form-control" id="nameOptional" name="name" placeholder="Enter name" type="text">
+    </div>
+    <div class="form-group">
+        <label for="feeOptional">Fee</label>
+        <input class="form-control" id="feeOptional" name="monthly_fee" placeholder="Amount" type="text">
+        <small class="form-text text-muted">Ex. 10.05</small>
+    </div>
+    <button class="btn btn-primary" type="submit">Submit</button>
 </form>
 </body>
 </html>

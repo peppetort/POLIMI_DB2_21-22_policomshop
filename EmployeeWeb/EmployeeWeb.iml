@@ -9,16 +9,14 @@
         <webroots>
           <root url="file://$MODULE_DIR$/src/it.polimi.DB2/web" relative="/" />
         </webroots>
-        <sourceRoots>
-          <root url="file://$MODULE_DIR$/src/it.polimi.DB2/java" />
-          <root url="file://$MODULE_DIR$/src/it.polimi.DB2/resources" />
-        </sourceRoots>
       </configuration>
     </facet>
     <facet type="jpa" name="JPA">
       <configuration>
         <setting name="validation-enabled" value="true" />
-        <datasource-mapping />
+        <datasource-mapping>
+          <factory-entry name="EmployeeWeb" />
+        </datasource-mapping>
         <naming-strategy-map />
       </configuration>
     </facet>
