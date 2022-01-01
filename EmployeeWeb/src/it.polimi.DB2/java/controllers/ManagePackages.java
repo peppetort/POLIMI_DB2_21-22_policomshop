@@ -5,7 +5,6 @@ import org.thymeleaf.context.WebContext;
 import services.PackageService;
 
 import javax.ejb.EJB;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,10 +16,10 @@ import java.util.List;
 public class ManagePackages extends HttpServletThymeleaf {
 
     @EJB
-    PackageService packageService;
+    private PackageService packageService;
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         FixedPhone fixedPhone = null;
         List<FixedInternet> fixedInternetList = new ArrayList<>();
         List<MobileInternet> mobileInternetList = new ArrayList<>();
@@ -34,8 +33,11 @@ public class ManagePackages extends HttpServletThymeleaf {
             else if (s instanceof FixedPhone) fixedPhone = (FixedPhone) s;
         }
 
+        List<ServicePackage> availbleServicePackages = packageService.getAllServicePackages();
+
         final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
         ctx.setVariable("user", request.getSession().getAttribute("user"));
+        ctx.setVariable("servicePackages", availbleServicePackages);
         ctx.setVariable("fixedInternet", fixedInternetList);
         ctx.setVariable("mobileInternet", mobileInternetList);
         ctx.setVariable("fixedPhone", fixedPhone);

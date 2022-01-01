@@ -15,10 +15,10 @@ public class ReportService {
     EntityManager em;
 
     public List<PackageStatistics> getAllStatForPackage() {
-        return em.createQuery("select stat from PackageStatistics stat").getResultList();
+        return em.createQuery("select stat from PackageStatistics stat", PackageStatistics.class).getResultList();
     }
 
     public List<AuditCustomer> getAllAuditCustomer() {
-        return em.createQuery("select ac from AuditCustomer ac").getResultList();
+        return em.createQuery("select ac from AuditCustomer ac", AuditCustomer.class).getResultList();
     }
 }

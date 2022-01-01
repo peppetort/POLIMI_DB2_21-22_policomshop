@@ -5,6 +5,27 @@
     <title>Service Packages</title>
 </head>
 <body>
+
+<div class="row">
+    <div class="card" style="width: 18rem; margin: 20px" th:each="sPackage: ${servicePackages}">
+        <div class="card-body">
+            <h5 class="card-title" style="font-weight: bold" th:text="${sPackage.getName()}">Package name</h5>
+            <ul class="list-group">
+                <li class="list-group-item" th:each="o: ${sPackage.offers}">
+                    <span th:text="${'Validiity period: ' + o.validityPeriod}">Fixed Internet</span>
+                    <br>
+                    <span th:text="${'Fee: '+ o.monthlyFee}">Fixed Internet</span>
+                    <a class="btn btn-primary" role="button" th:href="@{/Offer/disable(id=${o.id})}">Disable</a>
+                </li>
+            </ul>
+            <form th:action="@{/Offer/new}">
+                <!--Todo implementare l'aggiunta di nuove offerte-->
+            </form>
+        </div>
+    </div>
+</div>
+
+
 <form action="SaveServicePackage" method="post">
     <div class="mb-3">
         <label class="form-label" for="name_package">Email address</label>

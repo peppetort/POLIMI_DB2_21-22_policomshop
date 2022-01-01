@@ -28,13 +28,17 @@ public class PackageService {
         return servicePackages;
     }
 
+    public List<ServicePackage> getAllServicePackages() {
+        return em.createQuery("SELECT distinct sp from ServicePackage sp", ServicePackage.class).getResultList();
+    }
+
     public List<OptionalProduct> getAvailableOptionalProductByPackage(Long servicePackageId) {
         ServicePackage servicePackage;
         servicePackage = em.find(ServicePackage.class, servicePackageId);
         return servicePackage.getOptionalProductList();
     }
 
-    public List<Service> getAllService(){
+    public List<Service> getAllService() {
         return em.createQuery("select s from Service s", Service.class).getResultList();
     }
 
