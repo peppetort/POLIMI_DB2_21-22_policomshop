@@ -4,6 +4,7 @@ import services.PackageService;
 
 import javax.ejb.EJB;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "NewServicePackage", urlPatterns = "/SaveServicePackage")
-public class NewServicePackage extends HttpServletThymeleaf {
+public class NewServicePackage extends HttpServlet {
     @EJB(name = "PackageService")
     PackageService packageService;
 
@@ -20,7 +21,7 @@ public class NewServicePackage extends HttpServletThymeleaf {
         String name = request.getParameter("name");
         String[] serviceIDs = request.getParameterValues("serviceIDs");
         String[] optionalIDs = request.getParameterValues("optionalIDs");
-        if (name == null || name.isEmpty() || serviceIDs == null || optionalIDs == null)   {
+        if (name == null || name.isEmpty() || serviceIDs == null || optionalIDs == null) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }

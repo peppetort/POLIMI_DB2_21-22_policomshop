@@ -16,7 +16,8 @@
     <div th:each="s :${fixedInternet}">
         <div class="form-check">
             <input class="form-check-input" type="checkbox" name="serviceIDs" th:value="${s.id}" th:id="'service_'+${s.id}">
-            <label class="form-check-label" th:for="'service_'+${s.id}" th:text="${'Number Gigabytes: '+s.nGigabytes+'Fee: '+s.feeGigabytes}">
+            <label class="form-check-label" th:for="'service_'+${s.id}"
+                   th:text="${'Number Gigabytes: '+s.nGigabytes+' Fee: '+s.feeGigabytes}">
                 Default checkbox
             </label>
         </div>
@@ -24,29 +25,36 @@
     <h3>Mobile Internet</h3>
     <div th:each="s :${mobileInternet}">
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="serviceIDs" th:value="${s.id}" th:id="'service_'+${s.id}">
-            <label class="form-check-label" th:for="'service_'+${s.id}" th:text="${'Number Gigabytes: '+s.nGigabytes+'Fee: '+s.feeGigabytes}">
+            <input class="form-check-input" type="checkbox" name="serviceIDs" th:value="${s.id}"
+                   th:id="'service_'+${s.id}">
+            <label class="form-check-label" th:for="'service_'+${s.id}"
+                   th:text="${'Number Gigabytes: '+s.nGigabytes+' Fee: '+s.feeGigabytes}">
                 Default checkbox
             </label>
         </div>
-    </div>    <h3>Fixed Internet</h3>
+    </div>
+    <h3>Mobile Phone</h3>
     <div th:each="s :${mobilePhone}">
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="serviceIDs" th:value="${s.id}" th:id="'service_'+${s.id}">
-            <label class="form-check-label" th:for="'service_'+${s.id}" th:text="${'Number minutes: '+s.nMinutes+' Fee: '+s.feeMinutes+' - Number sms: '+ ${s.nSms} + ' Fee: ' + ${s.feeSms}}">
+            <input class="form-check-input" type="checkbox" name="serviceIDs" th:value="${s.id}"
+                   th:id="'service_'+${s.id}">
+            <label class="form-check-label" th:for="'service_'+${s.id}"
+                   th:text="${'Number minutes: '+s.nMinutes+' Fee: '+s.feeMinutes+' - Number sms: '+ s.nSms + ' Fee: ' + s.feeSms}">
                 Default checkbox
             </label>
         </div>
-    </div>    <h3>Fixed Internet</h3>
+    </div>
+    <h3>Fixed Phone</h3>
     <div th:if="${fixedPhone != null}">
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="serviceIDs" th:value="${fixedPhone.id}" th:id="'service_'+${fixedPhone.id}">
+            <input class="form-check-input" type="checkbox" name="serviceIDs" th:value="${fixedPhone.id}"
+                   th:id="'service_'+${fixedPhone.id}">
             <label class="form-check-label" th:for="'service_'+${fixedPhone.id}" th:text="${'Unlimited'}">
                 Default checkbox
             </label>
         </div>
     </div>
-
+    <h3>Optional Prods</h3>
     <div th:each="optional :${optionals}">
         <div class="form-check">
             <input class="form-check-input" type="checkbox" name="optionalIDs" th:value="${optional.id}"
