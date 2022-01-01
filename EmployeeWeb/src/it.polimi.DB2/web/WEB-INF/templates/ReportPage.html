@@ -102,5 +102,42 @@
         </div>
     </div>
 </div>
+<div class="accordion" id="accordionAuditCustomer">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingAuditCustomer">
+            <button aria-controls="collapseAuditCustomerOne" aria-expanded="true" class="accordion-button"
+                    data-bs-target="#collapseAuditCustomerOne" data-bs-toggle="collapse" type="button">
+                Insolvent users
+            </button>
+        </h2>
+        <div aria-labelledby="headingAuditCustomer" class="accordion-collapse collapse show"
+             data-bs-parent="#accordionAuditCustomer" id="collapseAuditCustomerOne">
+            <div class="accordion-body">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">email</th>
+                        <th scope="col">#Failed Payments</th>
+                        <th scope="col">Date last rejection</th>
+                        <th scope="col">Amount last rejection</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="row, rowStat : ${auditCustomers}">
+                        <th scope="row" th:text="${rowStat.count}">1</th>
+                        <td th:text="${row.customer.username}">Mark</td>
+                        <td th:text="${row.customer.email}">Mark</td>
+                        <td th:text="${row.customer.numFailedPayments}">Otto</td>
+                        <td th:text="${row.lastRejection}">Otto</td>
+                        <td th:text="${row.amount}">Otto</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

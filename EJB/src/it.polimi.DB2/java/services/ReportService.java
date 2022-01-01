@@ -1,5 +1,6 @@
 package services;
 
+import entities.AuditCustomer;
 import entities.PackageStatistics;
 
 import javax.ejb.Stateless;
@@ -15,5 +16,9 @@ public class ReportService {
 
     public List<PackageStatistics> getAllStatForPackage() {
         return em.createQuery("select stat from PackageStatistics stat").getResultList();
+    }
+
+    public List<AuditCustomer> getAllAuditCustomer() {
+        return em.createQuery("select ac from AuditCustomer ac").getResultList();
     }
 }

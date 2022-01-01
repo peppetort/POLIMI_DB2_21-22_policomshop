@@ -1,5 +1,6 @@
 package controllers;
 
+import entities.AuditCustomer;
 import entities.PackageStatistics;
 import entities.ServicePackage;
 import org.thymeleaf.context.WebContext;
@@ -51,11 +52,14 @@ public class Report extends HttpServletThymeleaf {
             }
         }
 
+        List<AuditCustomer> auditCustomers = reportService.getAllAuditCustomer();
+
         final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
         ctx.setVariable("user", request.getSession().getAttribute("user"));
         ctx.setVariable("numberPurchases", numberPurchases);
         ctx.setVariable("numberPurchasesForValidityPeriod", numberPurchasesForValidityPeriod);
         ctx.setVariable("amountPurchases", amountPurchases);
+        ctx.setVariable("auditCustomers", auditCustomers);
         templateEngine.process("ReportPage", ctx, response.getWriter());
     }
 }
