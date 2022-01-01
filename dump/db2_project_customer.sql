@@ -41,7 +41,7 @@ CREATE TABLE `customer` (
 
 LOCK TABLES `customer` WRITE;
 /*!40000 ALTER TABLE `customer` DISABLE KEYS */;
-INSERT INTO `customer` VALUES (13,'asd@asd.it','asd','asd',0,0),(14,'zxc@zxc.it','zxc','zxc',0,0),(15,'iop@iop.it','iop','iop',0,0),(17,'dfg@dfg.it','dfg','dfg',0,0);
+INSERT INTO `customer` VALUES (13,'asd@asd.it','asd','asd',1,0),(14,'zxc@zxc.it','zxc','zxc',0,0),(15,'iop@iop.it','iop','iop',0,0),(17,'dfg@dfg.it','dfg','dfg',0,0);
 /*!40000 ALTER TABLE `customer` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-12-31 10:18:08
+-- Dump completed on 2021-12-31 18:44:39

@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/application_8.xsd" id="Application_ID" version="8">
     <display-name>PoliComShop-ear</display-name>
-    <module id="WEB-Web">
-        <web>
-            <web-uri>WEB_Web.war</web-uri>
-            <context-root>WEBWeb</context-root>
-        </web>
-    </module>
     <module id="EJB-EJB">
         <ejb>EJB_ejb.jar</ejb>
+    </module>
+    <module id="CustomerWeb-Web">
+        <web>
+            <web-uri>Customer_Web.war</web-uri>
+            <context-root>Customer</context-root>
+        </web>
+    </module>
+    <module id="EmployeeWeb-Web">
+        <web>
+            <web-uri>Employee_Web.war</web-uri>
+            <context-root>Employee</context-root>
+        </web>
     </module>
 
 </application>

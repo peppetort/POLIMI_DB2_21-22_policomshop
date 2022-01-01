@@ -9,7 +9,7 @@ import java.util.Date;
 public class AuditCustomer {
     @Id
     @Column(name = "id")
-    Long id;
+    private Long id;
     @Column(name = "amount")
     private double amount;
     @Temporal(TemporalType.TIMESTAMP)

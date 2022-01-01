@@ -27,7 +27,7 @@ CREATE TABLE `service_package` (
   `name` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -36,7 +36,7 @@ CREATE TABLE `service_package` (
 
 LOCK TABLES `service_package` WRITE;
 /*!40000 ALTER TABLE `service_package` DISABLE KEYS */;
-INSERT INTO `service_package` VALUES (2,'package1'),(3,'package2');
+INSERT INTO `service_package` VALUES (4,'a'),(6,'ad'),(9,'as'),(2,'package1'),(3,'package2');
 /*!40000 ALTER TABLE `service_package` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -49,4 +49,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-12-31 10:18:08
+-- Dump completed on 2021-12-31 18:44:39

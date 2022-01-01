@@ -141,7 +141,7 @@ public class Order implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, creationDate, activationDate, totalMonthlyFee, status, customer, offer, optionalProductList);
+        return Objects.hash(id, creationDate, activationDate, totalMonthlyFee, optionalProductList);
     }
 
     public enum State {

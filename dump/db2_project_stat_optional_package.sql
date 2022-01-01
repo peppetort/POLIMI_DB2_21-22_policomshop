@@ -39,7 +39,7 @@ CREATE TABLE `stat_optional_package` (
 
 LOCK TABLES `stat_optional_package` WRITE;
 /*!40000 ALTER TABLE `stat_optional_package` DISABLE KEYS */;
-INSERT INTO `stat_optional_package` VALUES (1,2,1);
+INSERT INTO `stat_optional_package` VALUES (1,2,1),(2,2,1);
 /*!40000 ALTER TABLE `stat_optional_package` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-12-31 10:18:08
+-- Dump completed on 2021-12-31 18:44:38

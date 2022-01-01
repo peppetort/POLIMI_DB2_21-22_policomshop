@@ -6,16 +6,19 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="EmployeeWeb" />
         <module name="EJB" />
-        <module name="WEB" />
+        <module name="CustomerWeb" />
         <module name="EAR" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="Customer" target="1.8" />
+      <module name="CustomerWeb" target="1.8" />
       <module name="EAR" target="1.8" />
       <module name="EJB" target="11" />
+      <module name="EmployeeWeb" target="1.8" />
       <module name="PoliComShop" target="16" />
-      <module name="WEB" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

@@ -5,12 +5,13 @@
       <element id="javaee-facet-resources" facet="EAR/javaeeApplication/javaEEApplication" />
       <element id="directory" name="META-INF" />
       <element id="artifact" artifact-name="EJB:ejb" />
-      <element id="artifact" artifact-name="WEB:Web" />
+      <element id="artifact" artifact-name="Customer:Web" />
       <element id="directory" name="lib">
         <element id="archive" name="EAR.jar">
           <element id="module-output" name="EAR" />
         </element>
       </element>
+      <element id="artifact" artifact-name="Employee:Web" />
     </root>
   </artifact>
 </component>
