@@ -25,6 +25,16 @@ public class Offer implements Serializable {
             CascadeType.REFRESH})
     private List<Order> orders;
 
+    public Offer() {
+    }
+
+    public Offer(int validityPeriod, double monthlyFee, boolean active, ServicePackage servicePackage) {
+        this.validityPeriod = validityPeriod;
+        this.monthlyFee = monthlyFee;
+        this.active = active;
+        this.servicePackage = servicePackage;
+    }
+
     public int getId() {
         return id;
     }

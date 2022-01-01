@@ -34,6 +34,6 @@ public class NewServicePackage extends HttpServlet {
             tempOptional.add(Long.parseLong(s));
         }
         packageService.saveNewServicePackage(name, tempService, tempOptional);
-        response.sendRedirect("Employee");
+        response.sendRedirect(getServletContext().getContextPath());
     }
 }
