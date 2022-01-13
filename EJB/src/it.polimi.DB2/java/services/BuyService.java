@@ -11,10 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 import javax.ws.rs.BadRequestException;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Http Session is a perfect storage place where all request from same web client have access
@@ -46,11 +43,6 @@ public class BuyService implements Serializable {
         if (servicePackage == null) throw new BadRequestException();
         this.servicePackage = servicePackage;
         initOptionalProductBooleanMap();
-    }
-
-    //TODO:remove
-    public boolean isInitialized() {
-        return servicePackage != null;
     }
 
     public ServicePackage getServicePackage() {
@@ -101,11 +93,6 @@ public class BuyService implements Serializable {
         return order;
     }
 
-    //TODO:remove
-    public boolean isCorrectFilled(boolean userIsImportant) {
-        return order.isCorrectFilled(userIsImportant);
-    }
-
     @Remove
     public boolean executePayment(Customer customer) {
         /*Specification: "When the user presses the BUY button, an order is created",
@@ -116,8 +103,10 @@ public class BuyService implements Serializable {
 
         order.setCustomer(customer);
         order.setCreationDate(new Date());
-        //TODO: settare correttamente;
-        order.setDeactivationDate(new Date());
+        Calendar c = Calendar.getInstance();
+        c.setTime(order.getActivationDate());
+        c.add(Calendar.MONTH, order.getOffer().getValidityPeriod());
+        order.setDeactivationDate(c.getTime());
         boolean isPaymentValid = PaymentRevisionBot.review();
 
         if (isPaymentValid) {

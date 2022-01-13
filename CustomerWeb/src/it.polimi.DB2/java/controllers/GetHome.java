@@ -25,7 +25,6 @@ public class GetHome extends HttpServletThymeleaf {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        /*TODO controllare i valori null di rejectedPayments*/
         List<ServicePackage> servicePackages = packageService.getAvailableServicePackages();
         List<Order> rejectedPayments = null;
         Customer customer = (Customer) request.getSession().getAttribute("user");

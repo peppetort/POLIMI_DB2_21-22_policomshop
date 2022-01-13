@@ -25,16 +25,19 @@ public class GetPackageDetails extends HttpServletThymeleaf {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
+            BuyService buyService = (BuyService) request.getSession().getAttribute("BuyService");
+            if (buyService != null) {
+                renderPage(request, response, buyService, null);
+                return;
+            }
+
             String servicePackageIdParam = request.getParameter("id_sp");
-
             Long servicePackageId = Long.parseLong(servicePackageIdParam);
-
             ServicePackage servicePackage = packageService.findById(servicePackageId);
             if (servicePackage == null) {
                 response.sendRedirect(request.getContextPath());
                 return;
             }
-            BuyService buyService;
             InitialContext ic = new InitialContext();
             // Retrieve the EJB using JNDI lookup
             buyService = (BuyService) ic.lookup("java:module/BuyService");
