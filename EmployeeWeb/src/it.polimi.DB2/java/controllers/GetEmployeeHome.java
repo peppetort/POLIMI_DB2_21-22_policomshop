@@ -12,11 +12,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet(name = "ManagePackages", urlPatterns = "/ManagePackages")
-public class ManagePackages extends HttpServletThymeleaf {
+@WebServlet(name="GetEmployeeHome", urlPatterns = "/")
+public class GetEmployeeHome extends HttpServletThymeleaf{
 
-    @EJB
-    private PackageService packageService;
+    @EJB(beanName = "PackageService")
+    PackageService packageService;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -25,6 +25,7 @@ public class ManagePackages extends HttpServletThymeleaf {
         List<MobileInternet> mobileInternetList = new ArrayList<>();
         List<MobilePhone> mobilePhoneList = new ArrayList<>();
         List<OptionalProduct> optionalProducts = packageService.getAllOptional();
+        System.out.println(optionalProducts);
 
         for (Service s : packageService.getAllService()) {
             if (s instanceof FixedInternet) fixedInternetList.add((FixedInternet) s);
@@ -33,16 +34,18 @@ public class ManagePackages extends HttpServletThymeleaf {
             else if (s instanceof FixedPhone) fixedPhone = (FixedPhone) s;
         }
 
-        List<ServicePackage> availbleServicePackages = packageService.getAllServicePackages();
-
         final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
         ctx.setVariable("user", request.getSession().getAttribute("user"));
-        ctx.setVariable("servicePackages", availbleServicePackages);
         ctx.setVariable("fixedInternet", fixedInternetList);
         ctx.setVariable("mobileInternet", mobileInternetList);
         ctx.setVariable("fixedPhone", fixedPhone);
         ctx.setVariable("mobilePhone", mobilePhoneList);
-        ctx.setVariable("optionals", optionalProducts);
-        templateEngine.process("ServicePackage", ctx, response.getWriter());
+        ctx.setVariable("optionalProducts", optionalProducts);
+        templateEngine.process("HomePage", ctx, response.getWriter());
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        doGet(request, response);
     }
 }

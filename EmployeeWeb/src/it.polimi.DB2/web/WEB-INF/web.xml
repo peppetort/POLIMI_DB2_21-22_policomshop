@@ -10,6 +10,18 @@
     </filter>
     <filter-mapping>
         <filter-name>LoggedIn</filter-name>
-        <url-pattern>/*</url-pattern>
+        <servlet-name>Logout</servlet-name>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>LoggedIn</filter-name>
+        <servlet-name>GetEmployeeHome</servlet-name>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>LoggedIn</filter-name>
+        <servlet-name>CreateOptionalProduct</servlet-name>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>LoggedIn</filter-name>
+        <servlet-name>CreateServicePackage</servlet-name>
     </filter-mapping>
 </web-app>

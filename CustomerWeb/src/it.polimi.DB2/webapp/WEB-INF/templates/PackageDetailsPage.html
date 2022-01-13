@@ -11,7 +11,7 @@
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
           rel="stylesheet">
 
-    <title>PoliComShop - Buy service</title>
+    <title>PoliComShop - Package details</title>
     <style>
         .divider:after,
         .divider:before {
@@ -53,12 +53,12 @@
             <p class="text-center mx-3 mb-0">continue shopping</p>
         </div>
 
-        <form method="post" th:action="@{/CustomizeOrder}">
+        <form method="post" th:action="@{/GetPackageDetails}">
 
             <span style="font-size: 35px;">Step 1</span> <span style="font-size: 28px"> - choose the validity period among those available</span>
             <div style="margin: 20px" th:each="offer : ${servicePackage.getOffers()}">
                 <div class="form-check">
-                    <label class="form-check-label" th:for="'offer'+${offer.id}" th:text="${offer.getMonthlyFee() + '/month for ' + offer.getValidityPeriod() + ' months'}"> Default radio </label>
+                    <label class="form-check-label" th:for="'offer'+${offer.id}" th:text="${offer.getMonthlyFee() + ' &euro;/month for ' + offer.getValidityPeriod() + ' months'}"> Default radio </label>
                     <input class="form-check-input" th:id="'offer'+${offer.id}" name="offerRadio" th:value="${offer.id}" type="radio" th:checked="${order != null && order.getOffer() != null && order.getOffer().id == offer.id}">
                 </div>
             </div>
@@ -74,7 +74,7 @@
                              th:each="optProd : ${optionalProductMap}">
                             <div class="card-body">
                                     <b style="font-size: 20px" th:text="${optProd.key.name}">Optional product name</b>
-                                    <span th:text="${optProd.key.monthlyFee + '€/month'}">10</span>
+                                    <span th:text="${optProd.key.monthlyFee + ' '}">10</span><span>&euro;/month</span>
                                     <input type="checkbox" th:id="'optProd' + ${optProd.key.getId()}" name="opProd" th:value="${optProd.key.getId()}" th:checked="${optProd.value}">
                             </div>
                         </div>
@@ -83,7 +83,7 @@
             </div>
             <hr>
             <div class=" text-center text-lg-start mt-4 pt-2" style="display: flex;justify-content: space-between;">
-                <span style="font-size: 35px"><b th:text="${order.totalMonthlyFee}">35€</b>/month</span>
+                <span style="font-size: 35px"><b th:text="${order.totalMonthlyFee + ' '}">35€</b>&euro;/month</span>
                 <button type="submit" class="btn btn-primary btn-lg"
                         style="padding-left: 2.5rem; padding-right: 2.5rem;">Checkout
                 </button>

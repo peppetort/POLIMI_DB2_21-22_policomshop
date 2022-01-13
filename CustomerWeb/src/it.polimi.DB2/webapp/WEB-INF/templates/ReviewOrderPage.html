@@ -48,16 +48,16 @@
                                         class="list-group-item">
                                         <div style="display: flex;justify-content: space-between;">
                                             <b th:text="${optProd.name}">Optional prod name</b>
-                                            <p>+<span th:text="${optProd.monthlyFee}"></span>€/month</p>
+                                            <p>+<span th:text="${optProd.monthlyFee+' '}"></span><span>&euro;/month</span></p>
                                         </div>
                                     </li>
                                 </ul>
                             </div>
-                            <a th:href="@{/CustomizeOrder}">Do you want to change something? Go back</a>
+                            <a th:href="@{/GetPackageDetails}">Do you want to change something? Go back</a>
                             <div class=" text-center text-lg-start mt-4 pt-2"
                                  style="display: flex;justify-content: space-between;">
 
-                                <span style="font-size: 35px"><b th:text="${order.totalMonthlyFee}">35€</b>/month</span>
+                                <span style="font-size: 35px"><b th:text="${order.totalMonthlyFee + ' '}">35€</b> <span>&euro;/month</span></span>
                                 <a class="btn btn-primary btn-lg" th:href="@{/Payment}"
                                         th:if="${user!=null}"
                                         style="padding-left: 2.5rem; padding-right: 2.5rem;">Buy

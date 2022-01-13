@@ -15,7 +15,7 @@ public class LoggedIn implements Filter {
         String baseURI = req.getServletContext().getContextPath();
         User user = (User) req.getSession().getAttribute("user");
 
-        if (user == null && !req.getRequestURI().equals(baseURI + "/SignIn")) {
+        if (user == null) {
             res.sendRedirect(baseURI + "/SignIn");
             return;
         }

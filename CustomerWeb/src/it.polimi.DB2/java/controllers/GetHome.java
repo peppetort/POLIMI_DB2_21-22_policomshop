@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "HomePage", value = "")
-public class HomePage extends HttpServletThymeleaf {
+@WebServlet(name = "GetHome", value = "")
+public class GetHome extends HttpServletThymeleaf {
 
     @EJB(beanName = "PackageService")
     PackageService packageService;

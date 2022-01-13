@@ -14,4 +14,8 @@ public class OptionalProdService {
     public void saveNewProd(String name, Double monthlyFee) {
         em.persist(new OptionalProduct(name, monthlyFee));
     }
+
+    public OptionalProduct getById(long id){
+        return em.find(OptionalProduct.class, id);
+    }
 }

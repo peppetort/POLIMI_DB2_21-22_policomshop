@@ -9,6 +9,7 @@
         <webroots>
           <root url="file://$MODULE_DIR$/src/it.polimi.DB2/web" relative="/" />
         </webroots>
+        <sourceRoots />
       </configuration>
     </facet>
     <facet type="jpa" name="JPA">

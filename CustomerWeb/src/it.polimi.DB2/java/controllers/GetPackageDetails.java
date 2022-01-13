@@ -16,8 +16,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@WebServlet(name = "CustomizeOrder", value = "/CustomizeOrder")
-public class CustomizeOrder extends HttpServletThymeleaf {
+@WebServlet(name = "GetPackageDetails", value = "/GetPackageDetails")
+public class GetPackageDetails extends HttpServletThymeleaf {
 
     @EJB(name = "PackageService")
     PackageService packageService;
@@ -98,7 +98,7 @@ public class CustomizeOrder extends HttpServletThymeleaf {
     }
 
     private void renderPage(HttpServletRequest request, HttpServletResponse response, BuyService buyService, String errorMes) throws IOException {
-        String path = "CustomizeOrderPage";
+        String path = "PackageDetailsPage";
         final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
         ctx.setVariable("user", request.getSession().getAttribute("user"));
         ctx.setVariable("servicePackage", buyService.getServicePackage());

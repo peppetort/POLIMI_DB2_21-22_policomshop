@@ -43,7 +43,10 @@
                 <div class="list-group-item list-group-item-action">
                     <div class="d-flex w-100 justify-content-between">
                         <h5 class="mb-1" th:text="${order.offer.servicePackage.name}">Package name</h5>
-                        <b class="text-muted" th:text="${order.totalMonthlyFee +'€'}">0€</b>
+                        <div>
+                            <b class="text-muted" th:text="${order.totalMonthlyFee}">0€</b> <b class="text-muted">&euro;</b>
+                        </div>
+
                     </div>
                     <p class="mb-1" th:text="${#dates.format(order.creationDate, 'dd/MM/yyyy')}">12/10/2021</p>
                     <a class="btn btn-primary float-end" th:href="@{Payment(id=${order.id})}" role="button">Repay</a>
@@ -67,7 +70,7 @@
                     </ul>
                 </div>
                 <div class="card-body">
-                    <a th:href="@{/CustomizeOrder(id_sp=${sPackage.id})}" class="card-link">View more</a>
+                    <a th:href="@{/GetPackageDetails(id_sp=${sPackage.id})}" class="card-link">View more</a>
                 </div>
             </div>
         </div>

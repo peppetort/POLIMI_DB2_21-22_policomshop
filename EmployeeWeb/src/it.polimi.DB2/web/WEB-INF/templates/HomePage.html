@@ -1,24 +1,196 @@
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="en"
+      th:lang="it" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <div th:replace="fragments/headerImport :: header"></div>
+    <!-- Meta tag required for boostrap -->
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <!-- Bootstrap CSS -->
+    <link crossorigin="anonymous"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+          rel="stylesheet">
+
     <title>PoliComShop - Employee Home</title>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light"
-     th:replace="fragments/navbar :: navbar">
-</nav>
+<section class="vh-100">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light"
+         th:replace="fragments/navbar :: navbar">
+    </nav>
+    <div class="container-fluid h-auto w-75">
+        <h1 style="margin-bottom: 20px; margin-top: 20px">Create a service Package</h1>
+        <form method="post" th:action="@{/CreateServicePackage}">
+            <div class="form-group" style="margin-bottom: 20px">
+                <label for="spName">Package Name</label>
+                <input class="form-control" id="spName" name="spName" placeholder="Enter package name" type="text">
+            </div>
+            <div class="form-group" style="margin-bottom: 20px">
+                <label for="validityPeriod">Validity period</label>
+                <input class="form-control" id="validityPeriod" name="spValidityPeriod" placeholder="Enter months"
+                       type="number">
+            </div>
+            <div class="form-group" style="margin-bottom: 20px">
+                <label for="monthFee">Fee</label>
+                <input class="form-control" id="monthFee" name="spMonthFee" placeholder="Enter fee" type="number"
+                       step="any">
+            </div>
+            <div th:if="${fixedInternet.size() > 0 || mobileInternet.size() > 0 || mobilePhone.size() > 0 || fixedPhone != null }">
+                <span>Choose services to add</span>
+                <div th:if="${fixedInternet.size() > 0}" class="container" style="margin-top: 20px">
+                    <fieldset id="fixedInternetRadio">
+                        <div class="row">
+                            <div class="card w-auto" style="margin-left: 10px; margin-right: 10px"
+                                 th:each="s : ${fixedInternet}">
+                                <div class="card-body">
+                                    <div class="form-check">
+                                        <b style="font-size: 20px">Fixed Internet</b>
+                                        <input class="form-check-input" th:id="'service'+${s.getId()}"
+                                               name="fixedInternetRadio"
+                                               th:value="${s.getId()}" type="radio">
+                                    </div>
+                                    <div>
+                                        <span th:text="${s.getnGigabytes() + ' '}">10</span><span>GB</span>
+                                        <span th:text="${s.getFeeGigabytes() + ' '}">10</span><span>&euro;/month</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <hr>
+                </div>
 
-<form action="SaveOptionalProd" method="post">
-    <div class="form-group">
-        <label for="nameOptional">Name</label>
-        <input class="form-control" id="nameOptional" name="name" placeholder="Enter name" type="text">
+                <div th:if="${mobileInternet.size() > 0}" class="container" style="margin-top: 20px">
+                    <fieldset id="mobileInternetRadio">
+                    <div class="row">
+                        <div class="card w-auto" style="margin-left: 10px; margin-right: 10px"
+                             th:each="s : ${mobileInternet}">
+                            <div class="card-body">
+                                <div class="form-check">
+                                    <b style="font-size: 20px">Mobile Internet</b>
+                                    <input class="form-check-input" th:id="'mobileInternet'+${s.getId()}"
+                                           name="mobileInternetRadio"
+                                           th:value="${s.getId()}" type="radio">
+                                </div>
+                                <div>
+                                    <span th:text="${s.getnGigabytes() + ' '}">10</span><span>GB</span>
+                                    <span th:text="${s.getFeeGigabytes() + ' '}">10</span><span>&euro;/month</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </fieldset>
+                    <hr>
+                </div>
+
+
+                <div th:if="${mobilePhone.size() > 0}" class="container" style="margin-top: 20px">
+                    <fieldset id="mobilePhoneRadio">
+                    <div class="row">
+                        <div class="card w-auto" style="margin-left: 10px; margin-right: 10px"
+                             th:each="s : ${mobilePhone}">
+                            <div class="card-body">
+                                <div class="form-check">
+                                    <b style="font-size: 20px">Mobile Phone</b>
+                                    <input class="form-check-input" th:id="'MobilePhone'+${s.getId()}"
+                                           name="mobilePhoneRadio"
+                                           th:value="${s.getId()}" type="radio">
+                                </div>
+                                <div>
+                                    <span th:text="${s.getnMinutes() + ' '}">10</span><span>minutes</span>
+                                    <span th:text="${s.getFeeMinutes() + ' '}">10</span><span>&euro;/month</span>
+                                </div>
+                                <div>
+                                    <span th:text="${s.getnSms() + ' '}">10</span><span>SMS</span>
+                                    <span th:text="${s.getFeeSms() + ' '}">10</span><span>&euro;/month</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </fieldset>
+                    <hr>
+                </div>
+
+
+                <div th:if="${fixedPhone != null}" class="container" style="margin-top: 20px">
+                    <fieldset id="fixedPhoneRadio">
+                    <div class="row">
+                        <div class="card w-auto" style="margin-left: 10px; margin-right: 10px">
+                            <div class="card-body">
+                                <div class="form-check">
+                                    <b style="font-size: 20px">Fixed Phone</b>
+                                    <input class="form-check-input" th:id="'fixedPhone'+${fixedPhone.getId()}"
+                                           name="fixedPhoneRadio"
+                                           th:value="${fixedPhone.getId()}" type="radio">
+                                </div>
+                                <div>
+                                    <span>Unlimited minutes</span>
+                                    <span>25 &euro;/month</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </fieldset>
+                    <hr>
+                </div>
+
+
+            </div>
+
+
+            <div th:if="${optionalProducts.size() > 0 }">
+                <span>Choose the optional products to add</span>
+                <div class="container" style="margin-top: 20px">
+                    <div class="row">
+                        <div class="card w-auto" style="margin-left: 10px; margin-right: 10px"
+                             th:each="optProd : ${optionalProducts}">
+                            <div class="card-body">
+                                <b style="font-size: 20px" th:text="${optProd.getName()}">Optional product name</b>
+                                <span th:text="${optProd.getMonthlyFee() + ' '}">10</span><span>&euro;/month</span>
+                                <input type="checkbox" th:id="'optProd' + ${optProd.getId()}" name="opProd"
+                                       th:value="${optProd.getId()}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg"
+                    style="padding-left: 2.5rem; padding-right: 2.5rem; margin-top: 20px">Create Service Package
+            </button>
+            <hr>
+        </form>
+        <div th:unless="${errorMes == null }" style="margin-top: 20px">
+            <div class="alert alert-danger" role="alert">
+                <h6 class="alert-heading" th:text="${errorMes}">Error</h6>
+            </div>
+        </div>
+
+
+        <h1 style="margin-bottom: 20px; margin-top: 40px">Create an Optional Product</h1>
+        <form method="post" th:action="@{/CreateOptionalProduct}">
+            <div class="form-group" style="margin-bottom: 20px">
+                <label for="opName">Package Name</label>
+                <input class="form-control" id="opName" name="opName" placeholder="Enter product name" type="text">
+            </div>
+            <div class="form-group" style="margin-bottom: 20px">
+                <label for="opMonthFee">Fee</label>
+                <input class="form-control" id="opMonthFee" name="opMonthFee" placeholder="Enter fee" type="number"
+                       step="any">
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg"
+                    style="padding-left: 2.5rem; padding-right: 2.5rem;">Create Optional Product
+            </button>
+            <hr>
+        </form>
+        <div th:unless="${errorMes == null }" style="margin-top: 20px">
+            <div class="alert alert-danger" role="alert">
+                <h6 class="alert-heading" th:text="${errorMes}">Error</h6>
+            </div>
+        </div>
+
     </div>
-    <div class="form-group">
-        <label for="feeOptional">Fee</label>
-        <input class="form-control" id="feeOptional" name="monthly_fee" placeholder="Amount" type="text">
-        <small class="form-text text-muted">Ex. 10.05</small>
-    </div>
-    <button class="btn btn-primary" type="submit">Submit</button>
-</form>
+</section>
 </body>
 </html>

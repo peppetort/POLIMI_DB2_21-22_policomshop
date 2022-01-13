@@ -42,11 +42,15 @@ public class PackageService {
         return em.createQuery("select s from Service s", Service.class).getResultList();
     }
 
-    public List<OptionalProduct> getAllOptional(){
+    public Service getServiceById(Long id) {
+        return em.find(Service.class, id);
+    }
+
+    public List<OptionalProduct> getAllOptional() {
         return em.createQuery("select o from OptionalProduct o", OptionalProduct.class).getResultList();
     }
 
-    public void saveNewServicePackage(String name, List<Long> servicesIDs, List<Long> optionalIDs){
+    public Long createNewServicePackage(String name, List<Long> servicesIDs, List<Long> optionalIDs) {
         List<Service> services = new ArrayList<>();
         List<OptionalProduct> optionalProductList = new ArrayList<>();
         for (Long i : servicesIDs) {
@@ -57,5 +61,7 @@ public class PackageService {
         }
         ServicePackage sp = new ServicePackage(name, services, optionalProductList);
         em.persist(sp);
+        em.flush();
+        return sp.getId();
     }
 }
