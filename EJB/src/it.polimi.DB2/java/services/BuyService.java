@@ -33,12 +33,12 @@ public class BuyService implements Serializable {
     /* ---- Object Status ---- */
     private Order order;
     private ServicePackage servicePackage;
-    private final Map<OptionalProduct, Boolean> optionalProductBooleanMap = new HashMap<>();
+    private Map<OptionalProduct, Boolean> optionalProductBooleanMap;
 
 
     public void initOrder(Long idService) {
         order = new Order();
-        optionalProductBooleanMap.clear();
+        optionalProductBooleanMap = new HashMap<>();
         ServicePackage servicePackage = em.find(ServicePackage.class, idService);
         if (servicePackage == null) throw new BadRequestException();
         this.servicePackage = servicePackage;
@@ -56,15 +56,21 @@ public class BuyService implements Serializable {
         if (offer.equals(order.getOffer())) return;
         if (!offer.getServicePackage().equals(this.servicePackage)) throw new BadRequestException();
         order.setOffer(offer);
-    }
-
-    public Map<OptionalProduct, Boolean> getOptionalProduct() {
-        return optionalProductBooleanMap;
+        order.setTotalMonthlyFee(offer.getMonthlyFee());
     }
 
     public void setOptionalProducts(List<Integer> optionalProductIds) throws BadRequestException {
+        if (optionalProductBooleanMap == null) throw new BadRequestException();
+        if (servicePackage == null) throw new BadRequestException();
+
         for (OptionalProduct o : servicePackage.getOptionalProductList()) {
             optionalProductBooleanMap.put(o, Boolean.FALSE);
+        }
+
+        if (order.getOffer() != null) {
+            order.setTotalMonthlyFee(order.getOffer().getMonthlyFee());
+        } else {
+            order.setTotalMonthlyFee(0);
         }
 
         for (int id : optionalProductIds) {
@@ -73,32 +79,33 @@ public class BuyService implements Serializable {
             if (optionalProduct == null) {
                 throw new BadRequestException();
             }
-            if( optionalProductBooleanMap.replace(optionalProduct, true) == null){
+            if (optionalProductBooleanMap.replace(optionalProduct, true) == null) {
                 throw new BadRequestException();
             }
+            double tot = order.getTotalMonthlyFee();
+            order.setTotalMonthlyFee(tot + optionalProduct.getMonthlyFee());
         }
-
     }
 
 
     public void setStartDate(Date date) {
+        if (order == null) throw new BadRequestException();
         order.setActivationDate(date);
     }
 
     public Order getOrder() {
-        if (order != null && order.getOffer() != null) {
-            double sum = 0;
-            sum = sum + order.getOffer().getMonthlyFee();
-            for (Map.Entry<OptionalProduct, Boolean> e : optionalProductBooleanMap.entrySet()) {
-                if (e.getValue()) sum = sum + e.getKey().getMonthlyFee();
-                order.setTotalMonthlyFee(sum);
-            }
-        }
+        if (order == null) throw new BadRequestException();
         return order;
     }
 
     public ServicePackage getServicePackage() {
+        if(servicePackage == null) throw new BadRequestException();
         return servicePackage;
+    }
+
+    public Map<OptionalProduct, Boolean> getOptionalProduct() {
+        if(optionalProductBooleanMap == null) throw new BadRequestException();
+        return optionalProductBooleanMap;
     }
 
     @Remove
@@ -135,7 +142,6 @@ public class BuyService implements Serializable {
             }
             em.merge(customer);
         }
-
         em.persist(order);
         return isPaymentValid;
     }

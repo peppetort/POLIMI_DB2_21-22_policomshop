@@ -3,6 +3,8 @@ package filters;
 import services.BuyService;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Objects;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -17,11 +19,10 @@ public class InvalidateBuyProcess implements Filter {
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
-        HttpServletResponse res = (HttpServletResponse) response;
 
         BuyService buyService = (BuyService) req.getSession().getAttribute("BuyService");
 
-        if(buyService != null){
+        if (buyService != null) {
             buyService.stopProcess();
             req.getSession().removeAttribute("BuyService");
         }

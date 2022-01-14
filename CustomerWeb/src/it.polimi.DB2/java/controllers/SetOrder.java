@@ -10,6 +10,7 @@ import javax.ws.rs.BadRequestException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.stream.Collectors;
@@ -50,6 +51,8 @@ public class SetOrder extends HttpServletThymeleaf {
 
             if (optionalProductIdListParam != null) {
                 buyService.setOptionalProducts(Arrays.stream(optionalProductIdListParam).map(Integer::parseInt).collect(Collectors.toList()));
+            }else {
+                buyService.setOptionalProducts(new ArrayList<>());
             }
 
             response.sendRedirect("ReviewOrder");

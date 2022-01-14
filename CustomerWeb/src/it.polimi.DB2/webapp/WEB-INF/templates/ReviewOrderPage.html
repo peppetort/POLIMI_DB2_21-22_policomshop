@@ -52,15 +52,15 @@
                                 </li>
 
                             </ul>
-                            <div th:if="${!buyService.getOrder().getOptionalProductList().isEmpty()}">
+                            <div th:if="${!buyService.getOptionalProduct().isEmpty()}">
                                 <b>Optional products:</b>
                                 <ul>
-                                    <li th:each="optProd: ${buyService.getOrder().getOptionalProductList()}"
-                                        class="list-group-item">
+                                    <li th:each="optProd: ${buyService.getOptionalProduct()}"
+                                        class="list-group-item" th:if="${optProd.value}">
                                         <div style="display: flex;justify-content: space-between;">
-                                            <b th:text="${optProd.name}">Optional prod name</b>
+                                            <b th:text="${optProd.key.getName()}">Optional prod name</b>
                                             <p>+<span
-                                                    th:text="${optProd.monthlyFee+' '}"></span><span>&euro;/month</span>
+                                                    th:text="${optProd.key.getMonthlyFee()+' '}"></span><span>&euro;/month</span>
                                             </p>
                                         </div>
                                     </li>

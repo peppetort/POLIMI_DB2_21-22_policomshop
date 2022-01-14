@@ -17,6 +17,11 @@ public class ReviewOrder extends HttpServletThymeleaf {
         BuyService buyService = (BuyService) request.getSession().getAttribute("BuyService");
         Customer customer = (Customer) request.getSession().getAttribute("user");
 
+        if (buyService == null || buyService.getOrder() == null || buyService.getOrder().getOffer() == null || buyService.getOrder().getActivationDate() == null) {
+            response.sendRedirect(request.getServletContext().getContextPath());
+            return;
+        }
+
         if (customer == null) {
             request.getSession().setAttribute("paymentInProgress", true);
         }
