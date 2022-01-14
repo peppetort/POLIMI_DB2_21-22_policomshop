@@ -51,7 +51,8 @@
                                     </div>
                                     <div>
                                         <span th:text="${s.getnGigabytes() + ' '}">10</span><span>GB</span>
-                                        <span th:text="${s.getFeeGigabytes() + ' '}">10</span><span>&euro;/month</span>
+                                        <span> - </span>
+                                        <span th:text="${s.getFeeGigabytes() + ' '}">10</span><span>&euro;/GB fee</span>
                                     </div>
                                 </div>
                             </div>
@@ -74,7 +75,8 @@
                                 </div>
                                 <div>
                                     <span th:text="${s.getnGigabytes() + ' '}">10</span><span>GB</span>
-                                    <span th:text="${s.getFeeGigabytes() + ' '}">10</span><span>&euro;/month</span>
+                                    <span> - </span>
+                                    <span th:text="${s.getFeeGigabytes() + ' '}">10</span><span>&euro;/GB</span>
                                 </div>
                             </div>
                         </div>
@@ -98,11 +100,13 @@
                                 </div>
                                 <div>
                                     <span th:text="${s.getnMinutes() + ' '}">10</span><span>minutes</span>
-                                    <span th:text="${s.getFeeMinutes() + ' '}">10</span><span>&euro;/month</span>
+                                    <span> - </span>
+                                    <span th:text="${s.getFeeMinutes() + ' '}">10</span><span>&euro;/minute</span>
                                 </div>
                                 <div>
                                     <span th:text="${s.getnSms() + ' '}">10</span><span>SMS</span>
-                                    <span th:text="${s.getFeeSms() + ' '}">10</span><span>&euro;/month</span>
+                                    <span> - </span>
+                                    <span th:text="${s.getFeeSms() + ' '}">10</span><span>&euro;/SMS</span>
                                 </div>
                             </div>
                         </div>
@@ -125,7 +129,6 @@
                                 </div>
                                 <div>
                                     <span>Unlimited minutes</span>
-                                    <span>25 &euro;/month</span>
                                 </div>
                             </div>
                         </div>

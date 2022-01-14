@@ -31,7 +31,7 @@ public class SignUp extends HttpServletThymeleaf {
             renderPage(request, response, "Invalid data, username or password already present");
             return;
         }
-        response.sendRedirect("SignUp");
+        response.sendRedirect("SignIn");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

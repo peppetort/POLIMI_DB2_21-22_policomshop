@@ -145,7 +145,7 @@ public class Order implements Serializable {
     }
 
     public enum State {
-        CREATED(0),
+        CREATED(0), //TODO: non ha senso perché non verrà mai scritto sul db
         PAID(1),
         PAYMENT_FAILED(2);
         final int idDB;
