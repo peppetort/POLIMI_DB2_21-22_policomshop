@@ -33,20 +33,18 @@ public class BuyService implements Serializable {
     /* ---- Object Status ---- */
     private Order order;
     private ServicePackage servicePackage;
-    private final Map<OptionalProduct, Boolean> optionalProductBooleanMap = new HashMap<>();
+    private Map<OptionalProduct, Boolean> optionalProductBooleanMap;
 
 
     public void initOrder(Long idService) {
         order = new Order();
-        optionalProductBooleanMap.clear();
+        optionalProductBooleanMap = new HashMap<>();
         ServicePackage servicePackage = em.find(ServicePackage.class, idService);
         if (servicePackage == null) throw new BadRequestException();
         this.servicePackage = servicePackage;
-        initOptionalProductBooleanMap();
-    }
-
-    public ServicePackage getServicePackage() {
-        return servicePackage;
+        for (OptionalProduct o : servicePackage.getOptionalProductList()) {
+            optionalProductBooleanMap.put(o, Boolean.FALSE);
+        }
     }
 
     public void setOffer(int id) {
@@ -58,46 +56,63 @@ public class BuyService implements Serializable {
         if (offer.equals(order.getOffer())) return;
         if (!offer.getServicePackage().equals(this.servicePackage)) throw new BadRequestException();
         order.setOffer(offer);
+        order.setTotalMonthlyFee(offer.getMonthlyFee());
     }
 
-    public Map<OptionalProduct, Boolean> getOptionalProduct() {
-        return optionalProductBooleanMap;
-    }
+    public void setOptionalProducts(List<Integer> optionalProductIds) throws BadRequestException {
+        if (optionalProductBooleanMap == null) throw new BadRequestException();
+        if (servicePackage == null) throw new BadRequestException();
 
-    public void setOptionalProducts(String[] opProds) throws IllegalAccessException, NumberFormatException {
-        initOptionalProductBooleanMap();
-        order.getOptionalProductList().clear();
-        for (String opId : opProds) {
-            int idOpProd = Integer.parseInt(opId);
-            Optional<OptionalProduct> optional = optionalProductBooleanMap.keySet().stream().filter(x -> x.getId() == idOpProd).findAny();
-            if (optional.isEmpty()) throw new IllegalAccessException();
-            OptionalProduct o = optional.get();
-            optionalProductBooleanMap.replace(o, Boolean.TRUE);
-            order.getOptionalProductList().add(o);
+        for (OptionalProduct o : servicePackage.getOptionalProductList()) {
+            optionalProductBooleanMap.put(o, Boolean.FALSE);
+        }
+
+        if (order.getOffer() != null) {
+            order.setTotalMonthlyFee(order.getOffer().getMonthlyFee());
+        } else {
+            order.setTotalMonthlyFee(0);
+        }
+
+        for (int id : optionalProductIds) {
+            OptionalProduct optionalProduct = em.find(OptionalProduct.class, (long) id);
+
+            if (optionalProduct == null) {
+                throw new BadRequestException();
+            }
+            if (optionalProductBooleanMap.replace(optionalProduct, true) == null) {
+                throw new BadRequestException();
+            }
+            double tot = order.getTotalMonthlyFee();
+            order.setTotalMonthlyFee(tot + optionalProduct.getMonthlyFee());
         }
     }
 
+
     public void setStartDate(Date date) {
+        if (order == null) throw new BadRequestException();
         order.setActivationDate(date);
     }
 
     public Order getOrder() {
-        if (order != null && order.getOffer() != null) {
-            double sum = 0;
-            sum = sum + order.getOffer().getMonthlyFee();
-            for (Map.Entry<OptionalProduct, Boolean> e : optionalProductBooleanMap.entrySet()) {
-                if (e.getValue()) sum = sum + e.getKey().getMonthlyFee();
-                order.setTotalMonthlyFee(sum);
-            }
-        }
+        if (order == null) throw new BadRequestException();
         return order;
+    }
+
+    public ServicePackage getServicePackage() {
+        if(servicePackage == null) throw new BadRequestException();
+        return servicePackage;
+    }
+
+    public Map<OptionalProduct, Boolean> getOptionalProduct() {
+        if(optionalProductBooleanMap == null) throw new BadRequestException();
+        return optionalProductBooleanMap;
     }
 
     @Remove
     public boolean executePayment(Customer customer) {
         /*Specification: "When the user presses the BUY button, an order is created",
          * so the creation date is set manually only in this method*/
-        if(order.getOffer() == null || order.getActivationDate() == null){
+        if (order.getOffer() == null || order.getActivationDate() == null) {
             throw new BadRequestException();
         }
 
@@ -127,7 +142,6 @@ public class BuyService implements Serializable {
             }
             em.merge(customer);
         }
-
         em.persist(order);
         return isPaymentValid;
     }
@@ -136,11 +150,4 @@ public class BuyService implements Serializable {
     public void stopProcess() {
     }
 
-    /* ----- PRIVATE METHODS ------ */
-
-    private void initOptionalProductBooleanMap() {
-        for (OptionalProduct o : servicePackage.getOptionalProductList()) {
-            optionalProductBooleanMap.put(o, Boolean.FALSE);
-        }
-    }
 }

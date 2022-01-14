@@ -33,6 +33,8 @@ public class GetHome extends HttpServletThymeleaf {
                 rejectedPayments = orderService.getRejectedOrdersByCustomer(customer.getId());
             } catch (OrderNotFound e) {
                 e.printStackTrace();
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                return;
             }
         }
 

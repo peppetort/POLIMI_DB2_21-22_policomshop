@@ -4,17 +4,18 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
     <filter>
-        <filter-name>LoggedIn</filter-name>
-        <filter-class>filters.LoggedIn</filter-class>
+        <filter-name>LoggedInCheck</filter-name>
+        <filter-class>filters.LoggedInCheck</filter-class>
     </filter>
     <filter>
-        <filter-name>ValidBuyProcess</filter-name>
-        <filter-class>filters.ValidBuyProcess</filter-class>
+        <filter-name>NotLoggedInCheck</filter-name>
+        <filter-class>filters.NotLoggedInCheck</filter-class>
     </filter>
     <filter>
         <filter-name>InvalidateBuyProcess</filter-name>
         <filter-class>filters.InvalidateBuyProcess</filter-class>
     </filter>
+
     <filter-mapping>
         <filter-name>InvalidateBuyProcess</filter-name>
         <servlet-name>GetHome</servlet-name>
@@ -27,12 +28,18 @@
         <filter-name>InvalidateBuyProcess</filter-name>
         <servlet-name>SignUp</servlet-name>
     </filter-mapping>
+
     <filter-mapping>
-        <filter-name>LoggedIn</filter-name>
-        <url-pattern>/Payment</url-pattern>
+        <filter-name>LoggedInCheck</filter-name>
+        <servlet-name>Payment</servlet-name>
     </filter-mapping>
     <filter-mapping>
-        <filter-name>ValidBuyProcess</filter-name>
-        <url-pattern>/ReviewOrder</url-pattern>
+
+        <filter-name>NotLoggedInCheck</filter-name>
+        <servlet-name>SignIn</servlet-name>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>NotLoggedInCheck</filter-name>
+        <servlet-name>SignUp</servlet-name>
     </filter-mapping>
 </web-app>

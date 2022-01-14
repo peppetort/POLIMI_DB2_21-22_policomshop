@@ -1,6 +1,6 @@
 package controllers;
 
-import entities.Customer;
+import entities.*;
 import org.thymeleaf.context.WebContext;
 import services.BuyService;
 
@@ -15,14 +15,20 @@ public class ReviewOrder extends HttpServletThymeleaf {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         BuyService buyService = (BuyService) request.getSession().getAttribute("BuyService");
-        //TODO ma quando viene tolto??
         Customer customer = (Customer) request.getSession().getAttribute("user");
+
+        if (buyService == null || buyService.getOrder() == null || buyService.getOrder().getOffer() == null || buyService.getOrder().getActivationDate() == null) {
+            response.sendRedirect(request.getServletContext().getContextPath());
+            return;
+        }
+
         if (customer == null) {
             request.getSession().setAttribute("paymentInProgress", true);
         }
+
         final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
         ctx.setVariable("user", request.getSession().getAttribute("user"));
-        ctx.setVariable("order", buyService.getOrder());
+        ctx.setVariable("buyService", buyService);
         templateEngine.process("ReviewOrderPage", ctx, response.getWriter());
     }
 }

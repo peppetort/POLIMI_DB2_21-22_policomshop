@@ -2,6 +2,7 @@ package controllers;
 
 import entities.Customer;
 import org.thymeleaf.context.WebContext;
+import org.thymeleaf.util.StringUtils;
 import services.UserService;
 
 import javax.ejb.EJB;
@@ -16,31 +17,31 @@ public class SignUp extends HttpServletThymeleaf {
     UserService usrService;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-        final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
-
         String username = request.getParameter("username");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-        if (username == null || email == null || password == null ||
-                username.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            ctx.setVariable("errorMsg", "Invalid inserted credentials");
-            templateEngine.process("SignUpPage", ctx, response.getWriter());
+
+        if(StringUtils.isEmptyOrWhitespace(username) && StringUtils.isEmptyOrWhitespace(email) && StringUtils.isEmptyOrWhitespace(password)){
+            renderPage(request, response, "Invalid Request");
             return;
         }
 
         Customer newUser = usrService.registerNewUser(username, email, password);
         if (newUser == null) {
-            ctx.setVariable("errorMsg", "Invalid data, username or password already present");
-            templateEngine.process("SignUpPage", ctx, response.getWriter());
+            renderPage(request, response, "Invalid data, username or password already present");
             return;
         }
-        response.sendRedirect("SignIn");
+        response.sendRedirect("SignUp");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        //when the servlet is called with a DoGet, it's display the SignUp form
         final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
+        templateEngine.process("SignUpPage", ctx, response.getWriter());
+    }
+
+    private void renderPage(HttpServletRequest request, HttpServletResponse response, String errorMsg) throws IOException {
+        final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
+        ctx.setVariable("errorMsg", errorMsg);
         templateEngine.process("SignUpPage", ctx, response.getWriter());
     }
 }
