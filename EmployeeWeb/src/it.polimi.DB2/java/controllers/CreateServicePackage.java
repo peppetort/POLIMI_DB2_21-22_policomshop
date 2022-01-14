@@ -3,7 +3,7 @@ package controllers;
 import entities.OptionalProduct;
 import entities.Service;
 import services.OfferService;
-import services.OptionalProdService;
+import services.OptionalProductService;
 import services.PackageService;
 
 import javax.ejb.EJB;
@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.BadRequestException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class CreateServicePackage extends HttpServlet {
     @EJB(name = "PackageService")
     PackageService packageService;
     @EJB(name = "OptionalProdService")
-    OptionalProdService optionalProdService;
+    OptionalProductService optionalProdService;
     @EJB(name = "OfferService")
     OfferService offerService;
 
@@ -151,15 +152,19 @@ public class CreateServicePackage extends HttpServlet {
                     }
                     optionalProductsIdList.add(id);
 
-                } catch (NumberFormatException e) {
+                } catch (NumberFormatException | BadRequestException e) {
                     response.sendError(HttpServletResponse.SC_BAD_REQUEST);
                     return;
                 }
             }
         }
 
-        Long newServicePackageId = packageService.createNewServicePackage(name, servicesIDs, optionalProductsIdList);
-        offerService.saveNew(newServicePackageId, validityPeriodInt, monthFeeD);
-        response.sendRedirect(getServletContext().getContextPath());
+        try {
+            Long newServicePackageId = packageService.createNewServicePackage(name, servicesIDs, optionalProductsIdList);
+            offerService.createNewOffer(newServicePackageId, validityPeriodInt, monthFeeD);
+            response.sendRedirect(getServletContext().getContextPath());
+        }catch (BadRequestException e){
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        }
     }
 }

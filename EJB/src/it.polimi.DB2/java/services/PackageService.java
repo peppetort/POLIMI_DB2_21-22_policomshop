@@ -7,6 +7,8 @@ import entities.ServicePackage;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
+import javax.ws.rs.BadRequestException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,49 +21,55 @@ public class PackageService {
     }
 
     public ServicePackage findById(Long id) {
-        return em.find(ServicePackage.class, id);
+        try {
+            return em.find(ServicePackage.class, id);
+        } catch (PersistenceException ignored) {
+            throw new BadRequestException();
+        }
     }
 
     public List<ServicePackage> getAvailableServicePackages() {
-        List<ServicePackage> servicePackages;
-        servicePackages = em.createQuery("SELECT distinct o.servicePackage from Offer o where o.active = true", ServicePackage.class).getResultList();
-        return servicePackages;
-    }
-
-    public List<ServicePackage> getAllServicePackages() {
-        return em.createQuery("SELECT distinct sp from ServicePackage sp", ServicePackage.class).getResultList();
-    }
-
-    public List<OptionalProduct> getAvailableOptionalProductByPackage(Long servicePackageId) {
-        ServicePackage servicePackage;
-        servicePackage = em.find(ServicePackage.class, servicePackageId);
-        return servicePackage.getOptionalProductList();
+        try {
+            List<ServicePackage> servicePackages;
+            servicePackages = em.createQuery("SELECT distinct o.servicePackage from Offer o where o.active = true", ServicePackage.class).getResultList();
+            return servicePackages;
+        } catch (PersistenceException e) {
+            throw new BadRequestException();
+        }
     }
 
     public List<Service> getAllService() {
-        return em.createQuery("select s from Service s", Service.class).getResultList();
+        try {
+            return em.createQuery("select s from Service s", Service.class).getResultList();
+        } catch (PersistenceException e) {
+            throw new BadRequestException();
+        }
     }
 
     public Service getServiceById(Long id) {
-        return em.find(Service.class, id);
-    }
-
-    public List<OptionalProduct> getAllOptional() {
-        return em.createQuery("select o from OptionalProduct o", OptionalProduct.class).getResultList();
+        try {
+            return em.find(Service.class, id);
+        } catch (PersistenceException e) {
+            throw new BadRequestException();
+        }
     }
 
     public Long createNewServicePackage(String name, List<Long> servicesIDs, List<Long> optionalIDs) {
-        List<Service> services = new ArrayList<>();
-        List<OptionalProduct> optionalProductList = new ArrayList<>();
-        for (Long i : servicesIDs) {
-            services.add(em.find(Service.class, i));
+        try {
+            List<Service> services = new ArrayList<>();
+            List<OptionalProduct> optionalProductList = new ArrayList<>();
+            for (Long i : servicesIDs) {
+                services.add(em.find(Service.class, i));
+            }
+            for (Long i : optionalIDs) {
+                optionalProductList.add(em.find(OptionalProduct.class, i));
+            }
+            ServicePackage sp = new ServicePackage(name, services, optionalProductList);
+            em.persist(sp);
+            em.flush();
+            return sp.getId();
+        } catch (PersistenceException e) {
+            throw new BadRequestException();
         }
-        for (Long i : optionalIDs) {
-            optionalProductList.add(em.find(OptionalProduct.class, i));
-        }
-        ServicePackage sp = new ServicePackage(name, services, optionalProductList);
-        em.persist(sp);
-        em.flush();
-        return sp.getId();
     }
 }

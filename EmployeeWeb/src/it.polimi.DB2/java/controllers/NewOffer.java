@@ -29,7 +29,7 @@ public class NewOffer extends HttpServlet {
         int idPackage = Integer.parseInt(idPackageString);
         int validityPeriod = Integer.parseInt(validityPeriodString);
         double monthlyFee = Double.parseDouble(monthlyFeeString);
-        offerService.saveNew(idPackage, validityPeriod, monthlyFee);
+        offerService.createNewOffer(idPackage, validityPeriod, monthlyFee);
         resp.sendRedirect(getServletContext().getContextPath());
     }
 }

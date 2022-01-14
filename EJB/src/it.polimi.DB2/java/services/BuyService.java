@@ -9,6 +9,7 @@ import javax.ejb.StatefulTimeout;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
+import javax.persistence.PersistenceException;
 import javax.ws.rs.BadRequestException;
 import java.io.Serializable;
 import java.util.*;
@@ -37,53 +38,65 @@ public class BuyService implements Serializable {
 
 
     public void initOrder(Long idService) {
-        order = new Order();
-        optionalProductBooleanMap = new HashMap<>();
-        ServicePackage servicePackage = em.find(ServicePackage.class, idService);
-        if (servicePackage == null) throw new BadRequestException();
-        this.servicePackage = servicePackage;
-        for (OptionalProduct o : servicePackage.getOptionalProductList()) {
-            optionalProductBooleanMap.put(o, Boolean.FALSE);
+        try {
+            order = new Order();
+            optionalProductBooleanMap = new HashMap<>();
+            ServicePackage servicePackage = em.find(ServicePackage.class, idService);
+            if (servicePackage == null) throw new BadRequestException();
+            this.servicePackage = servicePackage;
+            for (OptionalProduct o : servicePackage.getOptionalProductList()) {
+                optionalProductBooleanMap.put(o, Boolean.FALSE);
+            }
+        } catch (PersistenceException e) {
+            throw new BadRequestException();
         }
     }
 
     public void setOffer(int id) {
         /*The only valid flow to call this method is via the CustomizeOrder post method,
         so the user must have already accessed the get method of the same controller -> This bean is already initialized*/
-        if (order == null) throw new BadRequestException();
-        Offer offer = em.find(Offer.class, id);
-        if (offer == null || !offer.isActive()) throw new BadRequestException();
-        if (offer.equals(order.getOffer())) return;
-        if (!offer.getServicePackage().equals(this.servicePackage)) throw new BadRequestException();
-        order.setOffer(offer);
-        order.setTotalMonthlyFee(offer.getMonthlyFee());
+        try {
+            if (order == null) throw new BadRequestException();
+            Offer offer = em.find(Offer.class, id);
+            if (offer == null || !offer.isActive()) throw new BadRequestException();
+            if (offer.equals(order.getOffer())) return;
+            if (!offer.getServicePackage().equals(this.servicePackage)) throw new BadRequestException();
+            order.setOffer(offer);
+            order.setTotalMonthlyFee(offer.getMonthlyFee());
+        }catch (PersistenceException e){
+            throw new BadRequestException();
+        }
     }
 
     public void setOptionalProducts(List<Integer> optionalProductIds) throws BadRequestException {
-        if (optionalProductBooleanMap == null) throw new BadRequestException();
-        if (servicePackage == null) throw new BadRequestException();
+        try {
+            if (optionalProductBooleanMap == null) throw new BadRequestException();
+            if (servicePackage == null) throw new BadRequestException();
 
-        for (OptionalProduct o : servicePackage.getOptionalProductList()) {
-            optionalProductBooleanMap.put(o, Boolean.FALSE);
-        }
-
-        if (order.getOffer() != null) {
-            order.setTotalMonthlyFee(order.getOffer().getMonthlyFee());
-        } else {
-            order.setTotalMonthlyFee(0);
-        }
-
-        for (int id : optionalProductIds) {
-            OptionalProduct optionalProduct = em.find(OptionalProduct.class, (long) id);
-
-            if (optionalProduct == null) {
-                throw new BadRequestException();
+            for (OptionalProduct o : servicePackage.getOptionalProductList()) {
+                optionalProductBooleanMap.put(o, Boolean.FALSE);
             }
-            if (optionalProductBooleanMap.replace(optionalProduct, true) == null) {
-                throw new BadRequestException();
+
+            if (order.getOffer() != null) {
+                order.setTotalMonthlyFee(order.getOffer().getMonthlyFee());
+            } else {
+                order.setTotalMonthlyFee(0);
             }
-            double tot = order.getTotalMonthlyFee();
-            order.setTotalMonthlyFee(tot + optionalProduct.getMonthlyFee());
+
+            for (int id : optionalProductIds) {
+                OptionalProduct optionalProduct = em.find(OptionalProduct.class, (long) id);
+
+                if (optionalProduct == null) {
+                    throw new BadRequestException();
+                }
+                if (optionalProductBooleanMap.replace(optionalProduct, true) == null) {
+                    throw new BadRequestException();
+                }
+                double tot = order.getTotalMonthlyFee();
+                order.setTotalMonthlyFee(tot + optionalProduct.getMonthlyFee());
+            }
+        }catch (PersistenceException e){
+            throw new BadRequestException();
         }
     }
 
@@ -99,12 +112,12 @@ public class BuyService implements Serializable {
     }
 
     public ServicePackage getServicePackage() {
-        if(servicePackage == null) throw new BadRequestException();
+        if (servicePackage == null) throw new BadRequestException();
         return servicePackage;
     }
 
     public Map<OptionalProduct, Boolean> getOptionalProduct() {
-        if(optionalProductBooleanMap == null) throw new BadRequestException();
+        if (optionalProductBooleanMap == null) throw new BadRequestException();
         return optionalProductBooleanMap;
     }
 
@@ -112,38 +125,42 @@ public class BuyService implements Serializable {
     public boolean executePayment(Customer customer) {
         /*Specification: "When the user presses the BUY button, an order is created",
          * so the creation date is set manually only in this method*/
-        if (order.getOffer() == null || order.getActivationDate() == null) {
+        try {
+            if (order.getOffer() == null || order.getActivationDate() == null) {
+                throw new BadRequestException();
+            }
+
+            order.setCustomer(customer);
+            order.setCreationDate(new Date());
+            Calendar c = Calendar.getInstance();
+            c.setTime(order.getActivationDate());
+            c.add(Calendar.MONTH, order.getOffer().getValidityPeriod());
+            order.setDeactivationDate(c.getTime());
+            boolean isPaymentValid = PaymentRevisionBot.review();
+
+            if (isPaymentValid) {
+                order.setStatus(Order.State.PAID);
+            } else {
+                order.setStatus(Order.State.PAYMENT_FAILED);
+                customer.addOneFailedPayment();
+                //It's already an audit customer
+                if (customer.isAuditCustomer()) {
+                    AuditCustomer a = em.find(AuditCustomer.class, customer.getId());
+                    a.setAmount(order.getTotalMonthlyFee());
+                    a.setLastRejection(order.getCreationDate());
+                } else if (customer.getNumFailedPayments() >= 3) {
+                    //Here only if it's becoming an Audit Customer
+                    customer.setAuditCustomer(true);
+                    AuditCustomer a = new AuditCustomer(customer, order.getTotalMonthlyFee(), order.getCreationDate());
+                    em.persist(a);
+                }
+                em.merge(customer);
+            }
+            em.persist(order);
+            return isPaymentValid;
+        }catch (PersistenceException e){
             throw new BadRequestException();
         }
-
-        order.setCustomer(customer);
-        order.setCreationDate(new Date());
-        Calendar c = Calendar.getInstance();
-        c.setTime(order.getActivationDate());
-        c.add(Calendar.MONTH, order.getOffer().getValidityPeriod());
-        order.setDeactivationDate(c.getTime());
-        boolean isPaymentValid = PaymentRevisionBot.review();
-
-        if (isPaymentValid) {
-            order.setStatus(Order.State.PAID);
-        } else {
-            order.setStatus(Order.State.PAYMENT_FAILED);
-            customer.addOneFailedPayment();
-            //It's already an audit customer
-            if (customer.isAuditCustomer()) {
-                AuditCustomer a = em.find(AuditCustomer.class, customer.getId());
-                a.setAmount(order.getTotalMonthlyFee());
-                a.setLastRejection(order.getCreationDate());
-            } else if (customer.getNumFailedPayments() >= 3) {
-                //Here only if it's becoming an Audit Customer
-                customer.setAuditCustomer(true);
-                AuditCustomer a = new AuditCustomer(customer, order.getTotalMonthlyFee(), order.getCreationDate());
-                em.persist(a);
-            }
-            em.merge(customer);
-        }
-        em.persist(order);
-        return isPaymentValid;
     }
 
     @Remove
