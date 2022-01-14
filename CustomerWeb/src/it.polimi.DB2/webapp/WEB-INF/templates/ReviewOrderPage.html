@@ -24,31 +24,44 @@
                 <div class="card bg-white text-black" style="border-radius: 1rem;">
                     <div class="card-body p-3">
                         <div class="mb-md-2 mt-md-4 pb-2">
-                            <h2 class="fw-bold mb-2" th:text="${order.offer.getServicePackage().name}">Package name</h2>
+                            <h2 class="fw-bold mb-2" th:text="${buyService.getServicePackage().getName()}">Package
+                                name</h2>
                             <span><b>Strat date:</b>&nbsp;<span
-                                    th:text="${#dates.format(order.activationDate, 'dd/MM/yyyy')}">10/10/2020 </span> </span>
+                                    th:text="${#dates.format(buyService.getOrder().getActivationDate(), 'dd/MM/yyyy')}">10/10/2020 </span> </span>
                             <br>
                             <span><b>Duration:</b>&nbsp;<span
-                                    th:text="${order.offer.validityPeriod}"> 10 </span> months </span>
+                                    th:text="${buyService.getOrder().getOffer().getValidityPeriod()}"> 10 </span> months </span>
                             <br>
                             <b>Services:</b>
                             <ul>
-                                <li th:each="service: ${order.offer.servicePackage.serviceList}"
-                                    class="list-group-item">
-                                    <span th:if="${service.type == 1}" th:inline="text"><b>Fixed Internet</b>: come ottengo le info?</span>
-                                    <span th:if="${service.type == 2}"><b>Fixed Phone</b>: 100 minutes/month <small>(0.5€/minute fee)</small></span>
-                                    <span th:if="${service.type == 3}"><b>Mobile Internet</b>:</span>
-                                    <span th:if="${service.type == 4}"><b>Mobile Phone</b>:</span>
+                                <li class="list-group-item"
+                                    th:each="s : ${buyService.getServicePackage().getServiceList()}">
+                <span
+                        th:if="${s.getType() == 1}"><b>Fixed Internet</b>: <span
+                        th:text="${s.getnGigabytes() + ' '}">x</span>GB (<span
+                        th:text="${s.getFeeGigabytes() + ' '}">0.3</span> &euro;/GB fee)  </span>
+                                    <span th:if="${s.getType() == 2}"><b>Fixed Phone</b>: Unlimited minutes </span>
+                                    <span th:if="${s.getType() == 3}"><b>Mobile Internet</b>: <span
+                                            th:text="${s.getnGigabytes() + ' '}">x</span>GB (<span
+                                            th:text="${s.getFeeGigabytes() + ' '}">0.3</span> &euro;/GB fee)  </span>
+                                    <span th:if="${s.getType() == 4}"><b>Mobile Phone</b>: <span
+                                            th:text="${s.getnMinutes() + ' '}">x</span>minutes (<span
+                                            th:text="${s.getFeeMinutes() + ' '}">0.3</span> &euro;/minute fee) + <span
+                                            th:text="${s.getnSms() + ' '}">x</span> SMS (<span
+                                            th:text="${s.getFeeSms() + ' '}">0.3</span> &euro;/SMS fee) </span>
                                 </li>
+
                             </ul>
-                            <div th:if="${!order.optionalProductList.isEmpty()}">
+                            <div th:if="${!buyService.getOrder().getOptionalProductList().isEmpty()}">
                                 <b>Optional products:</b>
                                 <ul>
-                                    <li th:each="optProd: ${order.optionalProductList}"
+                                    <li th:each="optProd: ${buyService.getOrder().getOptionalProductList()}"
                                         class="list-group-item">
                                         <div style="display: flex;justify-content: space-between;">
                                             <b th:text="${optProd.name}">Optional prod name</b>
-                                            <p>+<span th:text="${optProd.monthlyFee+' '}"></span><span>&euro;/month</span></p>
+                                            <p>+<span
+                                                    th:text="${optProd.monthlyFee+' '}"></span><span>&euro;/month</span>
+                                            </p>
                                         </div>
                                     </li>
                                 </ul>
@@ -57,10 +70,10 @@
                             <div class=" text-center text-lg-start mt-4 pt-2"
                                  style="display: flex;justify-content: space-between;">
 
-                                <span style="font-size: 35px"><b th:text="${order.totalMonthlyFee + ' '}">35€</b> <span>&euro;/month</span></span>
+                                <span style="font-size: 35px"><b th:text="${buyService.getOrder().getTotalMonthlyFee() + ' '}">35€</b> <span>&euro;/month</span></span>
                                 <a class="btn btn-primary btn-lg" th:href="@{/Payment}"
-                                        th:if="${user!=null}"
-                                        style="padding-left: 2.5rem; padding-right: 2.5rem;">Buy
+                                   th:if="${user!=null}"
+                                   style="padding-left: 2.5rem; padding-right: 2.5rem;">Buy
                                 </a>
                                 <a th:href="@{/SignIn(paymentInProgress=true)}" th:unless="${user!=null}">Login to
                                     buy</a>

@@ -20,16 +20,6 @@
             height: 2px;
             background: #eee;
         }
-
-        .h-custom {
-            height: calc(100% - 73px);
-        }
-
-        @media (max-width: 450px) {
-            .h-custom {
-                height: 100%;
-            }
-        }
     </style>
 </head>
 <body>
@@ -38,63 +28,81 @@
          th:replace="fragments/navbar :: navbar">
     </nav>
     <div class="container-fluid h-auto w-75">
-        <h1 style="margin-bottom: 20px; margin-top: 20px" th:text="${servicePackage.name}">Package name</h1>
-        <p>This package include the following services:</p>
+        <h1 style="margin-bottom: 20px; margin-top: 20px" th:text="${buyService.getServicePackage().getName()}">Package
+            name</h1>
+        <p>This package includes the following services:</p>
+
         <ul>
-            <li class="list-group-item" th:each="service: ${servicePackage.serviceList}">
-                <span th:if="${service.type == 1}" th:inline="text"><b>Fixed Internet</b>: come ottengo le info?</span>
-                <span th:if="${service.type == 2}"><b>Fixed Phone</b>: 100 minutes/month <small>(0.5€/minute fee)</small></span>
-                <span th:if="${service.type == 3}"><b>Mobile Internet</b>:</span>
-                <span th:if="${service.type == 4}"><b>Mobile Phone</b>:</span>
+            <li class="list-group-item" th:each="s : ${buyService.getServicePackage().getServiceList()}">
+                <span
+                        th:if="${s.getType() == 1}"><b>Fixed Internet</b>: <span
+                        th:text="${s.getnGigabytes() + ' '}">x</span>GB (<span
+                        th:text="${s.getFeeGigabytes() + ' '}">0.3</span> &euro;/GB fee)  </span>
+                <span th:if="${s.getType() == 2}"><b>Fixed Phone</b>: Unlimited minutes </span>
+                <span th:if="${s.getType() == 3}"><b>Mobile Internet</b>: <span
+                        th:text="${s.getnGigabytes() + ' '}">x</span>GB (<span
+                        th:text="${s.getFeeGigabytes() + ' '}">0.3</span> &euro;/GB fee)  </span>
+                <span th:if="${s.getType() == 4}"><b>Mobile Phone</b>: <span
+                        th:text="${s.getnMinutes() + ' '}">x</span>minutes (<span
+                        th:text="${s.getFeeMinutes() + ' '}">0.3</span> &euro;/minute fee) + <span
+                        th:text="${s.getnSms() + ' '}">x</span> SMS (<span
+                        th:text="${s.getFeeSms() + ' '}">0.3</span> &euro;/SMS fee) </span>
             </li>
+
         </ul>
 
         <div class="divider d-flex align-items-center my-4" style="margin-top: 20px; margin-bottom: 20px">
             <p class="text-center mx-3 mb-0">continue shopping</p>
         </div>
 
-        <form method="post" th:action="@{/GetPackageDetails}">
+        <form method="post" th:action="@{/SetOrder}">
 
             <span style="font-size: 35px;">Step 1</span> <span style="font-size: 28px"> - choose the validity period among those available</span>
-            <div style="margin: 20px" th:each="offer : ${servicePackage.getOffers()}">
+            <div style="margin: 20px" th:each="offer : ${buyService.getServicePackage().getOffers()}">
                 <div class="form-check">
-                    <label class="form-check-label" th:for="'offer'+${offer.id}" th:text="${offer.getMonthlyFee() + ' &euro;/month for ' + offer.getValidityPeriod() + ' months'}"> Default radio </label>
-                    <input class="form-check-input" th:id="'offer'+${offer.id}" name="offerRadio" th:value="${offer.id}" type="radio" th:checked="${order != null && order.getOffer() != null && order.getOffer().id == offer.id}">
+                    <label class="form-check-label" th:for="'offer'+${offer.id}">
+                        <span th:text="${offer.getMonthlyFee() + ' '}">x</span> &euro;/month for <span
+                            th:text="${offer.getValidityPeriod() + ' '}">x</span> months</label>
+                    <input class="form-check-input" th:id="'offer'+${offer.id}" name="offerRadio" th:value="${offer.id}"
+                           type="radio"
+                           th:checked="${buyService.getOrder() != null && buyService.getOrder().getOffer() != null && buyService.getOrder().getOffer().id == offer.id}">
                 </div>
             </div>
 
             <span style="font-size: 35px;">Step 2</span>
             <label for="start_date" style="font-size: 28px"> - choose the start date</label><br>
-            <input id="start_date" name="start_date" style="margin: 20px" th:value="${order.getStartDateString()}" type="date">
-            <div th:if="${optionalProductMap.size() > 0 }">
-                <span><span style="font-size: 35px;">Step 3</span> <span style="font-size: 28px"> - choose the optional products to add</span> </span>
+            <input id="start_date" name="start_date" style="margin: 20px"
+                   th:value="${buyService.getOrder().getStartDateString()}"
+                   type="date">
+            <div th:if="${buyService.getOptionalProduct().size() > 0 }">
+                <span style="font-size: 35px;">Step 3</span> <span style="font-size: 28px"> - choose the optional products to add</span>
+
                 <div class="container" style="margin-top: 20px">
-                    <div class="row">
-                        <div class="card w-auto" style="margin-left: 10px; margin-right: 10px"
-                             th:each="optProd : ${optionalProductMap}">
+                    <div class="row w-100">
+                        <div th:each="optProd : ${buyService.getOptionalProduct()}" style="margin-left: 10px; margin-right: 10px;"
+                             class="card w-auto">
                             <div class="card-body">
-                                    <b style="font-size: 20px" th:text="${optProd.key.name}">Optional product name</b>
-                                    <span th:text="${optProd.key.monthlyFee + ' '}">10</span><span>&euro;/month</span>
-                                    <input type="checkbox" th:id="'optProd' + ${optProd.key.getId()}" name="opProd" th:value="${optProd.key.getId()}" th:checked="${optProd.value}">
+                                <input type="checkbox" style="width: 20px; height: 20px"
+                                       th:id="'optProd' + ${optProd.key.getId()}" name="opProd"
+                                       th:value="${optProd.key.getId()}" th:checked="${optProd.value}">
+                                <b style="font-size: 20px" th:text="${optProd.key.name}">Optional product name</b>
+                                <span th:text="${optProd.key.monthlyFee + ' '}">10</span><span>&euro;/month</span>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <hr>
-            <div class=" text-center text-lg-start mt-4 pt-2" style="display: flex;justify-content: space-between;">
-                <span style="font-size: 35px"><b th:text="${order.totalMonthlyFee + ' '}">35€</b>&euro;/month</span>
-                <button type="submit" class="btn btn-primary btn-lg"
-                        style="padding-left: 2.5rem; padding-right: 2.5rem;">Checkout
-                </button>
-            </div>
-            <hr>
+
+
+                <hr>
+                <div class=" text-center text-lg-start mt-4 pt-2" style="display: flex;justify-content: space-between;">
+                    <span style="font-size: 35px"><b
+                            th:text="${buyService.getOrder().getTotalMonthlyFee() + ' '}">35€</b>&euro;/month</span>
+                    <button type="submit" class="btn btn-primary btn-lg"
+                            style="padding-left: 2.5rem; padding-right: 2.5rem;">Checkout
+                    </button>
+                </div>
+                <hr>
         </form>
-        <div th:unless="${errorMes == null }" style="margin-top: 20px">
-            <div class="alert alert-danger" role="alert">
-                <h6 class="alert-heading" th:text="${errorMes}">Error</h6>
-            </div>
-        </div>
 
     </div>
 </section>

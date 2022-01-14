@@ -42,11 +42,9 @@ public class BuyService implements Serializable {
         ServicePackage servicePackage = em.find(ServicePackage.class, idService);
         if (servicePackage == null) throw new BadRequestException();
         this.servicePackage = servicePackage;
-        initOptionalProductBooleanMap();
-    }
-
-    public ServicePackage getServicePackage() {
-        return servicePackage;
+        for (OptionalProduct o : servicePackage.getOptionalProductList()) {
+            optionalProductBooleanMap.put(o, Boolean.FALSE);
+        }
     }
 
     public void setOffer(int id) {
@@ -64,18 +62,24 @@ public class BuyService implements Serializable {
         return optionalProductBooleanMap;
     }
 
-    public void setOptionalProducts(String[] opProds) throws IllegalAccessException, NumberFormatException {
-        initOptionalProductBooleanMap();
-        order.getOptionalProductList().clear();
-        for (String opId : opProds) {
-            int idOpProd = Integer.parseInt(opId);
-            Optional<OptionalProduct> optional = optionalProductBooleanMap.keySet().stream().filter(x -> x.getId() == idOpProd).findAny();
-            if (optional.isEmpty()) throw new IllegalAccessException();
-            OptionalProduct o = optional.get();
-            optionalProductBooleanMap.replace(o, Boolean.TRUE);
-            order.getOptionalProductList().add(o);
+    public void setOptionalProducts(List<Integer> optionalProductIds) throws BadRequestException {
+        for (OptionalProduct o : servicePackage.getOptionalProductList()) {
+            optionalProductBooleanMap.put(o, Boolean.FALSE);
         }
+
+        for (int id : optionalProductIds) {
+            OptionalProduct optionalProduct = em.find(OptionalProduct.class, (long) id);
+
+            if (optionalProduct == null) {
+                throw new BadRequestException();
+            }
+            if( optionalProductBooleanMap.replace(optionalProduct, true) == null){
+                throw new BadRequestException();
+            }
+        }
+
     }
+
 
     public void setStartDate(Date date) {
         order.setActivationDate(date);
@@ -93,11 +97,15 @@ public class BuyService implements Serializable {
         return order;
     }
 
+    public ServicePackage getServicePackage() {
+        return servicePackage;
+    }
+
     @Remove
     public boolean executePayment(Customer customer) {
         /*Specification: "When the user presses the BUY button, an order is created",
          * so the creation date is set manually only in this method*/
-        if(order.getOffer() == null || order.getActivationDate() == null){
+        if (order.getOffer() == null || order.getActivationDate() == null) {
             throw new BadRequestException();
         }
 
@@ -136,11 +144,4 @@ public class BuyService implements Serializable {
     public void stopProcess() {
     }
 
-    /* ----- PRIVATE METHODS ------ */
-
-    private void initOptionalProductBooleanMap() {
-        for (OptionalProduct o : servicePackage.getOptionalProductList()) {
-            optionalProductBooleanMap.put(o, Boolean.FALSE);
-        }
-    }
 }

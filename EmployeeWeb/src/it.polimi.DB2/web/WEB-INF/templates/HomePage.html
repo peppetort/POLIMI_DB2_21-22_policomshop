@@ -39,7 +39,7 @@
                 <span>Choose services to add</span>
                 <div th:if="${fixedInternet.size() > 0}" class="container" style="margin-top: 20px">
                     <fieldset id="fixedInternetRadio">
-                        <div class="row">
+                        <div class="row w-100">
                             <div class="card w-auto" style="margin-left: 10px; margin-right: 10px"
                                  th:each="s : ${fixedInternet}">
                                 <div class="card-body">
@@ -140,15 +140,19 @@
 
             <div th:if="${optionalProducts.size() > 0 }">
                 <span>Choose the optional products to add</span>
+
+
+
                 <div class="container" style="margin-top: 20px">
                     <div class="row">
                         <div class="card w-auto" style="margin-left: 10px; margin-right: 10px"
                              th:each="optProd : ${optionalProducts}">
                             <div class="card-body">
+                                <input style="width: 20px; height: 20px" type="checkbox" th:id="'optProd' + ${optProd.getId()}" name="opProd"
+                                       th:value="${optProd.getId()}">
                                 <b style="font-size: 20px" th:text="${optProd.getName()}">Optional product name</b>
                                 <span th:text="${optProd.getMonthlyFee() + ' '}">10</span><span>&euro;/month</span>
-                                <input type="checkbox" th:id="'optProd' + ${optProd.getId()}" name="opProd"
-                                       th:value="${optProd.getId()}">
+
                             </div>
                         </div>
                     </div>
