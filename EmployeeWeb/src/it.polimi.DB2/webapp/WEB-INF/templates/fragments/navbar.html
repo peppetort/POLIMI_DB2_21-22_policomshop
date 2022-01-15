@@ -14,6 +14,9 @@
                 </ul>
                 <ul class="navbar-nav" th:if="${user!=null}">
                     <li class="nav-item">
+                        <a class="nav-link" th:href="@{/Report}"><span style="color: white"><b>Reports</b></span></a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" th:href="@{/Logout}"><span style="color: white">Logout</span></a>
                     </li>
                     <button class="btn btn-secondary" type="button"

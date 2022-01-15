@@ -18,6 +18,7 @@
 
     <filter-mapping>
         <filter-name>InvalidateBuyProcess</filter-name>
+        <url-pattern>/Employee/*</url-pattern>
         <servlet-name>GetHome</servlet-name>
     </filter-mapping>
     <filter-mapping>
