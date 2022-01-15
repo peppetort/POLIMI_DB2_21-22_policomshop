@@ -1,9 +1,6 @@
 package services;
 
-import entities.AuditCustomer;
-import entities.Offer;
-import entities.PackageStatistics;
-import entities.ServicePackage;
+import entities.*;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -58,5 +55,9 @@ public class ReportService {
 
     public List<AuditCustomer> getAllAuditCustomer() {
         return em.createQuery("select ac from AuditCustomer ac", AuditCustomer.class).getResultList();
+    }
+
+    public List<Order> getSuspendedOrder() {
+        return em.createQuery("select o from Order o where o.status = ?1", Order.class).setParameter(1, Order.State.PAYMENT_FAILED).getResultList();
     }
 }

@@ -17,6 +17,8 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light"
      th:replace="fragments/navbar :: navbar">
 </nav>
+
+<h3>Sales report</h3>
 <div class="accordion" id="accordion">
     <div class="accordion-item" th:if="${numberPurchases.size() > 0}">
         <h2 class="accordion-header" id="headingNumberPurchases">
@@ -111,6 +113,87 @@
         </div>
     </div>
 </div>
+
+
+<h3>Suspend Order</h3>
+<div class="accordion" id="accordionSuspendedOrder" th:if="${suspendedOrder.size() > 0}">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingSuspendedOrder">
+            <button aria-controls="collapseSuspendedOrder" aria-expanded="true" class="accordion-button"
+                    data-bs-target="#collapseSuspendedOrder" data-bs-toggle="collapse" type="button">
+                Suspended Orders
+            </button>
+        </h2>
+        <div aria-labelledby="headingSuspendedOrder" class="accordion-collapse collapse show"
+             data-bs-parent="#accordionSuspendedOrder" id="collapseSuspendedOrder">
+            <div class="accordion-body">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Creation date</th>
+                        <th scope="col">Activation date</th>
+                        <th scope="col">Monthly fee</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="o, oStat : ${suspendedOrder}">
+                        <th scope="row" th:text="${oStat.count}">1</th>
+                        <td th:text="${o.customer.username}">Mark</td>
+                        <td th:text="${o.creationDate}">Mark</td>
+                        <td th:text="${o.activationDate}">Otto</td>
+                        <td th:text="${o.totalMonthlyFee}">Otto</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="alert alert-success" role="alert" th:unless="${suspendedOrder.size() > 0}">
+    There are no suspended orders!
+</div>
+
+<h3>Insolvent users</h3>
+<div class="accordion" id="accordionInsolventCustomer" th:if="${insolventCustomer.size() > 0}">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingInsolventCustomer">
+            <button aria-controls="collapseInsolventCustomer" aria-expanded="true" class="accordion-button"
+                    data-bs-target="#collapseInsolventCustomer" data-bs-toggle="collapse" type="button">
+                Insolvent users
+            </button>
+        </h2>
+        <div aria-labelledby="headingInsolventCustomer" class="accordion-collapse collapse show"
+             data-bs-parent="#accordionInsolventCustomer" id="collapseInsolventCustomer">
+            <div class="accordion-body">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">#Failed payments</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="o, oStat : ${insolventCustomer}">
+                        <th scope="row" th:text="${oStat.count}">1</th>
+                        <td th:text="${o.username}">Mark</td>
+                        <td th:text="${o.email}">Mark</td>
+                        <td th:text="${o.numFailedPayments}">Otto</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="alert alert-success" role="alert" th:unless="${insolventCustomer.size() > 0}">
+    There are no insolvent customers!
+</div>
+
+<h3>Customer audits</h3>
 <div class="accordion" id="accordionAuditCustomer" th:if="${auditCustomers.size() > 0}">
     <div class="accordion-item">
         <h2 class="accordion-header" id="headingAuditCustomer">
@@ -149,7 +232,8 @@
     </div>
 </div>
 <div class="alert alert-success" role="alert" th:unless="${auditCustomers.size() > 0}">
-    There are no insolvent users!
+    There are no audit!
 </div>
+
 </body>
 </html>

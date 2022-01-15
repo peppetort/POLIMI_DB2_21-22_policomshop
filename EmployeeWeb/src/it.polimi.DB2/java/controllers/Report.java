@@ -1,8 +1,6 @@
 package controllers;
 
-import entities.AuditCustomer;
-import entities.PackageStatistics;
-import entities.ServicePackage;
+import entities.*;
 import org.thymeleaf.context.WebContext;
 import services.ReportService;
 import utils.Pair;
@@ -12,9 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @WebServlet(name = "Report", urlPatterns = "/Report")
 public class Report extends HttpServletThymeleaf {
@@ -52,6 +48,12 @@ public class Report extends HttpServletThymeleaf {
             }
         }
 
+        List<Order> suspendedOrders = reportService.getSuspendedOrder();
+
+        Set<Customer> insolventCustomer = new TreeSet<>();
+        for (Order o : suspendedOrders) {
+            insolventCustomer.add(o.getCustomer());
+        }
         List<AuditCustomer> auditCustomers = reportService.getAllAuditCustomer();
 
         final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
@@ -59,6 +61,8 @@ public class Report extends HttpServletThymeleaf {
         ctx.setVariable("numberPurchases", numberPurchases);
         ctx.setVariable("numberPurchasesForValidityPeriod", numberPurchasesForValidityPeriod);
         ctx.setVariable("amountPurchases", amountPurchases);
+        ctx.setVariable("suspendedOrder", suspendedOrders);
+        ctx.setVariable("insolventCustomer", insolventCustomer);
         ctx.setVariable("auditCustomers", auditCustomers);
         templateEngine.process("ReportPage", ctx, response.getWriter());
     }

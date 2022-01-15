@@ -114,7 +114,7 @@ public class Order implements Serializable {
         this.customer = customer;
     }
 
-    public Set<OptionalProduct> getOptionalProductList() {
+    public Set<OptionalProduct> getOptionalProductSet() {
         return optionalProductList;
     }
 
