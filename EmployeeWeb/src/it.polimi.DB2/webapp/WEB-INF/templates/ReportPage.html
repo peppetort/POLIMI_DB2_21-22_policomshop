@@ -22,7 +22,7 @@
 <div class="accordion" id="accordion">
     <div class="accordion-item" th:if="${numberPurchases.size() > 0}">
         <h2 class="accordion-header" id="headingNumberPurchases">
-            <button aria-controls="collapseNumberForPackage" aria-expanded="true" class="accordion-button"
+            <button aria-controls="collapseNumberForPackage" class="accordion-button"
                     data-bs-target="#collapseNumberForPackage" data-bs-toggle="collapse" type="button">
                 Purchases for Package
             </button>
@@ -114,12 +114,11 @@
     </div>
 </div>
 
-
 <h3>Suspend Order</h3>
 <div class="accordion" id="accordionSuspendedOrder" th:if="${suspendedOrder.size() > 0}">
     <div class="accordion-item">
         <h2 class="accordion-header" id="headingSuspendedOrder">
-            <button aria-controls="collapseSuspendedOrder" aria-expanded="true" class="accordion-button"
+            <button aria-controls="collapseSuspendedOrder" class="accordion-button"
                     data-bs-target="#collapseSuspendedOrder" data-bs-toggle="collapse" type="button">
                 Suspended Orders
             </button>
@@ -159,7 +158,7 @@
 <div class="accordion" id="accordionInsolventCustomer" th:if="${insolventCustomer.size() > 0}">
     <div class="accordion-item">
         <h2 class="accordion-header" id="headingInsolventCustomer">
-            <button aria-controls="collapseInsolventCustomer" aria-expanded="true" class="accordion-button"
+            <button aria-controls="collapseInsolventCustomer" class="accordion-button"
                     data-bs-target="#collapseInsolventCustomer" data-bs-toggle="collapse" type="button">
                 Insolvent users
             </button>
@@ -197,7 +196,7 @@
 <div class="accordion" id="accordionAuditCustomer" th:if="${auditCustomers.size() > 0}">
     <div class="accordion-item">
         <h2 class="accordion-header" id="headingAuditCustomer">
-            <button aria-controls="collapseAuditCustomerOne" aria-expanded="true" class="accordion-button"
+            <button aria-controls="collapseAuditCustomerOne" class="accordion-button"
                     data-bs-target="#collapseAuditCustomerOne" data-bs-toggle="collapse" type="button">
                 Insolvent users
             </button>

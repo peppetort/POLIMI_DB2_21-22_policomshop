@@ -20,12 +20,12 @@ public class Report extends HttpServletThymeleaf {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        List<PackageStatistics> packageStatistics = reportService.getAllStatForPackage();
+        List<PackagePurchasesStatistics> packagePurchasesStatistics = reportService.getAllStatPackagePurchases();
         Map<ServicePackage, Integer> numberPurchases = new HashMap<>();
         Map<Pair<ServicePackage, Integer>, Integer> numberPurchasesForValidityPeriod = new HashMap<>();
         Map<ServicePackage, Pair<Double, Double>> amountPurchases = new HashMap<>();
 
-        for (PackageStatistics s : packageStatistics) {
+        for (PackagePurchasesStatistics s : packagePurchasesStatistics) {
             //Number purchases
             if (numberPurchases.containsKey(s.getServicePackage())) {
                 //Here it's just an update for the value
@@ -46,6 +46,27 @@ public class Report extends HttpServletThymeleaf {
                 Pair<Double, Double> newPair = new Pair(s.getAmountWithOptional(), s.getAmountWithoutOptional());
                 amountPurchases.put(s.getServicePackage(), newPair);
             }
+        }
+
+        List<PackageOptionalStatistics> packageOptionalStatisticsList = reportService.getAllStatPackageOptional();
+        Map<ServicePackage, Pair<Integer, Integer>> servicePackagePairMap = new HashMap<>(); //obj1 num distinct optional prod - obj2 tot num of optioanl
+        Map<OptionalProduct, Integer> optionalProductIntegerMap = new HashMap<>();
+        for (PackageOptionalStatistics s : packageOptionalStatisticsList) {
+            Pair<Integer, Integer> temp = servicePackagePairMap.get(s.getServicePackage());
+            if (temp != null) {
+                temp = new Pair<>(temp.getObject1() + 1, temp.getObject2() + s.getNumPurchases());
+            } else {
+                temp = new Pair<>(1, s.getNumPurchases());
+            }
+            servicePackagePairMap.put(s.getServicePackage(), temp);
+
+            Integer flag = optionalProductIntegerMap.get(s.getOptionalProduct());
+            if (flag != null) {
+                flag += s.getNumPurchases();
+            } else {
+                flag = s.getNumPurchases();
+            }
+            optionalProductIntegerMap.put(s.getOptionalProduct(), flag);
         }
 
         List<Order> suspendedOrders = reportService.getSuspendedOrder();

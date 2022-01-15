@@ -17,22 +17,6 @@ public class ReportService {
     @PersistenceContext(unitName = "db2_project")
     EntityManager em;
 
-    public Map<ServicePackage, Long> getTotalPurchasesPerPackage() {
-        try {
-            Map<ServicePackage, Long> stat = new HashMap<>();
-            List<ServicePackage> servicePackageList = em.createQuery("select sp from ServicePackage sp", ServicePackage.class).getResultList();
-
-            for (ServicePackage sp : servicePackageList) {
-                Long numberOfPurchasedPackage = em.createQuery("select count(a) from ActivationSchedule a where a.servicePackage.id = :servicePackageId", Long.class).setParameter("servicePackageId", sp.getId()).getSingleResult();
-                stat.put(sp, numberOfPurchasedPackage);
-            }
-
-            return stat;
-        } catch (PersistenceException e) {
-            throw new BadRequestException();
-        }
-    }
-
     public Map<Offer, Long> getTotalPurchasePerPackageAndValidityPeriod() {
         try {
             Map<Offer, Long> stat = new HashMap<>();
@@ -49,8 +33,12 @@ public class ReportService {
         }
     }
 
-    public List<PackageStatistics> getAllStatForPackage() {
-        return em.createQuery("select stat from PackageStatistics stat", PackageStatistics.class).getResultList();
+    public List<PackagePurchasesStatistics> getAllStatPackagePurchases() {
+        return em.createQuery("select stat from PackagePurchasesStatistics stat", PackagePurchasesStatistics.class).getResultList();
+    }
+
+    public List<PackageOptionalStatistics> getAllStatPackageOptional() {
+        return em.createQuery("select stat from PackageOptionalStatistics stat", PackageOptionalStatistics.class).getResultList();
     }
 
     public List<AuditCustomer> getAllAuditCustomer() {

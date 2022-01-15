@@ -4,9 +4,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@IdClass(PackageStatistics.PackageValidityPeriod.class)
+@IdClass(PackagePurchasesStatistics.PackageValidityPeriod.class)
 @Table(name = "stat_service_package", schema = "db2_project")
-public class PackageStatistics {
+public class PackagePurchasesStatistics {
 
     @Id
     @Column(name = "id_package", insertable = false, updatable = false)
