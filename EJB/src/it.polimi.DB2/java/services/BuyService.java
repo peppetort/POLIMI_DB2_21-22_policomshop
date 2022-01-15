@@ -20,7 +20,6 @@ import java.util.*;
  * from where it can be referred again by all requests for same session.
  * Therefore, if in the session there's no attribute userQuestionnaire, it means that it's the first time the user is fulfilling
  * the product's questionnaire
- * -> @Stateful EJBs can be also denoted with @SessionScoped annotation.
  * Then the active HTTP session becomes the "EJB client" and maintains the instances.
  */
 
@@ -95,6 +94,7 @@ public class BuyService implements Serializable {
                 double tot = order.getTotalMonthlyFee();
                 order.setTotalMonthlyFee(tot + optionalProduct.getMonthlyFee());
             }
+            order.getOptionalProductSet().addAll(optionalProductBooleanMap.keySet());
         }catch (PersistenceException e){
             throw new BadRequestException();
         }
