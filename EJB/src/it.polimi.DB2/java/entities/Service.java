@@ -37,8 +37,6 @@ public abstract class Service implements Serializable {
         return Arrays.stream(ServiceType.values()).filter(x -> x.idTypeDB == type).findAny().get().readableName;//TODO + "<ul>" + getHTMLFields() + "</ul>";
     }
 
-    protected abstract String getHTMLFields();
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

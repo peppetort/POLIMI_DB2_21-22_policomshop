@@ -31,11 +31,6 @@ public class FixedInternet extends Service {
     }
 
     @Override
-    public String getHTMLFields() {
-        return "<li>" + "Number of GigaBytes: " + nGigabytes + "</li>" + "<li>" + "Fee" + feeGigabytes + "</li>";
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

@@ -51,12 +51,6 @@ public class MobilePhone extends Service {
     }
 
     @Override
-    public String getHTMLFields() {
-        return "<li>" + "Number of minutes: " + nMinutes + "</li>" + "<li>" + "Fee" + feeMinutes + "</li>"
-                + "<li>" + "Number of sms: " + nSms + "</li>" + "<li>" + "Fee" + feeSms + "</li>";
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

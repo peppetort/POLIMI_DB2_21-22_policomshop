@@ -8,9 +8,4 @@ import javax.persistence.Table;
 @Table(name = "service", schema = "db2_project")
 @DiscriminatorValue("2")
 public class FixedPhone extends Service {
-
-    @Override
-    protected String getHTMLFields() {
-        return "";
-    }
 }
