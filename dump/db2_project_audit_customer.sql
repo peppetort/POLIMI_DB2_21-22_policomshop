@@ -1,6 +1,6 @@
 -- MariaDB dump 10.19  Distrib 10.6.5-MariaDB, for Linux (x86_64)
 --
--- Host: 127.0.0.1    Database: db2_project
+-- Host: localhost    Database: db2_project
 -- ------------------------------------------------------
 -- Server version	10.6.5-MariaDB
 
@@ -23,11 +23,11 @@ DROP TABLE IF EXISTS `audit_customer`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `audit_customer` (
-  `amount` double NOT NULL,
-  `last_rejection` datetime NOT NULL DEFAULT current_timestamp(),
   `id` int(11) NOT NULL,
-  UNIQUE KEY `id_user_UNIQUE` (`id`),
-  CONSTRAINT `fk_audit_customer_1` FOREIGN KEY (`id`) REFERENCES `customer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  `amount` double NOT NULL,
+  `date` datetime NOT NULL,
+  KEY `audit_customer_customer_id_fk` (`id`),
+  CONSTRAINT `audit_customer_customer_id_fk` FOREIGN KEY (`id`) REFERENCES `customer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -37,7 +37,7 @@ CREATE TABLE `audit_customer` (
 
 LOCK TABLES `audit_customer` WRITE;
 /*!40000 ALTER TABLE `audit_customer` DISABLE KEYS */;
-INSERT INTO `audit_customer` VALUES (1,'2022-01-13 12:43:25',13),(1,'2022-01-13 12:43:25',14);
+INSERT INTO `audit_customer` VALUES (13,12,'2022-01-15 18:25:01'),(13,12,'2022-01-15 18:25:01'),(13,1234,'2022-01-15 18:35:24');
 /*!40000 ALTER TABLE `audit_customer` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-15 12:43:41
+-- Dump completed on 2022-01-15 18:38:00

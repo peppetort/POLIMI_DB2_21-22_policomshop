@@ -20,8 +20,6 @@ public class Customer implements User, Serializable, Comparable {
     protected String password;
     @Column(name = "num_failed_payments")
     private int numFailedPayments;
-    @Column(name = "audit")
-    private boolean auditCustomer;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH})
     private List<Order> orders;
 
@@ -56,14 +54,6 @@ public class Customer implements User, Serializable, Comparable {
 
     public int getNumFailedPayments() {
         return numFailedPayments;
-    }
-
-    public boolean isAuditCustomer() {
-        return auditCustomer;
-    }
-
-    public void setAuditCustomer(boolean auditCustomer) {
-        this.auditCustomer = auditCustomer;
     }
 
     public void addOneFailedPayment() {

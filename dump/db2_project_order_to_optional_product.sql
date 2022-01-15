@@ -1,6 +1,6 @@
 -- MariaDB dump 10.19  Distrib 10.6.5-MariaDB, for Linux (x86_64)
 --
--- Host: 127.0.0.1    Database: db2_project
+-- Host: localhost    Database: db2_project
 -- ------------------------------------------------------
 -- Server version	10.6.5-MariaDB
 
@@ -38,9 +38,31 @@ CREATE TABLE `order_to_optional_product` (
 
 LOCK TABLES `order_to_optional_product` WRITE;
 /*!40000 ALTER TABLE `order_to_optional_product` DISABLE KEYS */;
-INSERT INTO `order_to_optional_product` VALUES (130,2),(130,1),(132,2),(132,1),(133,2),(133,1),(135,1),(137,4),(139,1),(140,1),(140,3);
+INSERT INTO `order_to_optional_product` VALUES (162,6),(162,3),(162,5),(163,1),(163,3),(163,4),(164,1),(164,3),(164,4),(165,2),(165,1);
 /*!40000 ALTER TABLE `order_to_optional_product` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`juri`@`localhost`*/ /*!50003 trigger UpdatePurchasesStatOptionalOnInsert
+    after insert on order_to_optional_product
+    for each row
+begin
+    declare idServicePackage int;
+    select id_package into idServicePackage from offer where id = (select id_offer  from `order` where id = new.id_order);
+    call updateStatOptionalPackage(new.id_optional_product, idServicePackage);
+end */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -51,4 +73,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-15 12:43:41
+-- Dump completed on 2022-01-15 18:38:00

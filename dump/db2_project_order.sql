@@ -1,6 +1,6 @@
 -- MariaDB dump 10.19  Distrib 10.6.5-MariaDB, for Linux (x86_64)
 --
--- Host: 127.0.0.1    Database: db2_project
+-- Host: localhost    Database: db2_project
 -- ------------------------------------------------------
 -- Server version	10.6.5-MariaDB
 
@@ -37,7 +37,7 @@ CREATE TABLE `order` (
   KEY `order_status_index` (`status`),
   CONSTRAINT `fk_order_1` FOREIGN KEY (`id_offer`) REFERENCES `offer` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `fk_order_2` FOREIGN KEY (`id_user`) REFERENCES `customer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=157 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=166 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,9 +46,32 @@ CREATE TABLE `order` (
 
 LOCK TABLES `order` WRITE;
 /*!40000 ALTER TABLE `order` DISABLE KEYS */;
-INSERT INTO `order` VALUES (130,13,3,'2021-12-31 18:19:22','2022-01-06','2021-12-31',1304.01,1),(131,13,1,'2022-01-13 14:01:08','2022-02-05','2022-01-13',100,1),(132,13,3,'2022-01-13 15:41:26','2022-02-06','2022-01-13',1304.01,1),(133,13,3,'2022-01-13 15:42:28','2022-02-06','2022-01-13',1304.01,1),(134,13,1,'2022-01-13 19:49:15','2022-01-22','2022-01-13',100,1),(135,13,5,'2022-01-13 19:49:23','2022-01-19','2022-01-13',27.65,1),(136,13,1,'2022-01-13 19:55:45','2022-02-06','2022-01-13',100,1),(137,13,5,'2022-01-13 20:34:42','2022-02-04','2024-02-04',36,1),(138,13,5,'2022-01-13 20:35:07','2022-01-24','2024-01-24',12,1),(139,13,5,'2022-01-14 12:43:00','2022-01-30','2024-01-30',27.65,1),(140,13,5,'2022-01-14 13:05:41','2022-01-28','2024-01-28',39.65,1),(141,13,5,'2022-01-14 15:25:44','2022-01-22','2024-01-22',24,1),(142,13,5,'2022-01-14 16:26:48','2022-02-05','2024-02-05',63.65,1),(143,13,7,'2022-01-14 19:00:38','2022-01-29','2026-09-29',68.4344,1),(144,13,5,'2022-01-14 19:04:04','2022-02-06','2024-02-06',24,1),(145,13,5,'2022-01-14 19:05:20','2022-01-27','2024-01-27',63.65,1),(146,13,5,'2022-01-14 19:06:45','2022-01-29','2024-01-29',48,1),(147,13,1,'2022-01-14 19:07:02','2022-01-29','2023-01-29',154.36,1),(148,13,5,'2022-01-14 19:08:09','2022-02-06','2024-02-06',27.65,1),(149,13,5,'2022-01-14 19:13:43','2022-01-28','2024-01-28',27.65,1),(150,13,5,'2022-01-14 19:13:52','2022-01-30','2024-01-30',27.65,1),(154,13,1,'2022-01-14 22:59:56','2022-01-29','2023-01-29',154.36,1),(155,13,5,'2022-01-15 09:53:20','2022-01-28','2024-01-28',27.65,1),(156,13,5,'2022-01-15 10:35:07','2022-01-23','2024-01-23',27.65,1);
+INSERT INTO `order` VALUES (162,13,7,'2022-01-15 18:24:15','2022-02-02','2026-10-02',55.99,1),(163,13,5,'2022-01-15 18:25:01','2022-02-02','2024-02-02',12,0),(164,13,5,'2022-01-15 18:27:22','2022-02-01','2024-02-01',12,1),(165,13,3,'2022-01-15 18:35:24','2022-02-03','2025-11-03',1234,0);
 /*!40000 ALTER TABLE `order` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`juri`@`localhost`*/ /*!50003 trigger UpdatePurchasesStatOnInsert
+    after insert on `order`
+    for each row
+begin
+    declare idPackage int;
+    declare validityPeriod int;
+    select id_package, validity_period into idPackage, validityPeriod from offer where id = new.id_offer;
+    call UpdateStatPackagePurchases(new.id, idPackage, validityPeriod, new.total_monthly_fee);
+end */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -59,4 +82,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-15 12:43:41
+-- Dump completed on 2022-01-15 18:38:00

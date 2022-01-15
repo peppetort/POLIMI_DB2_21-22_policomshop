@@ -1,6 +1,6 @@
 -- MariaDB dump 10.19  Distrib 10.6.5-MariaDB, for Linux (x86_64)
 --
--- Host: 127.0.0.1    Database: db2_project
+-- Host: localhost    Database: db2_project
 -- ------------------------------------------------------
 -- Server version	10.6.5-MariaDB
 
@@ -28,7 +28,6 @@ CREATE TABLE `customer` (
   `username` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password` varchar(256) COLLATE utf8mb4_unicode_ci NOT NULL,
   `num_failed_payments` int(11) NOT NULL DEFAULT 0,
-  `audit` tinyint(1) DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email_UNIQUE` (`email`),
   UNIQUE KEY `username_UNIQUE` (`username`)
@@ -41,7 +40,7 @@ CREATE TABLE `customer` (
 
 LOCK TABLES `customer` WRITE;
 /*!40000 ALTER TABLE `customer` DISABLE KEYS */;
-INSERT INTO `customer` VALUES (13,'asd@asd.it','asd','asd',1,0),(14,'zxc@zxc.it','zxc','zxc',0,0),(15,'iop@iop.it','iop','iop',0,0),(17,'dfg@dfg.it','dfg','dfg',0,0),(18,'peppetort@policomshop.com','peppetort','supersecure',0,0),(20,'peppetort@policomshop1.com','peppetort1','supersecure',0,0);
+INSERT INTO `customer` VALUES (13,'asd@asd.it','asd','asd',5),(14,'zxc@zxc.it','zxc','zxc',0),(15,'iop@iop.it','iop','iop',0),(17,'dfg@dfg.it','dfg','dfg',0),(18,'peppetort@policomshop.com','peppetort','supersecure',0),(20,'peppetort@policomshop1.com','peppetort1','supersecure',0);
 /*!40000 ALTER TABLE `customer` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-15 12:43:41
+-- Dump completed on 2022-01-15 18:38:00

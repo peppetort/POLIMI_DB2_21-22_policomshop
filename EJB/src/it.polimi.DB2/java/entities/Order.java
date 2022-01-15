@@ -36,7 +36,7 @@ public class Order implements Serializable {
     private Offer offer;
     @ManyToMany
     @JoinTable(name = "order_to_optional_product", joinColumns = @JoinColumn(name = "id_order"), inverseJoinColumns = @JoinColumn(name = "id_optional_product"))
-    /*Ho scelto un set per evitare un inserimento doppio per lo stesso optional product*/
+    /* TODO ma sta cosa è giusta?? Ho scelto un set per evitare un inserimento doppio per lo stesso optional product*/
     private Set<OptionalProduct> optionalProductList;
 
     public Order() {

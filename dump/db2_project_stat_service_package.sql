@@ -1,6 +1,6 @@
 -- MariaDB dump 10.19  Distrib 10.6.5-MariaDB, for Linux (x86_64)
 --
--- Host: 127.0.0.1    Database: db2_project
+-- Host: localhost    Database: db2_project
 -- ------------------------------------------------------
 -- Server version	10.6.5-MariaDB
 
@@ -16,29 +16,31 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `stat_num_purchases_service_package`
+-- Table structure for table `stat_service_package`
 --
 
-DROP TABLE IF EXISTS `stat_num_purchases_service_package`;
+DROP TABLE IF EXISTS `stat_service_package`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `stat_num_purchases_service_package` (
+CREATE TABLE `stat_service_package` (
   `id_package` int(11) NOT NULL,
-  `num_purchases` int(11) DEFAULT NULL,
-  `validity_period` int(11) DEFAULT NULL,
-  `amount_total_sales` double DEFAULT NULL,
+  `validity_period` int(11) NOT NULL,
+  `num_purchases` int(11) NOT NULL DEFAULT 0,
+  `amount_with_optional` double NOT NULL DEFAULT 0,
+  `amount_without_optional` double NOT NULL DEFAULT 0,
   UNIQUE KEY `stat_purchases_package_validity_unique` (`id_package`,`validity_period`),
   CONSTRAINT `id_service_package_fk` FOREIGN KEY (`id_package`) REFERENCES `service_package` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `stat_num_purchases_service_package`
+-- Dumping data for table `stat_service_package`
 --
 
-LOCK TABLES `stat_num_purchases_service_package` WRITE;
-/*!40000 ALTER TABLE `stat_num_purchases_service_package` DISABLE KEYS */;
-/*!40000 ALTER TABLE `stat_num_purchases_service_package` ENABLE KEYS */;
+LOCK TABLES `stat_service_package` WRITE;
+/*!40000 ALTER TABLE `stat_service_package` DISABLE KEYS */;
+INSERT INTO `stat_service_package` VALUES (2,45,1,1234,0),(11,24,2,12,12),(17,56,2,55.99,12);
+/*!40000 ALTER TABLE `stat_service_package` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -50,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-15 12:43:41
+-- Dump completed on 2022-01-15 18:38:00

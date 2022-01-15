@@ -1,6 +1,6 @@
 -- MariaDB dump 10.19  Distrib 10.6.5-MariaDB, for Linux (x86_64)
 --
--- Host: 127.0.0.1    Database: db2_project
+-- Host: localhost    Database: db2_project
 -- ------------------------------------------------------
 -- Server version	10.6.5-MariaDB
 
@@ -43,7 +43,6 @@ CREATE TABLE `activation_schedule` (
 
 LOCK TABLES `activation_schedule` WRITE;
 /*!40000 ALTER TABLE `activation_schedule` DISABLE KEYS */;
-INSERT INTO `activation_schedule` VALUES (1,11,5,144),(2,11,5,148),(3,11,5,150),(4,11,5,149),(5,2,1,154),(6,11,5,155),(7,11,5,156);
 /*!40000 ALTER TABLE `activation_schedule` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -56,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-15 12:43:41
+-- Dump completed on 2022-01-15 18:38:00
