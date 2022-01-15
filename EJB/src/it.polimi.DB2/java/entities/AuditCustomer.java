@@ -13,7 +13,7 @@ public class AuditCustomer {
     @Column(name = "amount")
     private double amount;
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "last_rejection")
+    @Column(name = "date")
     private Date lastRejection;
     @MapsId
     @OneToOne

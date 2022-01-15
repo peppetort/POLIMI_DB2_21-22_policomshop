@@ -1,6 +1,8 @@
 package services;
 
-import entities.*;
+import entities.AuditCustomer;
+import entities.Customer;
+import entities.Order;
 import exception.OrderNotFound;
 import utils.PaymentRevisionBot;
 
@@ -43,14 +45,11 @@ public class OrderService {
 
                 if (isPaymentValid) {
                     order.setStatus(Order.State.PAID);
-                    customer.removeOneFailedPayment();
-                    if (customer.isAuditCustomer() && customer.getNumFailedPayments() == 0) {
-                        customer.setAuditCustomer(false);
-                        AuditCustomer a = em.find(AuditCustomer.class, customer.getId());
-                        em.remove(a);
-                    }
                 } else {
                     order.setStatus(Order.State.PAYMENT_FAILED);
+                    customer.addOneFailedPayment();
+                    AuditCustomer a = new AuditCustomer(customer, order.getTotalMonthlyFee(), order.getCreationDate());
+                    em.persist(a);
                 }
                 em.persist(order);
                 return isPaymentValid;

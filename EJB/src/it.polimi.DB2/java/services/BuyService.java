@@ -143,17 +143,8 @@ public class BuyService implements Serializable {
             } else {
                 order.setStatus(Order.State.PAYMENT_FAILED);
                 customer.addOneFailedPayment();
-                //It's already an audit customer
-                if (customer.isAuditCustomer()) {
-                    AuditCustomer a = em.find(AuditCustomer.class, customer.getId());
-                    a.setAmount(order.getTotalMonthlyFee());
-                    a.setLastRejection(order.getCreationDate());
-                } else if (customer.getNumFailedPayments() >= 3) {
-                    //Here only if it's becoming an Audit Customer
-                    customer.setAuditCustomer(true);
-                    AuditCustomer a = new AuditCustomer(customer, order.getTotalMonthlyFee(), order.getCreationDate());
-                    em.persist(a);
-                }
+                AuditCustomer a = new AuditCustomer(customer, order.getTotalMonthlyFee(), order.getCreationDate());
+                em.persist(a);
                 em.merge(customer);
             }
             em.persist(order);
