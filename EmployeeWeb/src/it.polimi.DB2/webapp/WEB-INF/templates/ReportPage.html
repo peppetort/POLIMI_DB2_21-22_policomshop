@@ -1,7 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <div th:replace="fragments/headerImport :: header"></div>
+    <!-- Meta tag required for boostrap -->
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <!-- Bootstrap CSS -->
+    <link crossorigin="anonymous"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+          rel="stylesheet">
+    <script crossorigin="anonymous" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <title>PoliComShop - Employee</title>
 </head>
 <body>
@@ -70,7 +79,7 @@
             </div>
         </div>
     </div>
-    <div class="accordion-item">
+    <div class="accordion-item" th:if="${amountPurchases.size() > 0}">
         <h2 class="accordion-header" id="headingAmountPurchases">
             <button aria-controls="collapseAmountPurchases" aria-expanded="false" class="accordion-button collapsed"
                     data-bs-target="#collapseAmountPurchases" data-bs-toggle="collapse" type="button">
@@ -102,7 +111,7 @@
         </div>
     </div>
 </div>
-<div class="accordion" id="accordionAuditCustomer">
+<div class="accordion" id="accordionAuditCustomer" th:if="${auditCustomers.size() > 0}">
     <div class="accordion-item">
         <h2 class="accordion-header" id="headingAuditCustomer">
             <button aria-controls="collapseAuditCustomerOne" aria-expanded="true" class="accordion-button"
@@ -125,19 +134,22 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="row, rowStat : ${auditCustomers}">
-                        <th scope="row" th:text="${rowStat.count}">1</th>
-                        <td th:text="${row.customer.username}">Mark</td>
-                        <td th:text="${row.customer.email}">Mark</td>
-                        <td th:text="${row.customer.numFailedPayments}">Otto</td>
-                        <td th:text="${row.lastRejection}">Otto</td>
-                        <td th:text="${row.amount}">Otto</td>
+                    <tr th:each="a, aStat : ${auditCustomers}">
+                        <th scope="row" th:text="${aStat.count}">1</th>
+                        <td th:text="${a.customer.username}">Mark</td>
+                        <td th:text="${a.customer.email}">Mark</td>
+                        <td th:text="${a.customer.numFailedPayments}">Otto</td>
+                        <td th:text="${a.lastRejection}">Otto</td>
+                        <td th:text="${a.amount}">Otto</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+</div>
+<div class="alert alert-success" role="alert" th:unless="${auditCustomers.size() > 0}">
+    There are no insolvent users!
 </div>
 </body>
 </html>

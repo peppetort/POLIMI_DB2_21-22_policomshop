@@ -1,6 +1,8 @@
 package controllers;
 
-import entities.*;
+import entities.AuditCustomer;
+import entities.PackageStatistics;
+import entities.ServicePackage;
 import org.thymeleaf.context.WebContext;
 import services.ReportService;
 import utils.Pair;
@@ -17,16 +19,7 @@ import java.util.Map;
 @WebServlet(name = "Report", urlPatterns = "/Report")
 public class Report extends HttpServletThymeleaf {
 
-//    @EJB(name = "ReposrService")
-//    ReportService reportService;
-//
-//    @Override
-//    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-//        Map<ServicePackage, Long> stat1 = reportService.getTotalPurchasesPerPackage();
-//        Map<Offer, Long> stat2 = reportService.getTotalPurchasePerPackageAndValidityPeriod();
-//    }
-
-    @EJB
+    @EJB(name = "ReportService")
     ReportService reportService;
 
     @Override

@@ -44,4 +44,8 @@ public class AuditCustomer {
     public void setLastRejection(Date lastRejection) {
         this.lastRejection = lastRejection;
     }
+
+    public Customer getCustomer() {
+        return customer;
+    }
 }
