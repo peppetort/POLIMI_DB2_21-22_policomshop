@@ -1,6 +1,6 @@
 -- MariaDB dump 10.19  Distrib 10.6.5-MariaDB, for Linux (x86_64)
 --
--- Host: localhost    Database: db2_project
+-- Host: 127.0.0.1    Database: db2_project
 -- ------------------------------------------------------
 -- Server version	10.6.5-MariaDB
 
@@ -28,7 +28,7 @@ CREATE TABLE `optional_product` (
   `monthly_fee` double NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +37,7 @@ CREATE TABLE `optional_product` (
 
 LOCK TABLES `optional_product` WRITE;
 /*!40000 ALTER TABLE `optional_product` DISABLE KEYS */;
-INSERT INTO `optional_product` VALUES (1,'Optional1',15.65),(2,'Optional2',54.36);
+INSERT INTO `optional_product` VALUES (1,'Optional1',15.65),(2,'Optional2',54.36),(3,'Apple',12),(4,'Apple TV',24),(5,'Iphone 12 pro',35),(6,'figas',12.4444),(7,'Ciao',12);
 /*!40000 ALTER TABLE `optional_product` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-12-31 18:44:39
+-- Dump completed on 2022-01-15 12:43:41

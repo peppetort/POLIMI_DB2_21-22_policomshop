@@ -1,6 +1,6 @@
 -- MariaDB dump 10.19  Distrib 10.6.5-MariaDB, for Linux (x86_64)
 --
--- Host: localhost    Database: db2_project
+-- Host: 127.0.0.1    Database: db2_project
 -- ------------------------------------------------------
 -- Server version	10.6.5-MariaDB
 
@@ -31,7 +31,7 @@ CREATE TABLE `offer` (
   PRIMARY KEY (`id`),
   KEY `fk_offer_1_idx` (`id_package`),
   CONSTRAINT `fk_offer_1` FOREIGN KEY (`id_package`) REFERENCES `service_package` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +40,7 @@ CREATE TABLE `offer` (
 
 LOCK TABLES `offer` WRITE;
 /*!40000 ALTER TABLE `offer` DISABLE KEYS */;
-INSERT INTO `offer` VALUES (1,2,12,100,1),(2,3,34,200,1),(3,2,45,1234,1);
+INSERT INTO `offer` VALUES (1,2,12,100,1),(2,3,34,200,1),(3,2,45,1234,1),(4,10,1,2,1),(5,11,24,12,1),(6,12,12,12.45,1),(7,17,56,8.99,1),(8,18,12,1,1);
 /*!40000 ALTER TABLE `offer` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-12-31 18:44:39
+-- Dump completed on 2022-01-15 12:43:41
