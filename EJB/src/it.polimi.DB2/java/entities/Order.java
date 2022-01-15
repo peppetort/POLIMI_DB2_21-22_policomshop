@@ -27,7 +27,7 @@ public class Order implements Serializable {
     @Column(name = "total_monthly_fee")
     private double totalMonthlyFee;
     @Column(name = "status")
-    private State status = State.CREATED;
+    private State status;
     @ManyToOne
     @JoinColumn(name = "id_user", nullable = false)
     private Customer customer;
@@ -145,9 +145,8 @@ public class Order implements Serializable {
     }
 
     public enum State {
-        CREATED(0), //TODO: non ha senso perché non verrà mai scritto sul db
-        PAID(1),
-        PAYMENT_FAILED(2);
+        PAYMENT_FAILED(0),
+        PAID(1);
         final int idDB;
 
         State(int idDB) {
