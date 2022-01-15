@@ -8,6 +8,7 @@ import java.util.Date;
 @Table(name = "audit_customer", schema = "db2_project")
 public class AuditCustomer {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
     @Column(name = "amount")
@@ -15,9 +16,8 @@ public class AuditCustomer {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "date")
     private Date lastRejection;
-    @MapsId
-    @OneToOne
-    @JoinColumn(name = "id")
+    @ManyToOne
+    @JoinColumn(name = "id_customer", referencedColumnName = "id")
     private Customer customer;
 
     public AuditCustomer() {
