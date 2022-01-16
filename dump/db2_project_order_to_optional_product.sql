@@ -1,6 +1,6 @@
 -- MariaDB dump 10.19  Distrib 10.6.5-MariaDB, for Linux (x86_64)
 --
--- Host: localhost    Database: db2_project
+-- Host: 127.0.0.1    Database: db2_project
 -- ------------------------------------------------------
 -- Server version	10.6.5-MariaDB
 
@@ -38,7 +38,7 @@ CREATE TABLE `order_to_optional_product` (
 
 LOCK TABLES `order_to_optional_product` WRITE;
 /*!40000 ALTER TABLE `order_to_optional_product` DISABLE KEYS */;
-INSERT INTO `order_to_optional_product` VALUES (168,2),(168,1),(170,2),(170,1),(171,2),(171,1),(172,2),(172,1);
+INSERT INTO `order_to_optional_product` VALUES (168,2),(168,1),(170,2),(170,1),(171,2),(171,1),(172,2),(172,1),(174,1),(174,3),(174,4);
 /*!40000 ALTER TABLE `order_to_optional_product` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-16 18:41:45
+-- Dump completed on 2022-01-16 21:25:06
