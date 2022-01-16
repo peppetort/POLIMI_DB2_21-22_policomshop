@@ -1,6 +1,6 @@
 -- MariaDB dump 10.19  Distrib 10.6.5-MariaDB, for Linux (x86_64)
 --
--- Host: localhost    Database: db2_project
+-- Host: 127.0.0.1    Database: db2_project
 -- ------------------------------------------------------
 -- Server version	10.6.5-MariaDB
 
@@ -27,7 +27,7 @@ CREATE TABLE `service_package` (
   `name` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -36,7 +36,7 @@ CREATE TABLE `service_package` (
 
 LOCK TABLES `service_package` WRITE;
 /*!40000 ALTER TABLE `service_package` DISABLE KEYS */;
-INSERT INTO `service_package` VALUES (4,'a'),(6,'ad'),(11,'All inclusive'),(9,'as'),(10,'asd'),(2,'package1'),(3,'package2'),(12,'qwe'),(18,'Test002'),(17,'Test01');
+INSERT INTO `service_package` VALUES (4,'a'),(6,'ad'),(11,'All inclusive'),(9,'as'),(10,'asd'),(21,'BBB'),(20,'G'),(2,'package1'),(3,'package2'),(12,'qwe'),(19,'S'),(18,'Test002'),(17,'Test01'),(22,'VV');
 /*!40000 ALTER TABLE `service_package` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -49,4 +49,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-16 18:41:45
+-- Dump completed on 2022-01-16 21:25:06

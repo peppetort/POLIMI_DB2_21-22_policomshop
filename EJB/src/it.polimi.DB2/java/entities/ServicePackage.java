@@ -14,8 +14,7 @@ public class ServicePackage implements Serializable {
     private Long id;
     @Column(name = "name")
     private String name;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "servicePackage", cascade = {CascadeType.PERSIST, CascadeType.REMOVE,
-            CascadeType.REFRESH})
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "servicePackage", cascade = CascadeType.ALL)
     private List<Offer> offers;
     @ManyToMany
     @JoinTable(name = "service_package_to_optional_product", joinColumns = @JoinColumn(name = "id_service_package"), inverseJoinColumns = @JoinColumn(name = "id_optional_product"))
@@ -23,6 +22,10 @@ public class ServicePackage implements Serializable {
     @ManyToMany
     @JoinTable(name = "service_package_to_service", joinColumns = @JoinColumn(name = "id_package"), inverseJoinColumns = @JoinColumn(name = "id_service"))
     private List<Service> serviceList;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "servicePackage", cascade = CascadeType.ALL)
+    private List<PackagePurchasesStatistics> packagePurchasesStatistics;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "servicePackage", cascade = CascadeType.ALL)
+    private List<PackageOptionalStatistics> packageOptionalStatistics;
 
     public ServicePackage() {
     }

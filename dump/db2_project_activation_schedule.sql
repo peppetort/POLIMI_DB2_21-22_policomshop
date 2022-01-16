@@ -1,6 +1,6 @@
 -- MariaDB dump 10.19  Distrib 10.6.5-MariaDB, for Linux (x86_64)
 --
--- Host: localhost    Database: db2_project
+-- Host: 127.0.0.1    Database: db2_project
 -- ------------------------------------------------------
 -- Server version	10.6.5-MariaDB
 
@@ -24,17 +24,13 @@ DROP TABLE IF EXISTS `activation_schedule`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `activation_schedule` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_package` int(11) NOT NULL,
-  `id_offer` int(11) NOT NULL,
   `id_order` int(11) NOT NULL,
+  `activation_date` datetime NOT NULL,
+  `deactivation_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_activation_schedule_1_idx` (`id_package`),
-  KEY `fk_activation_schedule_2_idx` (`id_offer`),
   KEY `fk_activation_schedule_3_idx` (`id_order`),
-  CONSTRAINT `fk_activation_schedule_1` FOREIGN KEY (`id_package`) REFERENCES `service_package` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  CONSTRAINT `fk_activation_schedule_2` FOREIGN KEY (`id_offer`) REFERENCES `offer` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `fk_activation_schedule_3` FOREIGN KEY (`id_order`) REFERENCES `order` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,6 +39,7 @@ CREATE TABLE `activation_schedule` (
 
 LOCK TABLES `activation_schedule` WRITE;
 /*!40000 ALTER TABLE `activation_schedule` DISABLE KEYS */;
+INSERT INTO `activation_schedule` VALUES (8,171,'2022-01-27 00:00:00','2023-01-27 00:00:00'),(9,174,'2022-01-23 00:00:00','2024-01-23 00:00:00');
 /*!40000 ALTER TABLE `activation_schedule` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -55,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-16 18:41:45
+-- Dump completed on 2022-01-16 21:25:06

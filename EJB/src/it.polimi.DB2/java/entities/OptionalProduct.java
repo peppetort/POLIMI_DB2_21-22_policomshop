@@ -22,6 +22,8 @@ public class OptionalProduct implements Serializable {
     @ManyToMany(mappedBy = "optionalProductList")
     @JoinTable(name = "service_package_to_optional_product", joinColumns = @JoinColumn(name = "id_optional_product"), inverseJoinColumns = @JoinColumn(name = "id_service_package"))
     private List<ServicePackage> servicePackagesList;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "optionalProduct", cascade = CascadeType.ALL)
+    private List<PackageOptionalStatistics> packageOptionalStatistics;
 
     public OptionalProduct() {
     }

@@ -16,8 +16,8 @@ public class AuditCustomer {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "date")
     private Date lastRejection;
-    @ManyToOne
-    @JoinColumn(name = "id_customer", referencedColumnName = "id")
+    @OneToOne
+    @JoinColumn(name = "id_customer", nullable = false)
     private Customer customer;
 
     public AuditCustomer() {
