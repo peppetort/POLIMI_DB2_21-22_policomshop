@@ -1,12 +1,13 @@
 package controllers;
 
 import entities.Customer;
-import exception.UserNotFound;
+import exception.UserExeption;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.util.StringUtils;
 import services.UserService;
 
 import javax.ejb.EJB;
+import javax.persistence.PersistenceException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,7 +30,7 @@ public class SignIn extends HttpServletThymeleaf {
         String paymentInProgress = request.getParameter("paymentInProgress");
 
         if (StringUtils.isEmptyOrWhitespace(email) && StringUtils.isEmptyOrWhitespace(password)) {
-            renderPage(request, response, "Invalid Request", paymentInProgress != null);
+            renderPage(request, response, "Invalid data", paymentInProgress != null);
             return;
         }
 
@@ -43,8 +44,10 @@ public class SignIn extends HttpServletThymeleaf {
                 servlet = request.getContextPath();
             }
             response.sendRedirect(servlet);
-        } catch (UserNotFound e) {
-            renderPage(request, response, "Invalid Credentials", paymentInProgress != null);
+        } catch (UserExeption e) {
+            renderPage(request, response, e.getMessage(), paymentInProgress != null);
+        }catch (PersistenceException e){
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 

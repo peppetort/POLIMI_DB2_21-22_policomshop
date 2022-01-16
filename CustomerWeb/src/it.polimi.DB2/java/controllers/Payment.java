@@ -1,12 +1,13 @@
 package controllers;
 
 import entities.Customer;
-import exception.OrderNotFound;
+import exception.OrderException;
 import org.thymeleaf.context.WebContext;
 import services.BuyService;
 import services.OrderService;
 
 import javax.ejb.EJB;
+import javax.persistence.PersistenceException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -50,13 +51,10 @@ public class Payment extends HttpServletThymeleaf {
             ctx.setVariable("result", result);
             ctx.setVariable("nFailedPayments", ((Customer) request.getSession().getAttribute("user")).getNumFailedPayments());
             templateEngine.process(path, ctx, response.getWriter());
-
-
-        } catch (NumberFormatException | OrderNotFound e) {
+        } catch (NumberFormatException | OrderException e) {
             response.sendRedirect(request.getContextPath());
-        } catch (BadRequestException e) {
-            e.getStackTrace();
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        } catch (PersistenceException e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
 
     }

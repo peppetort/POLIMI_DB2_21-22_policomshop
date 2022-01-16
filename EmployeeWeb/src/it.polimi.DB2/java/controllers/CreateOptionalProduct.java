@@ -1,8 +1,11 @@
 package controllers;
 
+import exception.OptionalProductException;
+import org.thymeleaf.util.StringUtils;
 import services.OptionalProductService;
 
 import javax.ejb.EJB;
+import javax.persistence.PersistenceException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,19 +29,21 @@ public class CreateOptionalProduct extends HttpServlet {
         String name = request.getParameter("opName");
         String monthlyFeeString = request.getParameter("opMonthFee");
 
-        if (name == null || monthlyFeeString == null || name.isEmpty() || monthlyFeeString.isEmpty()) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        if (StringUtils.isEmptyOrWhitespace(name) || StringUtils.isEmptyOrWhitespace(monthlyFeeString)) {
+            response.sendRedirect(getServletContext().getContextPath());
             return;
         }
 
         try {
             Double monthlyFee = Double.parseDouble(monthlyFeeString);
-            optionalProdService.saveNewProd(name, monthlyFee);
-        }catch (NumberFormatException | BadRequestException e){
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        }
+            optionalProdService.createNewOptionalProduct(name, monthlyFee);
 
-        response.sendRedirect(getServletContext().getContextPath());
+            response.sendRedirect(getServletContext().getContextPath());
+        }catch (NumberFormatException | OptionalProductException e){
+            //TODO: settare errori nella sessione
+            response.sendRedirect(getServletContext().getContextPath());
+        }catch (PersistenceException e){
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
     }
 }

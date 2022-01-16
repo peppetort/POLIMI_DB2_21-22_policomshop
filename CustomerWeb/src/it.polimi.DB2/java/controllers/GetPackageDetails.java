@@ -1,12 +1,14 @@
 package controllers;
 
 import entities.*;
+import exception.ServicePackageException;
 import org.thymeleaf.context.WebContext;
 import services.BuyService;
 import services.PackageService;
 
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
+import javax.persistence.PersistenceException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,12 +33,7 @@ public class GetPackageDetails extends HttpServletThymeleaf {
 
             String servicePackageIdParam = request.getParameter("id_sp");
             Long servicePackageId = Long.parseLong(servicePackageIdParam);
-            ServicePackage servicePackage = packageService.findById(servicePackageId);
-
-            if (servicePackage == null) {
-                response.sendRedirect(request.getContextPath());
-                return;
-            }
+            packageService.findById(servicePackageId);
 
             InitialContext ic = new InitialContext();
             // Retrieve the EJB using JNDI lookup
@@ -45,12 +42,10 @@ public class GetPackageDetails extends HttpServletThymeleaf {
             buyService.initOrder(servicePackageId);
 
             renderPage(request, response, buyService);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException | ServicePackageException e) {
             response.sendRedirect(request.getContextPath());
-        } catch (BadRequestException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
         } catch (Exception e) {
-            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
 
 

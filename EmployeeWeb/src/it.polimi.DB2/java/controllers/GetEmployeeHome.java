@@ -6,6 +6,7 @@ import services.OptionalProductService;
 import services.PackageService;
 
 import javax.ejb.EJB;
+import javax.persistence.PersistenceException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,7 +31,6 @@ public class GetEmployeeHome extends HttpServletThymeleaf{
             List<MobileInternet> mobileInternetList = new ArrayList<>();
             List<MobilePhone> mobilePhoneList = new ArrayList<>();
             List<OptionalProduct> optionalProducts = optionalProductService.getAllOptionalProducts();
-            System.out.println(optionalProducts);
 
             for (Service s : packageService.getAllService()) {
                 if (s instanceof FixedInternet) fixedInternetList.add((FixedInternet) s);
@@ -47,8 +47,8 @@ public class GetEmployeeHome extends HttpServletThymeleaf{
             ctx.setVariable("mobilePhone", mobilePhoneList);
             ctx.setVariable("optionalProducts", optionalProducts);
             templateEngine.process("HomePage", ctx, response.getWriter());
-        }catch (BadRequestException e){
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        }catch (PersistenceException e){
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
