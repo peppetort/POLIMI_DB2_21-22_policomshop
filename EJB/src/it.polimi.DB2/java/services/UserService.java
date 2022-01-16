@@ -2,13 +2,12 @@ package services;
 
 import entities.Customer;
 import entities.Employee;
-import exception.UserNotFound;
+import exception.UserExeption;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-import javax.xml.registry.infomodel.User;
 import java.util.List;
 
 @Stateless
@@ -19,43 +18,35 @@ public class UserService {
     public UserService() {
     }
 
-    public Customer checkCredentialsCustomer(String email, String password) throws UserNotFound {
+    public Customer checkCredentialsCustomer(String email, String password) throws UserExeption, PersistenceException {
         List<Customer> userList;
 
-        try {
-            userList = em.createNamedQuery("Customer.checkCredentials", Customer.class)
-                    .setParameter(1, email)
-                    .setParameter(2, password)
-                    .getResultList();
-        } catch (PersistenceException e) {
-            throw new UserNotFound("Error while checking credentials");
-        }
+        userList = em.createNamedQuery("Customer.checkCredentials", Customer.class)
+                .setParameter(1, email)
+                .setParameter(2, password)
+                .getResultList();
 
         if (userList.size() == 1) {
             return userList.get(0);
         }
-        throw new UserNotFound(null);
+        throw new UserExeption("User not found");
     }
 
-    public Employee checkCredentialsEmployee(String email, String password) throws UserNotFound {
+    public Employee checkCredentialsEmployee(String email, String password) throws UserExeption, PersistenceException {
         List<Employee> userList;
 
-        try {
-            userList = em.createNamedQuery("Employee.checkCredentials", Employee.class)
-                    .setParameter(1, email)
-                    .setParameter(2, password)
-                    .getResultList();
-        } catch (PersistenceException e) {
-            throw new UserNotFound("Error while checking credentials");
-        }
+        userList = em.createNamedQuery("Employee.checkCredentials", Employee.class)
+                .setParameter(1, email)
+                .setParameter(2, password)
+                .getResultList();
 
         if (userList.size() == 1) {
             return userList.get(0);
         }
-        throw new UserNotFound(null);
+        throw new UserExeption("User not found");
     }
 
-    public Customer registerNewUser(String username, String email, String psw) {
+    public Customer registerNewUser(String username, String email, String psw) throws PersistenceException, UserExeption {
         Customer newUser = new Customer();
         newUser.setEmail(email);
         newUser.setPassword(psw);
@@ -64,8 +55,10 @@ public class UserService {
             em.persist(newUser);
             em.flush();
         } catch (PersistenceException e) {
-            if (e.getCause().getMessage().contains("java.sql.SQLIntegrityConstraintViolationException")) return null;
-            throw e;
+            if (e.getCause().getMessage().contains("java.sql.SQLIntegrityConstraintViolationException")){
+                throw new UserExeption("User already exists");
+            }
+            throw new PersistenceException();
         }
         return newUser;
     }

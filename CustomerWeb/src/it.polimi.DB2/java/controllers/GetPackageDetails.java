@@ -1,6 +1,6 @@
 package controllers;
 
-import entities.*;
+import exception.ServicePackageException;
 import org.thymeleaf.context.WebContext;
 import services.BuyService;
 import services.PackageService;
@@ -10,7 +10,6 @@ import javax.naming.InitialContext;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.BadRequestException;
 import java.io.IOException;
 
 @WebServlet(name = "GetPackageDetails", value = "/GetPackageDetails")
@@ -25,18 +24,20 @@ public class GetPackageDetails extends HttpServletThymeleaf {
 
             BuyService buyService = (BuyService) request.getSession().getAttribute("BuyService");
             if (buyService != null) {
-                renderPage(request, response, buyService);
+                String errorMessage = (String) request.getSession().getAttribute("packageDetailsErrorMessage");
+
+                if (errorMessage != null) {
+                    request.getSession().removeAttribute("packageDetailsErrorMessage");
+                }
+
+                renderPage(request, response, buyService, errorMessage);
                 return;
             }
+
 
             String servicePackageIdParam = request.getParameter("id_sp");
             Long servicePackageId = Long.parseLong(servicePackageIdParam);
-            ServicePackage servicePackage = packageService.findById(servicePackageId);
-
-            if (servicePackage == null) {
-                response.sendRedirect(request.getContextPath());
-                return;
-            }
+            packageService.findById(servicePackageId);
 
             InitialContext ic = new InitialContext();
             // Retrieve the EJB using JNDI lookup
@@ -44,23 +45,23 @@ public class GetPackageDetails extends HttpServletThymeleaf {
             request.getSession().setAttribute("BuyService", buyService);
             buyService.initOrder(servicePackageId);
 
-            renderPage(request, response, buyService);
-        } catch (NumberFormatException e) {
+
+            renderPage(request, response, buyService, null);
+        } catch (NumberFormatException | ServicePackageException e) {
             response.sendRedirect(request.getContextPath());
-        } catch (BadRequestException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
         } catch (Exception e) {
-            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
 
 
     }
 
-    private void renderPage(HttpServletRequest request, HttpServletResponse response, BuyService buyService) throws IOException {
+    private void renderPage(HttpServletRequest request, HttpServletResponse response, BuyService buyService, String errorMessage) throws IOException {
         String path = "PackageDetailsPage";
         final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
         ctx.setVariable("user", request.getSession().getAttribute("user"));
         ctx.setVariable("buyService", buyService);
+        ctx.setVariable("errorMes", errorMessage);
         templateEngine.process(path, ctx, response.getWriter());
     }
 }

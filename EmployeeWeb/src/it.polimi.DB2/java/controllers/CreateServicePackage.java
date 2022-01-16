@@ -2,11 +2,17 @@ package controllers;
 
 import entities.OptionalProduct;
 import entities.Service;
+import exception.OfferException;
+import exception.OptionalProductException;
+import exception.ServiceException;
+import exception.ServicePackageException;
+import org.thymeleaf.util.StringUtils;
 import services.OfferService;
 import services.OptionalProductService;
 import services.PackageService;
 
 import javax.ejb.EJB;
+import javax.persistence.PersistenceException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -43,128 +49,86 @@ public class CreateServicePackage extends HttpServlet {
         String fixedPhone = request.getParameter("fixedPhoneRadio");
         String[] optionalProductIdList = request.getParameterValues("opProd");
 
-        if (name == null || name.isEmpty() || validityPeriod == null || validityPeriod.isEmpty() || monthFee == null || monthFee.isEmpty()) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        if (StringUtils.isEmptyOrWhitespace(name) || StringUtils.isEmptyOrWhitespace(validityPeriod) || StringUtils.isEmptyOrWhitespace(monthFee)) {
+            response.sendRedirect(request.getContextPath());
             return;
         }
 
-        if ((fixedInternet == null || fixedInternet.isEmpty()) && (mobileInternet == null || mobileInternet.isEmpty()) && (mobilePhone == null || mobilePhone.isEmpty()) && (fixedPhone == null || fixedPhone.isEmpty())) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        }
-
-        int validityPeriodInt;
-        double monthFeeD;
-
-        try {
-            validityPeriodInt = Integer.parseInt(validityPeriod);
-            if (validityPeriodInt < 1) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                return;
-            }
-        } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        }
-
-        try {
-            monthFeeD = Double.parseDouble(monthFee);
-            if (monthFeeD < 0) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                return;
-            }
-        } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        if (StringUtils.isEmptyOrWhitespace(fixedInternet) && StringUtils.isEmptyOrWhitespace(mobileInternet) && StringUtils.isEmptyOrWhitespace(mobilePhone) && StringUtils.isEmptyOrWhitespace(fixedPhone)) {
+            response.sendRedirect(request.getContextPath());
             return;
         }
 
         List<Long> servicesIDs = new ArrayList<>();
         List<Long> optionalProductsIdList = new ArrayList<>();
+        int validityPeriodInt;
+        double monthFeeD;
 
-        if (fixedInternet != null) {
-            try {
+        try {
+            validityPeriodInt = Integer.parseInt(validityPeriod);
+            monthFeeD = Double.parseDouble(monthFee);
+
+            if (validityPeriodInt < 1 || monthFeeD < 0) {
+                response.sendRedirect(request.getContextPath());
+                return;
+            }
+
+            if (fixedInternet != null) {
                 long fixedInternetId = Integer.parseInt(fixedInternet);
                 Service s = packageService.getServiceById(fixedInternetId);
-                if (s == null || s.getType() != 1) {
-                    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                if (s.getType() != 1) {
+                    response.sendRedirect(request.getContextPath());
                     return;
                 }
                 servicesIDs.add(fixedInternetId);
-            } catch (NumberFormatException e) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                return;
             }
-        }
 
-        if (mobileInternet != null) {
-            try {
+            if (mobileInternet != null) {
                 long mobileInternetId = Integer.parseInt(mobileInternet);
                 Service s = packageService.getServiceById(mobileInternetId);
-                if (s == null || s.getType() != 3) {
+                if (s.getType() != 3) {
                     response.sendError(HttpServletResponse.SC_BAD_REQUEST);
                     return;
                 }
                 servicesIDs.add(mobileInternetId);
-            } catch (NumberFormatException e) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                return;
             }
-        }
 
-        if (mobilePhone != null) {
-            try {
+            if (mobilePhone != null) {
                 long mobilePhoneId = Integer.parseInt(mobilePhone);
                 Service s = packageService.getServiceById(mobilePhoneId);
-                if (s == null || s.getType() != 4) {
+                if (s.getType() != 4) {
                     response.sendError(HttpServletResponse.SC_BAD_REQUEST);
                     return;
                 }
                 servicesIDs.add(mobilePhoneId);
-            } catch (NumberFormatException e) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                return;
             }
-        }
 
-        if (fixedPhone != null) {
-            try {
+            if (fixedPhone != null) {
                 long fixedPhoneId = Integer.parseInt(fixedPhone);
                 Service s = packageService.getServiceById(fixedPhoneId);
-                if (s == null || s.getType() != 2) {
+                if (s.getType() != 2) {
                     response.sendError(HttpServletResponse.SC_BAD_REQUEST);
                     return;
                 }
                 servicesIDs.add(fixedPhoneId);
-            } catch (NumberFormatException e) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                return;
             }
-        }
 
-        if (optionalProductIdList != null) {
-            for (String sId : optionalProductIdList) {
-                try {
+            if (optionalProductIdList != null) {
+                for (String sId : optionalProductIdList) {
                     long id = Integer.parseInt(sId);
-                    OptionalProduct o = optionalProdService.getById(id);
-                    if (o == null) {
-                        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                        return;
-                    }
                     optionalProductsIdList.add(id);
-
-                } catch (NumberFormatException | BadRequestException e) {
-                    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                    return;
                 }
             }
-        }
 
-        try {
             Long newServicePackageId = packageService.createNewServicePackage(name, servicesIDs, optionalProductsIdList);
             offerService.createNewOffer(newServicePackageId, validityPeriodInt, monthFeeD);
             response.sendRedirect(getServletContext().getContextPath());
-        }catch (BadRequestException e){
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+
+        } catch (NumberFormatException | ServiceException | OptionalProductException | ServicePackageException | OfferException e) {
+            request.getSession().setAttribute("errorMessageServicePackage", e.getMessage());
+            response.sendRedirect(request.getContextPath());
+        } catch (PersistenceException e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 }

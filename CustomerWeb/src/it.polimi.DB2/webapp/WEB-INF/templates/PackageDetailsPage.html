@@ -104,7 +104,11 @@
                 </div>
                 <hr>
         </form>
-
+        <div th:unless="${errorMes == null }" style="margin-top: 20px">
+            <div class="alert alert-danger" role="alert">
+                <h6 class="alert-heading" th:text="${errorMes}">Error</h6>
+            </div>
+        </div>
     </div>
 </section>
 </body>

@@ -1,11 +1,13 @@
 package controllers;
 
 import entities.Employee;
-import exception.UserNotFound;
+import exception.UserExeption;
 import org.thymeleaf.context.WebContext;
+import org.thymeleaf.util.StringUtils;
 import services.UserService;
 
 import javax.ejb.EJB;
+import javax.persistence.PersistenceException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,20 +25,22 @@ public class SignIn extends HttpServletThymeleaf {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String email = request.getParameter("email"), //email is the id of the field in the form
-                pwd = request.getParameter("password");
-        if (email == null || email.isEmpty() ||
-                pwd == null || pwd.isEmpty()) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+
+        if (StringUtils.isEmptyOrWhitespace(email) && StringUtils.isEmptyOrWhitespace(password)) {
+            renderPage(request, response, "Invalid data");
             return;
         }
 
         try {
-            Employee employee = userService.checkCredentialsEmployee(email, pwd);
+            Employee employee = userService.checkCredentialsEmployee(email, password);
             request.getSession().setAttribute("user", employee);
             response.sendRedirect(request.getContextPath());
-        } catch (UserNotFound e) {
-            renderPage(request, response, "Invalid Credentials");
+        } catch (UserExeption e) {
+            renderPage(request, response, e.getMessage());
+        }catch (PersistenceException e){
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
