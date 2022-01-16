@@ -40,7 +40,7 @@ public class CreateOptionalProduct extends HttpServlet {
 
             response.sendRedirect(getServletContext().getContextPath());
         }catch (NumberFormatException | OptionalProductException e){
-            //TODO: settare errori nella sessione
+            request.getSession().setAttribute("errorMessageOptionalProduct", e.getMessage());
             response.sendRedirect(getServletContext().getContextPath());
         }catch (PersistenceException e){
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

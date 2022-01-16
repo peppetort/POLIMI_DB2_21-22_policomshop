@@ -36,7 +36,6 @@ public class BuyService implements Serializable {
     private ServicePackage servicePackage;
     private Map<OptionalProduct, Boolean> optionalProductBooleanMap;
 
-
     public void initOrder(Long idService) throws PersistenceException, ServicePackageException {
         order = new Order();
         optionalProductBooleanMap = new HashMap<>();
@@ -88,7 +87,6 @@ public class BuyService implements Serializable {
         }
         order.getOptionalProductSet().addAll(optionalProductBooleanMap.keySet());
     }
-
 
     public void setStartDate(Date date) {
         if (order == null) throw new BadRequestException();

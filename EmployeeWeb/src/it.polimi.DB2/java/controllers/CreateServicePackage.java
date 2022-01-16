@@ -125,7 +125,7 @@ public class CreateServicePackage extends HttpServlet {
             response.sendRedirect(getServletContext().getContextPath());
 
         } catch (NumberFormatException | ServiceException | OptionalProductException | ServicePackageException | OfferException e) {
-            //TODO: inserire errore nella sessione
+            request.getSession().setAttribute("errorMessageServicePackage", e.getMessage());
             response.sendRedirect(request.getContextPath());
         } catch (PersistenceException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

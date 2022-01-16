@@ -34,13 +34,15 @@ public class SetOrder extends HttpServletThymeleaf {
             String startDateParam = request.getParameter("start_date");
 
             if (StringUtils.isEmptyOrWhitespace(offerIdParam)) {
-                throw new BadRequestException();
+                request.getSession().setAttribute("packageDetailsErrorMessage", "select a valid offer");
+                response.sendRedirect("GetPackageDetails");
+                return;
             }
             int offerId = Integer.parseInt(offerIdParam);
             buyService.setOffer(offerId);
 
             if (StringUtils.isEmptyOrWhitespace(startDateParam)) {
-                //TODO: set error message
+                request.getSession().setAttribute("packageDetailsErrorMessage", "select an activation date");
                 response.sendRedirect("GetPackageDetails");
                 return;
             }
@@ -49,7 +51,7 @@ public class SetOrder extends HttpServletThymeleaf {
             if (startDate.after(new java.util.Date()))
                 buyService.setStartDate(startDate);
             else {
-                //TODO: set error message
+                request.getSession().setAttribute("packageDetailsErrorMessage", "activation date is before actual date");
                 response.sendRedirect("GetPackageDetails");
                 return;
             }

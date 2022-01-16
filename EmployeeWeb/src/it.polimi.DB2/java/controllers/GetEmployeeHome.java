@@ -39,6 +39,17 @@ public class GetEmployeeHome extends HttpServletThymeleaf{
                 else if (s instanceof FixedPhone) fixedPhone = (FixedPhone) s;
             }
 
+            String errorMessageServicePackage = (String) request.getSession().getAttribute("errorMessageServicePackage");
+            String errorMessageOptionalProduct = (String) request.getSession().getAttribute("errorMessageOptionalProduct");
+
+            if(errorMessageOptionalProduct != null){
+                request.getSession().removeAttribute("errorMessageOptionalProduct");
+            }
+
+            if(errorMessageServicePackage != null){
+                request.getSession().removeAttribute("errorMessageServicePackage");
+            }
+
             final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
             ctx.setVariable("user", request.getSession().getAttribute("user"));
             ctx.setVariable("fixedInternet", fixedInternetList);
@@ -46,6 +57,8 @@ public class GetEmployeeHome extends HttpServletThymeleaf{
             ctx.setVariable("fixedPhone", fixedPhone);
             ctx.setVariable("mobilePhone", mobilePhoneList);
             ctx.setVariable("optionalProducts", optionalProducts);
+            ctx.setVariable("errorMesSp", errorMessageServicePackage);
+            ctx.setVariable("errorMesOp", errorMessageOptionalProduct);
             templateEngine.process("HomePage", ctx, response.getWriter());
         }catch (PersistenceException e){
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
