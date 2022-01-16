@@ -1,15 +1,18 @@
 package entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
+@IdClass(PackageStatistics.PackageValidityPeriod.class)
 @Table(name = "stat_service_package", schema = "db2_project")
 public class PackageStatistics {
 
     @Id
-    @Column(name = "id_package")
-    private Long id;
-    @Column(name = "validity_period")
+    @Column(name = "id_package", insertable = false, updatable = false)
+    private Long idPackage;
+    @Id
+    @Column(name = "validity_period", insertable = false)
     private int validityPeriod;
     @Column(name = "num_purchases")
     private int numPurchases;
@@ -17,8 +20,7 @@ public class PackageStatistics {
     private double amountWithOptional;
     @Column(name = "amount_without_optional")
     private double amountWithoutOptional;
-    @MapsId
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_package")
     private ServicePackage servicePackage;
 
@@ -40,5 +42,18 @@ public class PackageStatistics {
 
     public ServicePackage getServicePackage() {
         return servicePackage;
+    }
+
+    public static class PackageValidityPeriod implements Serializable {
+        private Long idPackage;
+        private int validityPeriod;
+
+        public PackageValidityPeriod() {
+        }
+
+        public PackageValidityPeriod(Long idPackage, int validityPeriod) {
+            this.idPackage = idPackage;
+            this.validityPeriod = validityPeriod;
+        }
     }
 }
