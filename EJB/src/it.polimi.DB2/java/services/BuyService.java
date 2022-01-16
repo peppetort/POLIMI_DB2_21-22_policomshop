@@ -36,11 +36,9 @@ public class BuyService implements Serializable {
     private ServicePackage servicePackage;
     private Map<OptionalProduct, Boolean> optionalProductBooleanMap;
 
-    public void initOrder(Long idService) throws PersistenceException, ServicePackageException {
+    public void initOrder(ServicePackage servicePackage) throws PersistenceException, ServicePackageException {
         order = new Order();
         optionalProductBooleanMap = new HashMap<>();
-        ServicePackage servicePackage = em.find(ServicePackage.class, idService);
-        if (servicePackage == null) throw new ServicePackageException("Service Pacakge not found");
         this.servicePackage = servicePackage;
         for (OptionalProduct o : servicePackage.getOptionalProductList()) {
             optionalProductBooleanMap.put(o, Boolean.FALSE);

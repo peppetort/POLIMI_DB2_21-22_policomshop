@@ -7,7 +7,7 @@ import java.util.List;
 @Entity
 @Table(name = "customer", schema = "db2_project")
 @NamedQuery(name = "Customer.checkCredentials", query = "SELECT r FROM Customer r  WHERE r.email = ?1 and r.password = ?2")
-public class Customer implements User, Serializable, Comparable {
+public class Customer implements User, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -20,8 +20,18 @@ public class Customer implements User, Serializable, Comparable {
     protected String password;
     @Column(name = "num_failed_payments")
     private int numFailedPayments;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH})
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Order> orders;
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private AuditCustomer auditCustomer;
+
+    public AuditCustomer getAuditCustomer() {
+        return auditCustomer;
+    }
+
+    public void setAuditCustomer(AuditCustomer auditCustomer) {
+        this.auditCustomer = auditCustomer;
+    }
 
     public Long getId() {
         return id;
@@ -70,14 +80,5 @@ public class Customer implements User, Serializable, Comparable {
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
-    }
-
-    @Override
-    public int compareTo(Object o) {
-        if (!(o instanceof Customer)) {
-            return -1;
-        }
-        Customer o1 = (Customer) o;
-        return (int) (this.id - o1.id);
     }
 }

@@ -8,7 +8,6 @@ import java.util.*;
 @Entity
 @Table(name = "order", schema = "db2_project")
 @NamedQuery(name = "Order.rejectedOrders", query = "SELECT r FROM Order r  WHERE r.customer.id = ?1 and r.status = ?2")
-//TODO: rimuovere
 @NamedQuery(name = "Order.rejectedOrdersByID", query = "SELECT r FROM Order r  WHERE r.id = ?1 and r.customer.id = ?2 and r.status = ?3")
 public class Order implements Serializable {
 
@@ -22,6 +21,7 @@ public class Order implements Serializable {
     @Temporal(TemporalType.DATE)
     @Column(name = "activation_date")
     private Date activationDate;
+    @Temporal(TemporalType.DATE)
     @Column(name = "deactivation_date")
     private Date deactivationDate;
     @Column(name = "total_monthly_fee")
@@ -36,8 +36,9 @@ public class Order implements Serializable {
     private Offer offer;
     @ManyToMany
     @JoinTable(name = "order_to_optional_product", joinColumns = @JoinColumn(name = "id_order"), inverseJoinColumns = @JoinColumn(name = "id_optional_product"))
-    /* TODO ma sta cosa è giusta?? Ho scelto un set per evitare un inserimento doppio per lo stesso optional product*/
     private Set<OptionalProduct> optionalProductList;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.ALL)
+    private List<ActivationSchedule> activationSchedules;
 
     public Order() {
         optionalProductList = new HashSet<>();

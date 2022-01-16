@@ -21,8 +21,7 @@ public class Offer implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_package")
     private ServicePackage servicePackage;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "offer", cascade = {CascadeType.PERSIST, CascadeType.REMOVE,
-            CascadeType.REFRESH})
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "offer", cascade = CascadeType.ALL)
     private List<Order> orders;
 
     public Offer() {
