@@ -1,11 +1,13 @@
 package controllers;
 
 import entities.Customer;
+import exception.UserExeption;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.util.StringUtils;
 import services.UserService;
 
 import javax.ejb.EJB;
+import javax.persistence.PersistenceException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,17 +23,19 @@ public class SignUp extends HttpServletThymeleaf {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        if(StringUtils.isEmptyOrWhitespace(username) && StringUtils.isEmptyOrWhitespace(email) && StringUtils.isEmptyOrWhitespace(password)){
+        if (StringUtils.isEmptyOrWhitespace(username) && StringUtils.isEmptyOrWhitespace(email) && StringUtils.isEmptyOrWhitespace(password)) {
             renderPage(request, response, "Invalid Request");
             return;
         }
 
-        Customer newUser = usrService.registerNewUser(username, email, password);
-        if (newUser == null) {
-            renderPage(request, response, "Invalid data, username or password already present");
-            return;
+        try {
+            usrService.registerNewUser(username, email, password);
+            response.sendRedirect("SignIn");
+        } catch (UserExeption e) {
+            renderPage(request, response, e.getMessage());
+        } catch (PersistenceException e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
-        response.sendRedirect("SignIn");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

@@ -1,6 +1,7 @@
 package services;
 
 import entities.*;
+import exception.ServicePackageException;
 import utils.PaymentRevisionBot;
 
 import javax.ejb.Remove;
@@ -35,71 +36,57 @@ public class BuyService implements Serializable {
     private ServicePackage servicePackage;
     private Map<OptionalProduct, Boolean> optionalProductBooleanMap;
 
-
-    public void initOrder(Long idService) {
-        try {
-            order = new Order();
-            optionalProductBooleanMap = new HashMap<>();
-            ServicePackage servicePackage = em.find(ServicePackage.class, idService);
-            if (servicePackage == null) throw new BadRequestException();
-            this.servicePackage = servicePackage;
-            for (OptionalProduct o : servicePackage.getOptionalProductList()) {
-                optionalProductBooleanMap.put(o, Boolean.FALSE);
-            }
-        } catch (PersistenceException e) {
-            throw new BadRequestException();
+    public void initOrder(Long idService) throws PersistenceException, ServicePackageException {
+        order = new Order();
+        optionalProductBooleanMap = new HashMap<>();
+        ServicePackage servicePackage = em.find(ServicePackage.class, idService);
+        if (servicePackage == null) throw new ServicePackageException("Service Pacakge not found");
+        this.servicePackage = servicePackage;
+        for (OptionalProduct o : servicePackage.getOptionalProductList()) {
+            optionalProductBooleanMap.put(o, Boolean.FALSE);
         }
     }
 
-    public void setOffer(int id) {
+    public void setOffer(int id) throws PersistenceException, BadRequestException {
         /*The only valid flow to call this method is via the CustomizeOrder post method,
         so the user must have already accessed the get method of the same controller -> This bean is already initialized*/
-        try {
-            if (order == null) throw new BadRequestException();
-            Offer offer = em.find(Offer.class, id);
-            if (offer == null || !offer.isActive()) throw new BadRequestException();
-            if (offer.equals(order.getOffer())) return;
-            if (!offer.getServicePackage().equals(this.servicePackage)) throw new BadRequestException();
-            order.setOffer(offer);
-            order.setTotalMonthlyFee(offer.getMonthlyFee());
-        }catch (PersistenceException e){
-            throw new BadRequestException();
-        }
+        if (order == null) throw new BadRequestException();
+        Offer offer = em.find(Offer.class, id);
+        if (offer == null || !offer.isActive()) throw new BadRequestException();
+        if (offer.equals(order.getOffer())) return;
+        if (!offer.getServicePackage().equals(this.servicePackage)) throw new BadRequestException();
+        order.setOffer(offer);
+        order.setTotalMonthlyFee(offer.getMonthlyFee());
     }
 
-    public void setOptionalProducts(List<Integer> optionalProductIds) throws BadRequestException {
-        try {
-            if (optionalProductBooleanMap == null) throw new BadRequestException();
-            if (servicePackage == null) throw new BadRequestException();
+    public void setOptionalProducts(List<Integer> optionalProductIds) throws BadRequestException, PersistenceException {
+        if (optionalProductBooleanMap == null) throw new BadRequestException();
+        if (servicePackage == null) throw new BadRequestException();
 
-            for (OptionalProduct o : servicePackage.getOptionalProductList()) {
-                optionalProductBooleanMap.put(o, Boolean.FALSE);
-            }
-
-            if (order.getOffer() != null) {
-                order.setTotalMonthlyFee(order.getOffer().getMonthlyFee());
-            } else {
-                order.setTotalMonthlyFee(0);
-            }
-
-            for (int id : optionalProductIds) {
-                OptionalProduct optionalProduct = em.find(OptionalProduct.class, (long) id);
-
-                if (optionalProduct == null) {
-                    throw new BadRequestException();
-                }
-                if (optionalProductBooleanMap.replace(optionalProduct, true) == null) {
-                    throw new BadRequestException();
-                }
-                double tot = order.getTotalMonthlyFee();
-                order.setTotalMonthlyFee(tot + optionalProduct.getMonthlyFee());
-            }
-            order.getOptionalProductSet().addAll(optionalProductBooleanMap.keySet());
-        }catch (PersistenceException e){
-            throw new BadRequestException();
+        for (OptionalProduct o : servicePackage.getOptionalProductList()) {
+            optionalProductBooleanMap.put(o, Boolean.FALSE);
         }
-    }
 
+        if (order.getOffer() != null) {
+            order.setTotalMonthlyFee(order.getOffer().getMonthlyFee());
+        } else {
+            order.setTotalMonthlyFee(0);
+        }
+
+        for (int id : optionalProductIds) {
+            OptionalProduct optionalProduct = em.find(OptionalProduct.class, (long) id);
+
+            if (optionalProduct == null) {
+                throw new BadRequestException();
+            }
+            if (optionalProductBooleanMap.replace(optionalProduct, true) == null) {
+                throw new BadRequestException();
+            }
+            double tot = order.getTotalMonthlyFee();
+            order.setTotalMonthlyFee(tot + optionalProduct.getMonthlyFee());
+        }
+        order.getOptionalProductSet().addAll(optionalProductBooleanMap.keySet());
+    }
 
     public void setStartDate(Date date) {
         if (order == null) throw new BadRequestException();
@@ -122,36 +109,32 @@ public class BuyService implements Serializable {
     }
 
     @Remove
-    public boolean executePayment(Customer customer) {
+    public boolean executePayment(Customer customer) throws PersistenceException {
         /*Specification: "When the user presses the BUY button, an order is created",
          * so the creation date is set manually only in this method*/
-        try {
-            if (order.getOffer() == null || order.getActivationDate() == null) {
-                throw new BadRequestException();
-            }
-
-            order.setCustomer(customer);
-            order.setCreationDate(new Date());
-            Calendar c = Calendar.getInstance();
-            c.setTime(order.getActivationDate());
-            c.add(Calendar.MONTH, order.getOffer().getValidityPeriod());
-            order.setDeactivationDate(c.getTime());
-            boolean isPaymentValid = PaymentRevisionBot.review();
-
-            if (isPaymentValid) {
-                order.setStatus(Order.State.PAID);
-            } else {
-                order.setStatus(Order.State.PAYMENT_FAILED);
-                customer.addOneFailedPayment();
-                AuditCustomer a = new AuditCustomer(customer, order.getTotalMonthlyFee(), order.getCreationDate());
-                em.persist(a);
-                em.merge(customer);
-            }
-            em.persist(order);
-            return isPaymentValid;
-        }catch (PersistenceException e){
+        if (order.getOffer() == null || order.getActivationDate() == null) {
             throw new BadRequestException();
         }
+
+        order.setCustomer(customer);
+        order.setCreationDate(new Date());
+        Calendar c = Calendar.getInstance();
+        c.setTime(order.getActivationDate());
+        c.add(Calendar.MONTH, order.getOffer().getValidityPeriod());
+        order.setDeactivationDate(c.getTime());
+        boolean isPaymentValid = PaymentRevisionBot.review();
+
+        if (isPaymentValid) {
+            order.setStatus(Order.State.PAID);
+        } else {
+            order.setStatus(Order.State.PAYMENT_FAILED);
+            customer.addOneFailedPayment();
+            AuditCustomer a = new AuditCustomer(customer, order.getTotalMonthlyFee(), order.getCreationDate());
+            em.persist(a);
+            em.merge(customer);
+        }
+        em.persist(order);
+        return isPaymentValid;
     }
 
     @Remove

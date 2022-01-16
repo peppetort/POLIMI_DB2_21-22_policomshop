@@ -3,6 +3,7 @@ package controllers;
 import org.thymeleaf.util.StringUtils;
 import services.BuyService;
 
+import javax.persistence.PersistenceException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,20 +34,26 @@ public class SetOrder extends HttpServletThymeleaf {
             String startDateParam = request.getParameter("start_date");
 
             if (StringUtils.isEmptyOrWhitespace(offerIdParam)) {
-                throw new BadRequestException();
+                request.getSession().setAttribute("packageDetailsErrorMessage", "select a valid offer");
+                response.sendRedirect("GetPackageDetails");
+                return;
             }
             int offerId = Integer.parseInt(offerIdParam);
             buyService.setOffer(offerId);
 
             if (StringUtils.isEmptyOrWhitespace(startDateParam)) {
-                throw new BadRequestException();
+                request.getSession().setAttribute("packageDetailsErrorMessage", "select an activation date");
+                response.sendRedirect("GetPackageDetails");
+                return;
             }
 
             Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(startDateParam);
             if (startDate.after(new java.util.Date()))
                 buyService.setStartDate(startDate);
             else {
-                throw new BadRequestException();
+                request.getSession().setAttribute("packageDetailsErrorMessage", "activation date is before actual date");
+                response.sendRedirect("GetPackageDetails");
+                return;
             }
 
             if (optionalProductIdListParam != null) {
@@ -56,12 +63,13 @@ public class SetOrder extends HttpServletThymeleaf {
             }
 
             response.sendRedirect("ReviewOrder");
-        } catch (NumberFormatException | ParseException e) {
+        } catch (NumberFormatException | ParseException | BadRequestException e) {
             BuyService buyService = (BuyService) request.getSession().getAttribute("BuyService");
             buyService.stopProcess();
+            request.getSession().removeAttribute("BuyService");
             response.sendRedirect(request.getContextPath());
-        } catch (BadRequestException e) {
-            response.sendRedirect("GetPackageDetails");
+        } catch (PersistenceException e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
 
     }

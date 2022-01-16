@@ -6,6 +6,7 @@ import services.OptionalProductService;
 import services.PackageService;
 
 import javax.ejb.EJB;
+import javax.persistence.PersistenceException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,13 +31,23 @@ public class GetEmployeeHome extends HttpServletThymeleaf{
             List<MobileInternet> mobileInternetList = new ArrayList<>();
             List<MobilePhone> mobilePhoneList = new ArrayList<>();
             List<OptionalProduct> optionalProducts = optionalProductService.getAllOptionalProducts();
-            System.out.println(optionalProducts);
 
             for (Service s : packageService.getAllService()) {
                 if (s instanceof FixedInternet) fixedInternetList.add((FixedInternet) s);
                 else if (s instanceof MobileInternet) mobileInternetList.add((MobileInternet) s);
                 else if (s instanceof MobilePhone) mobilePhoneList.add((MobilePhone) s);
                 else if (s instanceof FixedPhone) fixedPhone = (FixedPhone) s;
+            }
+
+            String errorMessageServicePackage = (String) request.getSession().getAttribute("errorMessageServicePackage");
+            String errorMessageOptionalProduct = (String) request.getSession().getAttribute("errorMessageOptionalProduct");
+
+            if(errorMessageOptionalProduct != null){
+                request.getSession().removeAttribute("errorMessageOptionalProduct");
+            }
+
+            if(errorMessageServicePackage != null){
+                request.getSession().removeAttribute("errorMessageServicePackage");
             }
 
             final WebContext ctx = new WebContext(request, response, getServletContext(), request.getLocale());
@@ -46,9 +57,11 @@ public class GetEmployeeHome extends HttpServletThymeleaf{
             ctx.setVariable("fixedPhone", fixedPhone);
             ctx.setVariable("mobilePhone", mobilePhoneList);
             ctx.setVariable("optionalProducts", optionalProducts);
+            ctx.setVariable("errorMesSp", errorMessageServicePackage);
+            ctx.setVariable("errorMesOp", errorMessageOptionalProduct);
             templateEngine.process("HomePage", ctx, response.getWriter());
-        }catch (BadRequestException e){
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        }catch (PersistenceException e){
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
