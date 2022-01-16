@@ -49,29 +49,6 @@ LOCK TABLES `order` WRITE;
 INSERT INTO `order` VALUES (168,13,1,'2022-01-15 20:11:29','2022-01-27','2023-01-27',154.36,1),(170,13,1,'2022-01-15 20:12:50','2022-01-27','2023-01-27',100,1),(171,13,1,'2022-01-15 20:17:04','2022-01-27','2023-01-27',100,0),(172,13,3,'2022-01-15 20:45:42','2022-01-27','2025-10-27',1249.65,1);
 /*!40000 ALTER TABLE `order` ENABLE KEYS */;
 UNLOCK TABLES;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`juri`@`localhost`*/ /*!50003 trigger UpdatePurchasesStatOnInsert
-    after insert on `order`
-    for each row
-begin
-    declare idPackage int;
-    declare validityPeriod int;
-    select id_package, validity_period into idPackage, validityPeriod from offer where id = new.id_offer;
-    call UpdateStatPackagePurchases(new.id, idPackage, validityPeriod, new.total_monthly_fee);
-end */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -82,4 +59,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-15 20:51:37
+-- Dump completed on 2022-01-16 18:41:45

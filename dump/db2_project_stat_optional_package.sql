@@ -23,13 +23,13 @@ DROP TABLE IF EXISTS `stat_optional_package`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `stat_optional_package` (
+  `id_package` int(11) NOT NULL,
   `id_optional` int(11) NOT NULL,
-  `id_service_package` int(11) NOT NULL,
   `num_purchases` int(11) NOT NULL,
-  PRIMARY KEY (`id_optional`,`id_service_package`),
-  KEY `stat_optional_package_service_package_id_fk` (`id_service_package`),
+  PRIMARY KEY (`id_optional`,`id_package`),
+  KEY `stat_optional_package_service_package_id_fk` (`id_package`),
   CONSTRAINT `stat_optional_package_optional_product_id_fk` FOREIGN KEY (`id_optional`) REFERENCES `optional_product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `stat_optional_package_service_package_id_fk` FOREIGN KEY (`id_service_package`) REFERENCES `service_package` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `stat_optional_package_service_package_id_fk` FOREIGN KEY (`id_package`) REFERENCES `service_package` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -39,7 +39,7 @@ CREATE TABLE `stat_optional_package` (
 
 LOCK TABLES `stat_optional_package` WRITE;
 /*!40000 ALTER TABLE `stat_optional_package` DISABLE KEYS */;
-INSERT INTO `stat_optional_package` VALUES (1,2,7),(2,2,7);
+INSERT INTO `stat_optional_package` VALUES (2,1,7),(2,2,7);
 /*!40000 ALTER TABLE `stat_optional_package` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-15 20:51:37
+-- Dump completed on 2022-01-16 18:41:45
