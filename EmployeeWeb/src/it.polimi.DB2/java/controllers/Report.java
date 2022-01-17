@@ -42,10 +42,10 @@ public class Report extends HttpServletThymeleaf {
 
                 if (amountPurchases.containsKey(s.getServicePackage())) {
                     Pair<Double, Double> temp = amountPurchases.get(s.getServicePackage());
-                    Pair<Double, Double> newPair = new Pair(temp.getObject1() + s.getAmountWithOptional(), temp.getObject2() + s.getAmountWithoutOptional());
+                    Pair<Double, Double> newPair = new Pair(temp.getObject1() + s.getTotalMonthlyFee(), temp.getObject2() + s.getAmountForOptionalProds());
                     amountPurchases.put(s.getServicePackage(), newPair);
                 } else {
-                    Pair<Double, Double> newPair = new Pair(s.getAmountWithOptional(), s.getAmountWithoutOptional());
+                    Pair<Double, Double> newPair = new Pair(s.getTotalMonthlyFee(), s.getAmountForOptionalProds());
                     amountPurchases.put(s.getServicePackage(), newPair);
                 }
             }
@@ -68,7 +68,7 @@ public class Report extends HttpServletThymeleaf {
             for (Map.Entry<ServicePackage, Integer> s : averageOptionalForEachServicePackage.entrySet()) {
                 Integer numPurchases = numberPurchases.get(s.getKey());
                 if (numPurchases != null) {
-                    averageOptionalServicePackage.put(s.getKey(), (double) (s.getValue() / numPurchases));
+                    averageOptionalServicePackage.put(s.getKey(), (s.getValue() / (double) numPurchases));
                 }
             }
 

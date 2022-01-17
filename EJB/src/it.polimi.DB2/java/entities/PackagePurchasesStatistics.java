@@ -16,10 +16,10 @@ public class PackagePurchasesStatistics {
     private int validityPeriod;
     @Column(name = "num_purchases")
     private int numPurchases;
-    @Column(name = "amount_with_optional")
-    private double amountWithOptional;
-    @Column(name = "amount_without_optional")
-    private double amountWithoutOptional;
+    @Column(name = "tot_monthly_fee")
+    private double totalMonthlyFee;
+    @Column(name = "amount_for_optional_prods")
+    private double amountForOptionalProds;
     @ManyToOne
     @JoinColumn(name = "id_package", nullable = false, updatable = false)
     private ServicePackage servicePackage;
@@ -32,12 +32,12 @@ public class PackagePurchasesStatistics {
         return numPurchases;
     }
 
-    public double getAmountWithOptional() {
-        return amountWithOptional;
+    public double getTotalMonthlyFee() {
+        return totalMonthlyFee;
     }
 
-    public double getAmountWithoutOptional() {
-        return amountWithoutOptional;
+    public double getAmountForOptionalProds() {
+        return amountForOptionalProds;
     }
 
     public ServicePackage getServicePackage() {
