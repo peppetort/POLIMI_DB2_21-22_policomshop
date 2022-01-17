@@ -20,10 +20,6 @@ public class Customer implements User, Serializable, Comparable<Customer> {
     protected String password;
     @Column(name = "num_failed_payments")
     private int numFailedPayments;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL)
-    private List<Order> orders;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL)
-    private List<AuditCustomer> auditCustomers;
 
     public Long getId() {
         return id;
@@ -58,13 +54,6 @@ public class Customer implements User, Serializable, Comparable<Customer> {
         this.numFailedPayments = this.numFailedPayments + 1;
     }
 
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
 
     @Override
     public int compareTo(Customer o) {

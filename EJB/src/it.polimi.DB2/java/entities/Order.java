@@ -36,12 +36,10 @@ public class Order implements Serializable {
     private Offer offer;
     @ManyToMany
     @JoinTable(name = "order_to_optional_product", joinColumns = @JoinColumn(name = "id_order"), inverseJoinColumns = @JoinColumn(name = "id_optional_product"))
-    private Set<OptionalProduct> optionalProductList;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.ALL)
-    private List<ActivationSchedule> activationSchedules;
+    private Set<OptionalProduct> optionalProductSet;
 
     public Order() {
-        optionalProductList = new HashSet<>();
+        optionalProductSet = new HashSet<>();
     }
 
     public int getId() {
@@ -116,11 +114,11 @@ public class Order implements Serializable {
     }
 
     public Set<OptionalProduct> getOptionalProductSet() {
-        return optionalProductList;
+        return optionalProductSet;
     }
 
     public void addOptionalProducts(Collection<OptionalProduct> c) {
-        optionalProductList.addAll(c);
+        optionalProductSet.addAll(c);
     }
 
     @Override
@@ -128,12 +126,12 @@ public class Order implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return id == order.id && Double.compare(order.totalMonthlyFee, totalMonthlyFee) == 0 && Objects.equals(creationDate, order.creationDate) && Objects.equals(activationDate, order.activationDate) && status == order.status && Objects.equals(customer, order.customer) && Objects.equals(offer, order.offer) && Objects.equals(optionalProductList, order.optionalProductList);
+        return id == order.id && Double.compare(order.totalMonthlyFee, totalMonthlyFee) == 0 && Objects.equals(creationDate, order.creationDate) && Objects.equals(activationDate, order.activationDate) && status == order.status && Objects.equals(customer, order.customer) && Objects.equals(offer, order.offer) && Objects.equals(optionalProductSet, order.optionalProductSet);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, creationDate, activationDate, totalMonthlyFee, optionalProductList);
+        return Objects.hash(id, creationDate, activationDate, totalMonthlyFee, optionalProductSet);
     }
 
     public enum State {

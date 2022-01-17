@@ -18,17 +18,10 @@ public class FixedInternet extends Service {
         return nGigabytes;
     }
 
-    public void setnGigabytes(int nGigabytes) {
-        this.nGigabytes = nGigabytes;
-    }
-
     public double getFeeGigabytes() {
         return feeGigabytes;
     }
 
-    public void setFeeGigabytes(double feeGigabytes) {
-        this.feeGigabytes = feeGigabytes;
-    }
 
     @Override
     public boolean equals(Object o) {

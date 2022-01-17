@@ -3,7 +3,7 @@ package entities;
 import javax.persistence.*;
 import java.util.Date;
 
-/*Todo Derived Identifiers Pag. 434*/
+//Derived Identifiers Pag. 434
 @Entity
 @Table(name = "audit_customer", schema = "db2_project")
 public class AuditCustomer {
@@ -15,7 +15,7 @@ public class AuditCustomer {
     private double amount;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "date")
-    private Date lastRejection;
+    private Date date;
     @ManyToOne
     @JoinColumn(name = "id_customer", nullable = false)
     private Customer customer;
@@ -23,26 +23,18 @@ public class AuditCustomer {
     public AuditCustomer() {
     }
 
-    public AuditCustomer(Customer customer, double amount, Date lastRejection) {
+    public AuditCustomer(Customer customer, double amount, Date date) {
         this.customer = customer;
         this.amount = amount;
-        this.lastRejection = lastRejection;
+        this.date = date;
     }
 
     public double getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
-    public Date getLastRejection() {
-        return lastRejection;
-    }
-
-    public void setLastRejection(Date lastRejection) {
-        this.lastRejection = lastRejection;
+    public Date getDate() {
+        return date;
     }
 
     public Customer getCustomer() {

@@ -21,8 +21,6 @@ public class Offer implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_package")
     private ServicePackage servicePackage;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "offer", cascade = CascadeType.ALL)
-    private List<Order> orders;
 
     public Offer() {
     }
@@ -38,33 +36,18 @@ public class Offer implements Serializable {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public int getValidityPeriod() {
         return validityPeriod;
-    }
-
-    public void setValidityPeriod(int validityPeriod) {
-        this.validityPeriod = validityPeriod;
     }
 
     public double getMonthlyFee() {
         return monthlyFee;
     }
 
-    public void setMonthlyFee(double monthlyFee) {
-        this.monthlyFee = monthlyFee;
-    }
-
     public boolean isActive() {
         return active;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
 
     public ServicePackage getServicePackage(){
         return servicePackage;

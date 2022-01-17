@@ -22,32 +22,16 @@ public class MobilePhone extends Service {
         return nMinutes;
     }
 
-    public void setnMinutes(int nMinutes) {
-        this.nMinutes = nMinutes;
-    }
-
     public double getFeeMinutes() {
         return feeMinutes;
-    }
-
-    public void setFeeMinutes(double feeMinutes) {
-        this.feeMinutes = feeMinutes;
     }
 
     public int getnSms() {
         return nSms;
     }
 
-    public void setnSms(int nSms) {
-        this.nSms = nSms;
-    }
-
     public double getFeeSms() {
         return feeSms;
-    }
-
-    public void setFeeSms(double feeSms) {
-        this.feeSms = feeSms;
     }
 
     @Override

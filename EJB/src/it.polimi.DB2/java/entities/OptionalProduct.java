@@ -16,14 +16,6 @@ public class OptionalProduct implements Serializable {
     private String name;
     @Column(name = "monthly_fee")
     private double monthlyFee;
-    @ManyToMany(mappedBy = "optionalProductList")
-    @JoinTable(name = "order_to_optional_product", joinColumns = @JoinColumn(name = "id_optional_product"), inverseJoinColumns = @JoinColumn(name = "id_order"))
-    private List<Order> orderList;
-    @ManyToMany(mappedBy = "optionalProductList")
-    @JoinTable(name = "service_package_to_optional_product", joinColumns = @JoinColumn(name = "id_optional_product"), inverseJoinColumns = @JoinColumn(name = "id_service_package"))
-    private List<ServicePackage> servicePackagesList;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "optionalProduct", cascade = CascadeType.ALL)
-    private List<PackageOptionalStatistics> packageOptionalStatistics;
 
     public OptionalProduct() {
     }
@@ -37,27 +29,15 @@ public class OptionalProduct implements Serializable {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-
     public double getMonthlyFee() {
         return monthlyFee;
     }
 
-    public void setMonthlyFee(double monthlyFee) {
-        this.monthlyFee = monthlyFee;
-    }
 
     @Override
     public boolean equals(Object o) {

@@ -8,8 +8,8 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "service", schema = "db2_project")
-@Inheritance(strategy=InheritanceType.JOINED)
-@DiscriminatorColumn(name="type", discriminatorType=DiscriminatorType.INTEGER, columnDefinition = "TINYINT(1)")
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.INTEGER, columnDefinition = "TINYINT(1)")
 public abstract class Service implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,10 +17,6 @@ public abstract class Service implements Serializable {
     private Long id;
     @Column(name = "type")
     private int type;
-    //TODO possiamo rimuovere questo mappaggio??
-    @ManyToMany(mappedBy = "serviceList")
-    @JoinTable(name = "service_package_to_service", joinColumns = @JoinColumn(name = "id_service"), inverseJoinColumns = @JoinColumn(name = "id_package"))
-    private List<ServicePackage> servicePackagesList;
 
     public Long getId() {
         return id;
@@ -34,10 +30,6 @@ public abstract class Service implements Serializable {
         return type;
     }
 
-    public String getReadableType() {
-        return Arrays.stream(ServiceType.values()).filter(x -> x.idTypeDB == type).findAny().get().readableName;//TODO + "<ul>" + getHTMLFields() + "</ul>";
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -49,24 +41,6 @@ public abstract class Service implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, type, servicePackagesList);
-    }
-
-    public enum ServiceType {
-        FIXED_INTERNET("Fixed internet", 1),
-        FIXED_PHONE("Fixed phone", 2),
-        MOBILE_INTERNET("Mobile internet", 3),
-        MOBILE_PHONE("Mobile phone", 4);
-        public final int idTypeDB;
-        private final String readableName;
-
-        ServiceType(String readableName, int idTypeDB) {
-            this.readableName = readableName;
-            this.idTypeDB = idTypeDB;
-        }
-
-        public String getReadableName() {
-            return readableName;
-        }
+        return Objects.hash(id, type);
     }
 }

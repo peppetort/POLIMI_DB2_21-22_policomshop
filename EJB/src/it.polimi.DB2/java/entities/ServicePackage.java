@@ -22,10 +22,6 @@ public class ServicePackage implements Serializable {
     @ManyToMany
     @JoinTable(name = "service_package_to_service", joinColumns = @JoinColumn(name = "id_package"), inverseJoinColumns = @JoinColumn(name = "id_service"))
     private List<Service> serviceList;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "servicePackage", cascade = CascadeType.ALL)
-    private List<PackagePurchasesStatistics> packagePurchasesStatistics;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "servicePackage", cascade = CascadeType.ALL)
-    private List<PackageOptionalStatistics> packageOptionalStatistics;
 
     public ServicePackage() {
     }
