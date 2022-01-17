@@ -7,7 +7,7 @@ import java.util.List;
 @Entity
 @Table(name = "customer", schema = "db2_project")
 @NamedQuery(name = "Customer.checkCredentials", query = "SELECT r FROM Customer r  WHERE r.email = ?1 and r.password = ?2")
-public class Customer implements User, Serializable, Comparable {
+public class Customer implements User, Serializable, Comparable<Customer> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -24,14 +24,6 @@ public class Customer implements User, Serializable, Comparable {
     private List<Order> orders;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL)
     private List<AuditCustomer> auditCustomers;
-
-    public List<AuditCustomer> getAuditCustomer() {
-        return auditCustomers;
-    }
-
-    public void setAuditCustomer(List<AuditCustomer> auditCustomer) {
-        this.auditCustomers = auditCustomer;
-    }
 
     public Long getId() {
         return id;
@@ -54,10 +46,6 @@ public class Customer implements User, Serializable, Comparable {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password = password;
     }
@@ -70,10 +58,6 @@ public class Customer implements User, Serializable, Comparable {
         this.numFailedPayments = this.numFailedPayments + 1;
     }
 
-    public void removeOneFailedPayment() {
-        this.numFailedPayments = this.numFailedPayments - 1;
-    }
-
     public List<Order> getOrders() {
         return orders;
     }
@@ -83,11 +67,7 @@ public class Customer implements User, Serializable, Comparable {
     }
 
     @Override
-    public int compareTo(Object o) {
-        if (!(o instanceof Customer)) {
-            return -1;
-        }
-        Customer o1 = (Customer) o;
-        return (int) (this.id - o1.id);
+    public int compareTo(Customer o) {
+        return (int) (this.id - o.id);
     }
 }
