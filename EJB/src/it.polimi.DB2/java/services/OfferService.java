@@ -31,9 +31,12 @@ public class OfferService {
             if (sp == null) {
                 throw new OfferException("Selected service package does not exists");
             }
+            Offer offer = new Offer(validityPeriod, monthlyFee, true, sp);
 
-
-            em.persist(new Offer(validityPeriod, monthlyFee, true, sp));
+            em.persist(offer);
+            //I need to update the service package object in the persistence context
+            //with the offer informations written in the DB
+            em.refresh(sp);
         }
     }
 }
