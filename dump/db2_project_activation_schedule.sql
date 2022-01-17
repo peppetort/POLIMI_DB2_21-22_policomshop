@@ -29,19 +29,9 @@ CREATE TABLE `activation_schedule` (
   `deactivation_date` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_activation_schedule_3_idx` (`id_order`),
-  CONSTRAINT `fk_activation_schedule_3` FOREIGN KEY (`id_order`) REFERENCES `order` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
+  CONSTRAINT `fk_activation_schedule_3` FOREIGN KEY (`id_order`) REFERENCES `order` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `activation_schedule`
---
-
-LOCK TABLES `activation_schedule` WRITE;
-/*!40000 ALTER TABLE `activation_schedule` DISABLE KEYS */;
-INSERT INTO `activation_schedule` VALUES (8,171,'2022-01-27 00:00:00','2023-01-27 00:00:00'),(9,174,'2022-01-23 00:00:00','2024-01-23 00:00:00'),(10,177,'2022-01-27 00:00:00','2024-01-27 00:00:00'),(11,183,'2022-01-26 00:00:00','2023-01-26 00:00:00');
-/*!40000 ALTER TABLE `activation_schedule` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -52,4 +42,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-17 13:13:03
+-- Dump completed on 2022-01-17 15:56:50

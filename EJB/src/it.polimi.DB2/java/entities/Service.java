@@ -17,6 +17,7 @@ public abstract class Service implements Serializable {
     private Long id;
     @Column(name = "type")
     private int type;
+    //TODO possiamo rimuovere questo mappaggio??
     @ManyToMany(mappedBy = "serviceList")
     @JoinTable(name = "service_package_to_service", joinColumns = @JoinColumn(name = "id_service"), inverseJoinColumns = @JoinColumn(name = "id_package"))
     private List<ServicePackage> servicePackagesList;

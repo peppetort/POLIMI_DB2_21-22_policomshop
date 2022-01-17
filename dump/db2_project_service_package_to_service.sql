@@ -31,16 +31,6 @@ CREATE TABLE `service_package_to_service` (
   CONSTRAINT `fk_service_package_to_service_2` FOREIGN KEY (`id_service`) REFERENCES `service` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `service_package_to_service`
---
-
-LOCK TABLES `service_package_to_service` WRITE;
-/*!40000 ALTER TABLE `service_package_to_service` DISABLE KEYS */;
-INSERT INTO `service_package_to_service` VALUES (2,1),(4,1),(6,1),(9,1),(10,1),(11,1),(12,1),(17,1),(17,3),(18,3),(19,3),(20,1),(20,3),(21,1),(22,1),(22,3);
-/*!40000 ALTER TABLE `service_package_to_service` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -51,4 +41,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-17 13:13:03
+-- Dump completed on 2022-01-17 15:56:50

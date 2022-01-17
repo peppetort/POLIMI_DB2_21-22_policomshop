@@ -32,16 +32,6 @@ CREATE TABLE `stat_service_package` (
   CONSTRAINT `stat_service_package_service_package_id_fk` FOREIGN KEY (`id_package`) REFERENCES `service_package` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `stat_service_package`
---
-
-LOCK TABLES `stat_service_package` WRITE;
-/*!40000 ALTER TABLE `stat_service_package` DISABLE KEYS */;
-INSERT INTO `stat_service_package` VALUES (2,12,4,154.36,263.65),(2,45,2,1249.65,63.65),(11,24,2,0,127.3),(18,12,1,0,1);
-/*!40000 ALTER TABLE `stat_service_package` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -52,4 +42,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-17 13:13:04
+-- Dump completed on 2022-01-17 15:56:50

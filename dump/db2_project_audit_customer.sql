@@ -32,16 +32,6 @@ CREATE TABLE `audit_customer` (
   CONSTRAINT `audit_customer_customer_id_fk` FOREIGN KEY (`id_customer`) REFERENCES `customer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `audit_customer`
---
-
-LOCK TABLES `audit_customer` WRITE;
-/*!40000 ALTER TABLE `audit_customer` DISABLE KEYS */;
-INSERT INTO `audit_customer` VALUES (1,13,100,'2022-01-15 20:17:04'),(2,13,100,'2022-01-15 20:17:04'),(3,13,1249.65,'2022-01-15 20:45:42'),(4,13,1249.65,'2022-01-15 20:45:42'),(5,13,100,'2022-01-15 20:17:04'),(6,13,100,'2022-01-15 20:17:04'),(7,13,63.65,'2022-01-17 12:55:37'),(9,13,63.65,'2022-01-17 13:04:04'),(11,13,63.65,'2022-01-17 13:10:31');
-/*!40000 ALTER TABLE `audit_customer` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -52,4 +42,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-17 13:13:04
+-- Dump completed on 2022-01-17 15:56:50

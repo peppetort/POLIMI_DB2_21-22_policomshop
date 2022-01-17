@@ -119,17 +119,8 @@ public class Order implements Serializable {
         return optionalProductList;
     }
 
-    //TODO: a che serve?
-    public boolean isCorrectFilled(boolean userIsImportant) {
-        Date now = new Date();
-        if(status.equals(State.PAYMENT_FAILED) && activationDate.before(now)) {
-            Calendar c = Calendar.getInstance();
-            c.setTime(now);
-            c.add(Calendar.DAY_OF_MONTH, 1);
-            activationDate = c.getTime();
-        }
-        boolean flag = activationDate.after(now) && offer != null;
-        return flag && (!userIsImportant || customer != null);
+    public void addOptionalProducts(Collection<OptionalProduct> c) {
+        optionalProductList.addAll(c);
     }
 
     @Override

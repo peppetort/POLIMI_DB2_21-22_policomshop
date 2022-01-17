@@ -33,16 +33,6 @@ CREATE TABLE `customer` (
   UNIQUE KEY `username_UNIQUE` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `customer`
---
-
-LOCK TABLES `customer` WRITE;
-/*!40000 ALTER TABLE `customer` DISABLE KEYS */;
-INSERT INTO `customer` VALUES (13,'asd@asd.it','asd','asd',9),(14,'zxc@zxc.it','zxc','zxc',0),(15,'iop@iop.it','iop','iop',0),(17,'dfg@dfg.it','dfg','dfg',0),(18,'peppetort@policomshop.com','peppetort','supersecure',0),(20,'peppetort@policomshop1.com','peppetort1','supersecure',0);
-/*!40000 ALTER TABLE `customer` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -53,4 +43,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-17 13:13:03
+-- Dump completed on 2022-01-17 15:56:50

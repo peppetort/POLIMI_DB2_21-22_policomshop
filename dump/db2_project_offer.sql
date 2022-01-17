@@ -33,16 +33,6 @@ CREATE TABLE `offer` (
   CONSTRAINT `fk_offer_1` FOREIGN KEY (`id_package`) REFERENCES `service_package` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `offer`
---
-
-LOCK TABLES `offer` WRITE;
-/*!40000 ALTER TABLE `offer` DISABLE KEYS */;
-INSERT INTO `offer` VALUES (1,2,12,100,1),(2,3,34,200,1),(3,2,45,1234,1),(4,10,1,2,1),(5,11,24,12,1),(6,12,12,12.45,1),(7,17,56,8.99,1),(8,18,12,1,1),(9,19,1,2,1),(10,20,1,1,1),(11,21,1,1,1),(12,22,1,2,1);
-/*!40000 ALTER TABLE `offer` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -53,4 +43,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-17 13:13:03
+-- Dump completed on 2022-01-17 15:56:50

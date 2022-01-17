@@ -27,19 +27,9 @@ CREATE TABLE `mobile_internet` (
   `n_gigabytes` int(11) NOT NULL,
   `fee` double NOT NULL,
   KEY `fk_mobile_internet_1_idx` (`id`),
-  CONSTRAINT `fk_mobile_internet_1` FOREIGN KEY (`id`) REFERENCES `service` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
+  CONSTRAINT `fk_mobile_internet_1` FOREIGN KEY (`id`) REFERENCES `service` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `mobile_internet`
---
-
-LOCK TABLES `mobile_internet` WRITE;
-/*!40000 ALTER TABLE `mobile_internet` DISABLE KEYS */;
-INSERT INTO `mobile_internet` VALUES (2,20,12.4);
-/*!40000 ALTER TABLE `mobile_internet` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -50,4 +40,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-17 13:13:04
+-- Dump completed on 2022-01-17 15:56:50

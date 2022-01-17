@@ -39,16 +39,6 @@ CREATE TABLE `order` (
   CONSTRAINT `fk_order_2` FOREIGN KEY (`id_user`) REFERENCES `customer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=184 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `order`
---
-
-LOCK TABLES `order` WRITE;
-/*!40000 ALTER TABLE `order` DISABLE KEYS */;
-INSERT INTO `order` VALUES (168,13,1,'2022-01-15 20:11:29','2022-01-27','2023-01-27',154.36,1),(170,13,1,'2022-01-15 20:12:50','2022-01-27','2023-01-27',100,1),(171,13,1,'2022-01-15 20:17:04','2022-01-27','2023-01-27',100,1),(172,13,3,'2022-01-15 20:45:42','2022-01-27','2025-10-27',1249.65,1),(174,13,5,'2022-01-16 21:17:42','2022-01-23','2024-01-23',27.65,1),(177,13,5,'2022-01-17 12:55:25','2022-01-27','2024-01-27',12,1),(178,13,5,'2022-01-17 12:55:37','2022-01-25','2024-01-25',63.65,0),(180,13,5,'2022-01-17 13:04:04','2022-01-27','2024-01-27',63.65,0),(182,13,5,'2022-01-17 13:10:31','2022-01-26','2024-01-26',63.65,0),(183,13,8,'2022-01-17 13:10:47','2022-01-26','2023-01-26',1,1);
-/*!40000 ALTER TABLE `order` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -136,4 +126,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-17 13:13:03
+-- Dump completed on 2022-01-17 15:56:50

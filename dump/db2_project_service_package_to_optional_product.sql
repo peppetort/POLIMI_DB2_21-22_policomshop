@@ -27,20 +27,10 @@ CREATE TABLE `service_package_to_optional_product` (
   `id_optional_product` int(11) DEFAULT NULL,
   KEY `fk_service_package_to_optional_product_1_idx` (`id_service_package`),
   KEY `fk_service_package_to_optional_product_2_idx` (`id_optional_product`),
-  CONSTRAINT `fk_service_package_to_optional_product_1` FOREIGN KEY (`id_service_package`) REFERENCES `service_package` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  CONSTRAINT `fk_service_package_to_optional_product_2` FOREIGN KEY (`id_optional_product`) REFERENCES `optional_product` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
+  CONSTRAINT `fk_service_package_to_optional_product_1` FOREIGN KEY (`id_service_package`) REFERENCES `service_package` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_service_package_to_optional_product_2` FOREIGN KEY (`id_optional_product`) REFERENCES `optional_product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `service_package_to_optional_product`
---
-
-LOCK TABLES `service_package_to_optional_product` WRITE;
-/*!40000 ALTER TABLE `service_package_to_optional_product` DISABLE KEYS */;
-INSERT INTO `service_package_to_optional_product` VALUES (2,1),(2,2),(4,1),(6,1),(9,1),(11,1),(11,3),(11,4),(17,3),(17,5),(17,6),(20,1),(20,3),(20,5),(21,1),(22,1);
-/*!40000 ALTER TABLE `service_package_to_optional_product` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -51,4 +41,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-17 13:13:04
+-- Dump completed on 2022-01-17 15:56:50

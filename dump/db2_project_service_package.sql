@@ -29,16 +29,6 @@ CREATE TABLE `service_package` (
   UNIQUE KEY `name_UNIQUE` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `service_package`
---
-
-LOCK TABLES `service_package` WRITE;
-/*!40000 ALTER TABLE `service_package` DISABLE KEYS */;
-INSERT INTO `service_package` VALUES (4,'a'),(6,'ad'),(11,'All inclusive'),(9,'as'),(10,'asd'),(21,'BBB'),(20,'G'),(2,'package1'),(3,'package2'),(12,'qwe'),(19,'S'),(18,'Test002'),(17,'Test01'),(22,'VV');
-/*!40000 ALTER TABLE `service_package` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -49,4 +39,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-17 13:13:03
+-- Dump completed on 2022-01-17 15:56:50

@@ -31,16 +31,6 @@ CREATE TABLE `order_to_optional_product` (
   CONSTRAINT `fk_order_to_optional_product_2` FOREIGN KEY (`id_optional_product`) REFERENCES `optional_product` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `order_to_optional_product`
---
-
-LOCK TABLES `order_to_optional_product` WRITE;
-/*!40000 ALTER TABLE `order_to_optional_product` DISABLE KEYS */;
-INSERT INTO `order_to_optional_product` VALUES (168,2),(168,1),(170,2),(170,1),(171,2),(171,1),(172,2),(172,1),(174,1),(174,3),(174,4),(178,1),(178,3),(178,4),(180,1),(180,3),(180,4),(182,1),(182,3),(182,4);
-/*!40000 ALTER TABLE `order_to_optional_product` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -78,4 +68,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-17 13:13:03
+-- Dump completed on 2022-01-17 15:56:50
