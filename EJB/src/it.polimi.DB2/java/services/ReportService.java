@@ -1,37 +1,21 @@
 package services;
 
-import entities.*;
+import entities.AuditCustomer;
+import entities.Order;
+import entities.PackageOptionalStatistics;
+import entities.PackagePurchasesStatistics;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-import javax.ws.rs.BadRequestException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Stateless
 public class ReportService {
 
     @PersistenceContext(unitName = "db2_project")
     EntityManager em;
-
-//    public Map<Offer, Long> getTotalPurchasePerPackageAndValidityPeriod() {
-//        try {
-//            Map<Offer, Long> stat = new HashMap<>();
-//            List<Offer> offerList = em.createQuery("select o from Offer o order by o.servicePackage.id", Offer.class).getResultList();
-//
-//            for (Offer o : offerList) {
-//                Long numberOfPurchasedOffer = em.createQuery("select count(a) from ActivationSchedule a where a.offer.id = :offerId ", Long.class).setParameter("offerId", o.getId()).getSingleResult();
-//                stat.put(o, numberOfPurchasedOffer);
-//            }
-//
-//            return stat;
-//        } catch (PersistenceException e) {
-//            throw new BadRequestException();
-//        }
-//    }
 
     public List<PackagePurchasesStatistics> getAllStatPackagePurchases() throws PersistenceException{
         return em.createQuery("select stat from PackagePurchasesStatistics stat", PackagePurchasesStatistics.class).getResultList();

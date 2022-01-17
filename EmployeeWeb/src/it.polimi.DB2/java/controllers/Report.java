@@ -51,30 +51,25 @@ public class Report extends HttpServletThymeleaf {
             }
 
             List<PackageOptionalStatistics> packageOptionalStatisticsList = reportService.getAllStatPackageOptional();
-            Map<ServicePackage, Pair<Integer, Integer>> servicePackagePairMap = new HashMap<>(); //obj1 num distinct optional prod - obj2 tot num of optioanl
-            Map<OptionalProduct, Integer> optionalProductNumberPurchases = new HashMap<>();
-            for (PackageOptionalStatistics s : packageOptionalStatisticsList) {
-                Pair<Integer, Integer> temp = servicePackagePairMap.get(s.getServicePackage());
-                if (temp != null) {
-                    temp = new Pair<>(temp.getObject1() + 1, temp.getObject2() + s.getNumPurchases());
-                } else {
-                    temp = new Pair<>(1, s.getNumPurchases());
-                }
-                servicePackagePairMap.put(s.getServicePackage(), temp);
 
-                Integer flag = optionalProductNumberPurchases.get(s.getOptionalProduct());
-                if (flag != null) {
-                    flag += s.getNumPurchases();
+            Map<ServicePackage, Integer> averageOptionalForEachServicePackage = new HashMap<>();
+
+            for (PackageOptionalStatistics s : packageOptionalStatisticsList) {
+                Integer numPurchases = averageOptionalForEachServicePackage.get(s.getServicePackage());
+                if (numPurchases == null) {
+                    averageOptionalForEachServicePackage.put(s.getServicePackage(), s.getNumPurchases());
                 } else {
-                    flag = s.getNumPurchases();
+                    averageOptionalForEachServicePackage.put(s.getServicePackage(), numPurchases + s.getNumPurchases());
                 }
-                optionalProductNumberPurchases.put(s.getOptionalProduct(), flag);
             }
 
-            List<Pair<ServicePackage, Double>> averageOptionalServicePackage = new ArrayList<>();
+            Map<ServicePackage, Double> averageOptionalServicePackage = new HashMap<>();
 
-            for (Map.Entry<ServicePackage, Pair<Integer, Integer>> s : servicePackagePairMap.entrySet()) {
-                averageOptionalServicePackage.add(new Pair<ServicePackage, Double>(s.getKey(), (double) (s.getValue().getObject1() / s.getValue().getObject2())));
+            for (Map.Entry<ServicePackage, Integer> s : averageOptionalForEachServicePackage.entrySet()) {
+                Integer numPurchases = numberPurchases.get(s.getKey());
+                if (numPurchases != null) {
+                    averageOptionalServicePackage.put(s.getKey(), (double) (s.getValue() / numPurchases));
+                }
             }
 
             List<Order> suspendedOrders = reportService.getSuspendedOrder();
@@ -90,7 +85,6 @@ public class Report extends HttpServletThymeleaf {
             ctx.setVariable("numberPurchases", numberPurchases);
             ctx.setVariable("numberPurchasesForValidityPeriod", numberPurchasesForValidityPeriod);
             ctx.setVariable("averageOptionalServicePackage", averageOptionalServicePackage);
-            ctx.setVariable("optionalProductNumberPurchases", optionalProductNumberPurchases);
             ctx.setVariable("amountPurchases", amountPurchases);
             ctx.setVariable("suspendedOrder", suspendedOrders);
             ctx.setVariable("insolventCustomer", insolventCustomer);

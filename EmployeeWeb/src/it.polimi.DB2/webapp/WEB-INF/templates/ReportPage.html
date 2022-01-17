@@ -112,37 +112,6 @@
             </div>
         </div>
     </div>
-    <div class="accordion-item" th:if="${optionalProductNumberPurchases.size() > 0}">
-        <h2 class="accordion-header" id="headingOptionalProductNumberPurchases">
-            <button aria-controls="collapseOptionalProductNumberPurchases" aria-expanded="false"
-                    class="accordion-button collapsed"
-                    data-bs-target="#collapseOptionalProductNumberPurchases" data-bs-toggle="collapse" type="button">
-                Optional products sales
-            </button>
-        </h2>
-        <div aria-labelledby="headingOptionalProductNumberPurchases" class="accordion-collapse collapse"
-             data-bs-parent="#accordion"
-             id="collapseOptionalProductNumberPurchases">
-            <div class="accordion-body">
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Number purchases</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="row, rowStat : ${optionalProductNumberPurchases}">
-                        <th scope="row" th:text="${rowStat.count}">1</th>
-                        <td th:text="${row.key.getName()}">Mark</td>
-                        <td th:text="${row.value}">Mark</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
     <div class="accordion-item" th:if="${averageOptionalServicePackage.size() > 0}">
         <h2 class="accordion-header" id="headingAverageOptionalServicePackage">
             <button aria-controls="collapseAverageOptionalServicePackage" aria-expanded="false"
@@ -160,14 +129,14 @@
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Number purchases</th>
+                        <th scope="col">Average number of optional products sold together</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="row, rowStat : ${averageOptionalServicePackage}">
+                    <tr th:each="row, rowStat : ${averageOptionalServicePackage.entrySet()}">
                         <th scope="row" th:text="${rowStat.count}">1</th>
-                        <td th:text="${row.getObject1().getName()}">Mark</td>
-                        <td th:text="${row.getObject2()}">Mark</td>
+                        <td th:text="${row.key.name}">Mark</td>
+                        <td th:text="${row.value}">Mark</td>
                     </tr>
                     </tbody>
                 </table>
