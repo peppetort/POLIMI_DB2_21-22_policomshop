@@ -17,43 +17,4 @@ public class ActivationSchedule implements Serializable {
     @Temporal(TemporalType.DATE)
     @Column(name = "deactivation_date", nullable = false)
     private Date deactivationDate;
-    @ManyToOne
-    @JoinColumn(name = "id_order", nullable = false)
-    private Order order;
-
-    public ActivationSchedule() {
-    }
-
-    public Date getActivationDate() {
-        return activationDate;
-    }
-
-    public void setActivationDate(Date activationDate) {
-        this.activationDate = activationDate;
-    }
-
-    public Date getDeactivationDate() {
-        return deactivationDate;
-    }
-
-    public void setDeactivationDate(Date deactivationDate) {
-        this.deactivationDate = deactivationDate;
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 }

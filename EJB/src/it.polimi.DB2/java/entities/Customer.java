@@ -2,7 +2,6 @@ package entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 
 @Entity
 @Table(name = "customer", schema = "db2_project")
@@ -54,6 +53,9 @@ public class Customer implements User, Serializable, Comparable<Customer> {
         this.numFailedPayments = this.numFailedPayments + 1;
     }
 
+    public boolean isAudit() {
+        return numFailedPayments >= 3;
+    }
 
     @Override
     public int compareTo(Customer o) {

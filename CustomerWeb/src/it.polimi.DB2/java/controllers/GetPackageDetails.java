@@ -46,7 +46,6 @@ public class GetPackageDetails extends HttpServletThymeleaf {
             request.getSession().setAttribute("BuyService", buyService);
             buyService.initOrder(servicePackage);
 
-
             renderPage(request, response, buyService, null);
         } catch (NumberFormatException | ServicePackageException e) {
             response.sendRedirect(request.getContextPath());

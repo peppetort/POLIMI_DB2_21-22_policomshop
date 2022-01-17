@@ -44,8 +44,10 @@ public class OrderService {
             } else {
                 order.setStatus(Order.State.PAYMENT_FAILED);
                 customer.addOneFailedPayment();
-                AuditCustomer a = new AuditCustomer(customer, order.getTotalMonthlyFee(), order.getCreationDate());
-                em.persist(a);
+                if (customer.isAudit()) {
+                    AuditCustomer a = new AuditCustomer(customer, order.getTotalMonthlyFee(), order.getCreationDate());
+                    em.persist(a);
+                }
             }
             em.persist(order);
             return isPaymentValid;

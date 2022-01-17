@@ -14,7 +14,6 @@ import javax.persistence.PersistenceException;
 import javax.ws.rs.BadRequestException;
 import java.io.Serializable;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Http Session is a perfect storage place where all request from same web client have access
@@ -129,8 +128,10 @@ public class BuyService implements Serializable {
         } else {
             order.setStatus(Order.State.PAYMENT_FAILED);
             customer.addOneFailedPayment();
-            AuditCustomer a = new AuditCustomer(customer, order.getTotalMonthlyFee(), order.getCreationDate());
-            em.persist(a);
+            if (customer.isAudit()) {
+                AuditCustomer a = new AuditCustomer(customer, order.getTotalMonthlyFee(), order.getCreationDate());
+                em.persist(a);
+            }
             em.merge(customer);
         }
         em.persist(order);

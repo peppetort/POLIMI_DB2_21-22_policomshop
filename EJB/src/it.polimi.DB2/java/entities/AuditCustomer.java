@@ -17,7 +17,7 @@ public class AuditCustomer {
     @Column(name = "date")
     private Date date;
     @ManyToOne
-    @JoinColumn(name = "id_customer", nullable = false)
+    @JoinColumn(name = "id_customer", updatable = false, nullable = false)
     private Customer customer;
 
     public AuditCustomer() {

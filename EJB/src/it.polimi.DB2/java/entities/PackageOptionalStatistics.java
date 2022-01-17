@@ -17,10 +17,10 @@ public class PackageOptionalStatistics {
     @Column(name = "num_purchases")
     private int numPurchases;
     @ManyToOne
-    @JoinColumn(name = "id_package", nullable = false)
+    @JoinColumn(name = "id_package", nullable = false, updatable = false)
     private ServicePackage servicePackage;
     @ManyToOne
-    @JoinColumn(name = "id_optional", nullable = false)
+    @JoinColumn(name = "id_optional", nullable = false, updatable = false)
     private OptionalProduct optionalProduct;
 
     public int getNumPurchases() {

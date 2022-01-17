@@ -2,7 +2,6 @@ package entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -19,7 +18,7 @@ public class Offer implements Serializable {
     @Column(name = "is_active")
     private boolean active;
     @ManyToOne
-    @JoinColumn(name = "id_package")
+    @JoinColumn(name = "id_package", nullable = false, updatable = false)
     private ServicePackage servicePackage;
 
     public Offer() {

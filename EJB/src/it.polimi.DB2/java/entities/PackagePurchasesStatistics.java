@@ -21,7 +21,7 @@ public class PackagePurchasesStatistics {
     @Column(name = "amount_without_optional")
     private double amountWithoutOptional;
     @ManyToOne
-    @JoinColumn(name = "id_package", nullable = false)
+    @JoinColumn(name = "id_package", nullable = false, updatable = false)
     private ServicePackage servicePackage;
 
     public int getValidityPeriod() {
