@@ -22,15 +22,15 @@ public class Customer implements User, Serializable {
     private int numFailedPayments;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Order> orders;
-    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private AuditCustomer auditCustomer;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<AuditCustomer> auditCustomers;
 
-    public AuditCustomer getAuditCustomer() {
-        return auditCustomer;
+    public List<AuditCustomer> getAuditCustomer() {
+        return auditCustomers;
     }
 
-    public void setAuditCustomer(AuditCustomer auditCustomer) {
-        this.auditCustomer = auditCustomer;
+    public void setAuditCustomer(List<AuditCustomer> auditCustomer) {
+        this.auditCustomers = auditCustomer;
     }
 
     public Long getId() {

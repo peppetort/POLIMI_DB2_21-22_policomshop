@@ -24,6 +24,22 @@ public class ActivationSchedule implements Serializable {
     public ActivationSchedule() {
     }
 
+    public Date getActivationDate() {
+        return activationDate;
+    }
+
+    public void setActivationDate(Date activationDate) {
+        this.activationDate = activationDate;
+    }
+
+    public Date getDeactivationDate() {
+        return deactivationDate;
+    }
+
+    public void setDeactivationDate(Date deactivationDate) {
+        this.deactivationDate = deactivationDate;
+    }
+
     public Order getOrder() {
         return order;
     }
