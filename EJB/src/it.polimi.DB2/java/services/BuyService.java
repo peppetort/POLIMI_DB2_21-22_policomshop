@@ -64,6 +64,7 @@ public class BuyService implements Serializable {
         for (OptionalProduct o : servicePackage.getOptionalProductList()) {
             optionalProductBooleanMap.put(o, Boolean.FALSE);
         }
+        order.getOptionalProductSet().clear();
 
         if (order.getOffer() != null) {
             order.setTotalMonthlyFee(order.getOffer().getMonthlyFee());
@@ -82,8 +83,8 @@ public class BuyService implements Serializable {
             }
             double tot = order.getTotalMonthlyFee();
             order.setTotalMonthlyFee(tot + optionalProduct.getMonthlyFee());
+            order.getOptionalProductSet().add(optionalProduct);
         }
-        order.getOptionalProductSet().addAll(optionalProductBooleanMap.keySet());
     }
 
     public void setStartDate(Date date) {
