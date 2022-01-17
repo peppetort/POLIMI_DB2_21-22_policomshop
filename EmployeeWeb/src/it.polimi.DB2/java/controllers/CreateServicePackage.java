@@ -1,6 +1,5 @@
 package controllers;
 
-import entities.OptionalProduct;
 import entities.Service;
 import exception.OfferException;
 import exception.OptionalProductException;
@@ -10,6 +9,7 @@ import org.thymeleaf.util.StringUtils;
 import services.OfferService;
 import services.OptionalProductService;
 import services.PackageService;
+import utils.Pair;
 
 import javax.ejb.EJB;
 import javax.persistence.PersistenceException;
@@ -17,10 +17,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.BadRequestException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @WebServlet(name = "CreateServicePackage", urlPatterns = "/CreateServicePackage")
 public class CreateServicePackage extends HttpServlet {
@@ -41,15 +42,22 @@ public class CreateServicePackage extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String name = request.getParameter("spName");
-        String validityPeriod = request.getParameter("spValidityPeriod");
-        String monthFee = request.getParameter("spMonthFee");
+        String validityPeriodAndFees = request.getParameter("validityPeriodAndFees");
         String fixedInternet = request.getParameter("fixedInternetRadio");
         String mobileInternet = request.getParameter("mobileInternetRadio");
         String mobilePhone = request.getParameter("mobilePhoneRadio");
         String fixedPhone = request.getParameter("fixedPhoneRadio");
         String[] optionalProductIdList = request.getParameterValues("opProd");
 
-        if (StringUtils.isEmptyOrWhitespace(name) || StringUtils.isEmptyOrWhitespace(validityPeriod) || StringUtils.isEmptyOrWhitespace(monthFee)) {
+
+        Pattern pattern = Pattern.compile("(\\d+:\\d+[,]?)+");
+        Matcher matcher = pattern.matcher(validityPeriodAndFees);
+        List<Pair<Integer, Double>> validityPeriodAndMonthlyFee = new ArrayList<>();
+        while (matcher.find()) {
+            String[] values = matcher.group().replace(",", "").split(":");
+            validityPeriodAndMonthlyFee.add(new Pair<>(Integer.parseInt(values[0]), Double.parseDouble(values[1])));
+        }
+        if (StringUtils.isEmptyOrWhitespace(name) || StringUtils.isEmptyOrWhitespace(validityPeriodAndFees)) {
             response.sendRedirect(request.getContextPath());
             return;
         }
@@ -61,18 +69,14 @@ public class CreateServicePackage extends HttpServlet {
 
         List<Long> servicesIDs = new ArrayList<>();
         List<Long> optionalProductsIdList = new ArrayList<>();
-        int validityPeriodInt;
-        double monthFeeD;
 
         try {
-            validityPeriodInt = Integer.parseInt(validityPeriod);
-            monthFeeD = Double.parseDouble(monthFee);
-
-            if (validityPeriodInt < 1 || monthFeeD < 0) {
-                response.sendRedirect(request.getContextPath());
-                return;
+            for (Pair<Integer, Double> p : validityPeriodAndMonthlyFee) {
+                if (p.getObject1() < 1 || p.getObject2() < 0) {
+                    response.sendRedirect(request.getContextPath());
+                    return;
+                }
             }
-
             if (fixedInternet != null) {
                 long fixedInternetId = Integer.parseInt(fixedInternet);
                 Service s = packageService.getServiceById(fixedInternetId);
@@ -121,7 +125,9 @@ public class CreateServicePackage extends HttpServlet {
             }
 
             Long newServicePackageId = packageService.createNewServicePackage(name, servicesIDs, optionalProductsIdList);
-            offerService.createNewOffer(newServicePackageId, validityPeriodInt, monthFeeD);
+            for (Pair<Integer, Double> p : validityPeriodAndMonthlyFee) {
+                offerService.createNewOffer(newServicePackageId, p.getObject1(), p.getObject2());
+            }
             response.sendRedirect(getServletContext().getContextPath());
 
         } catch (NumberFormatException | ServiceException | OptionalProductException | ServicePackageException | OfferException e) {

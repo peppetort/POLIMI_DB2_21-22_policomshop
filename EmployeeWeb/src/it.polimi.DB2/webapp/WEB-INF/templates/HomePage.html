@@ -26,14 +26,10 @@
                 <input class="form-control" id="spName" name="spName" placeholder="Enter package name" type="text">
             </div>
             <div class="form-group" style="margin-bottom: 20px">
-                <label for="validityPeriod">Validity period</label>
-                <input class="form-control" id="validityPeriod" name="spValidityPeriod" placeholder="Enter months"
-                       type="number">
-            </div>
-            <div class="form-group" style="margin-bottom: 20px">
-                <label for="monthFee">Fee</label>
-                <input class="form-control" id="monthFee" name="spMonthFee" placeholder="Enter fee" type="number"
-                       step="any">
+                <label for="validityPeriod">Validity period and fee</label>
+                <input class="form-control" id="validityPeriod" name="validityPeriodAndFees"
+                       placeholder="mm:fee, 36:6, ..." type="text">
+                <small>Legend: insert values as durationInMoths:MonthlyFee, ...</small>
             </div>
             <div th:if="${fixedInternet.size() > 0 || mobileInternet.size() > 0 || mobilePhone.size() > 0 || fixedPhone != null }">
                 <span>Choose services to add</span>
