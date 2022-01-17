@@ -18,10 +18,6 @@
     </filter-mapping>
     <filter-mapping>
         <filter-name>LoggedIn</filter-name>
-        <servlet-name>CreateOptionalProduct</servlet-name>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>LoggedIn</filter-name>
-        <servlet-name>CreateServicePackage</servlet-name>
+        <servlet-name>Report</servlet-name>
     </filter-mapping>
 </web-app>
