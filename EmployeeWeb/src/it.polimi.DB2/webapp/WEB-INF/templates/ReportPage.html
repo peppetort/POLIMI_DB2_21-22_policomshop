@@ -112,6 +112,68 @@
             </div>
         </div>
     </div>
+    <div class="accordion-item" th:if="${optionalProductNumberPurchases.size() > 0}">
+        <h2 class="accordion-header" id="headingOptionalProductNumberPurchases">
+            <button aria-controls="collapseOptionalProductNumberPurchases" aria-expanded="false"
+                    class="accordion-button collapsed"
+                    data-bs-target="#collapseOptionalProductNumberPurchases" data-bs-toggle="collapse" type="button">
+                Optional products sales
+            </button>
+        </h2>
+        <div aria-labelledby="headingOptionalProductNumberPurchases" class="accordion-collapse collapse"
+             data-bs-parent="#accordion"
+             id="collapseOptionalProductNumberPurchases">
+            <div class="accordion-body">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Number purchases</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="row, rowStat : ${optionalProductNumberPurchases}">
+                        <th scope="row" th:text="${rowStat.count}">1</th>
+                        <td th:text="${row.key.getName()}">Mark</td>
+                        <td th:text="${row.value}">Mark</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item" th:if="${averageOptionalServicePackage.size() > 0}">
+        <h2 class="accordion-header" id="headingAverageOptionalServicePackage">
+            <button aria-controls="collapseAverageOptionalServicePackage" aria-expanded="false"
+                    class="accordion-button collapsed"
+                    data-bs-target="#collapseAverageOptionalServicePackage" data-bs-toggle="collapse" type="button">
+                Optional products sales
+            </button>
+        </h2>
+        <div aria-labelledby="headingAverageOptionalServicePackage" class="accordion-collapse collapse"
+             data-bs-parent="#accordion"
+             id="collapseAverageOptionalServicePackage">
+            <div class="accordion-body">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Number purchases</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="row, rowStat : ${averageOptionalServicePackage}">
+                        <th scope="row" th:text="${rowStat.count}">1</th>
+                        <td th:text="${row.getObject1().getName()}">Mark</td>
+                        <td th:text="${row.getObject2()}">Mark</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 <h3>Suspend Order</h3>

@@ -1,19 +1,15 @@
-drop procedure if exists updateStatOptionalPackage;
-drop trigger if exists UpdatePurchasesStatOptionalOnInsert;
+drop trigger if exists UpdatePurchasesStatOptional_AFTER_INSERT;
 
-create procedure updateStatOptionalPackage(idOptionalProd int, idServicePackage int)
-        if(select count(*) from stat_optional_package where id_optional = idOptionalProd and id_service_package = idServicePackage) > 0 then
-            update stat_optional_package set num_purchases = num_purchases + 1;
-        else
-            insert into stat_optional_package values (idOptionalProd, idServicePackage, 1);
-        end if;
-end;
-
-create trigger UpdatePurchasesStatOptionalOnInsert
+create trigger UpdatePurchasesStatOptional_AFTER_INSERT
     after insert on order_to_optional_product
     for each row
 begin
     declare idServicePackage int;
-    select id_package into idServicePackage from offer where id = (select id_offer  from `order` where id = new.id_order);
-    call updateStatOptionalPackage(new.id_optional_product, idServicePackage);
+    select id_package into idServicePackage from offer where id in (select id_offer  from `order` where id = new.id_order);
+
+    if exists(select * from stat_optional_package where id_optional = new.id_optional_product and id_package = idServicePackage) then
+        update stat_optional_package set num_purchases = num_purchases + 1 where id_optional = new.id_optional_product and id_package = idServicePackage;
+    else
+        insert into stat_optional_package values (idServicePackage, new.id_optional_product, 1);
+    end if;
 end;

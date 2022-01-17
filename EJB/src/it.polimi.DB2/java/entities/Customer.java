@@ -7,7 +7,7 @@ import java.util.List;
 @Entity
 @Table(name = "customer", schema = "db2_project")
 @NamedQuery(name = "Customer.checkCredentials", query = "SELECT r FROM Customer r  WHERE r.email = ?1 and r.password = ?2")
-public class Customer implements User, Serializable {
+public class Customer implements User, Serializable, Comparable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -80,5 +80,14 @@ public class Customer implements User, Serializable {
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        if (!(o instanceof Customer)) {
+            return -1;
+        }
+        Customer o1 = (Customer) o;
+        return (int) (this.id - o1.id);
     }
 }

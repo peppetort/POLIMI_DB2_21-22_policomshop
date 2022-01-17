@@ -1,6 +1,6 @@
 -- MariaDB dump 10.19  Distrib 10.6.5-MariaDB, for Linux (x86_64)
 --
--- Host: 127.0.0.1    Database: db2_project
+-- Host: localhost    Database: db2_project
 -- ------------------------------------------------------
 -- Server version	10.6.5-MariaDB
 
@@ -38,9 +38,36 @@ CREATE TABLE `order_to_optional_product` (
 
 LOCK TABLES `order_to_optional_product` WRITE;
 /*!40000 ALTER TABLE `order_to_optional_product` DISABLE KEYS */;
-INSERT INTO `order_to_optional_product` VALUES (168,2),(168,1),(170,2),(170,1),(171,2),(171,1),(172,2),(172,1),(174,1),(174,3),(174,4);
+INSERT INTO `order_to_optional_product` VALUES (168,2),(168,1),(170,2),(170,1),(171,2),(171,1),(172,2),(172,1),(174,1),(174,3),(174,4),(178,1),(178,3),(178,4),(180,1),(180,3),(180,4),(182,1),(182,3),(182,4);
 /*!40000 ALTER TABLE `order_to_optional_product` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`juri`@`localhost`*/ /*!50003 trigger UpdatePurchasesStatOptional_AFTER_INSERT
+    after insert on order_to_optional_product
+    for each row
+begin
+    declare idServicePackage int;
+    select id_package into idServicePackage from offer where id in (select id_offer  from `order` where id = new.id_order);
+
+    if exists(select * from stat_optional_package where id_optional = new.id_optional_product and id_package = idServicePackage) then
+        update stat_optional_package set num_purchases = num_purchases + 1 where id_optional = new.id_optional_product and id_package = idServicePackage;
+    else
+        insert into stat_optional_package values (idServicePackage, new.id_optional_product, 1);
+    end if;
+end */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -51,4 +78,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-16 21:25:06
+-- Dump completed on 2022-01-17 13:13:03

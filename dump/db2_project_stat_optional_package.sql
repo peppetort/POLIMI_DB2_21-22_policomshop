@@ -1,6 +1,6 @@
 -- MariaDB dump 10.19  Distrib 10.6.5-MariaDB, for Linux (x86_64)
 --
--- Host: 127.0.0.1    Database: db2_project
+-- Host: localhost    Database: db2_project
 -- ------------------------------------------------------
 -- Server version	10.6.5-MariaDB
 
@@ -39,7 +39,7 @@ CREATE TABLE `stat_optional_package` (
 
 LOCK TABLES `stat_optional_package` WRITE;
 /*!40000 ALTER TABLE `stat_optional_package` DISABLE KEYS */;
-INSERT INTO `stat_optional_package` VALUES (2,1,7),(2,2,7);
+INSERT INTO `stat_optional_package` VALUES (2,1,7),(11,1,1),(2,2,7),(11,3,1),(11,4,1);
 /*!40000 ALTER TABLE `stat_optional_package` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-16 21:25:06
+-- Dump completed on 2022-01-17 13:13:04

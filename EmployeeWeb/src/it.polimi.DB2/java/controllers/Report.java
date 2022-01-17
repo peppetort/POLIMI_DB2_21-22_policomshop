@@ -52,7 +52,7 @@ public class Report extends HttpServletThymeleaf {
 
             List<PackageOptionalStatistics> packageOptionalStatisticsList = reportService.getAllStatPackageOptional();
             Map<ServicePackage, Pair<Integer, Integer>> servicePackagePairMap = new HashMap<>(); //obj1 num distinct optional prod - obj2 tot num of optioanl
-            Map<OptionalProduct, Integer> optionalProductIntegerMap = new HashMap<>();
+            Map<OptionalProduct, Integer> optionalProductNumberPurchases = new HashMap<>();
             for (PackageOptionalStatistics s : packageOptionalStatisticsList) {
                 Pair<Integer, Integer> temp = servicePackagePairMap.get(s.getServicePackage());
                 if (temp != null) {
@@ -62,13 +62,19 @@ public class Report extends HttpServletThymeleaf {
                 }
                 servicePackagePairMap.put(s.getServicePackage(), temp);
 
-                Integer flag = optionalProductIntegerMap.get(s.getOptionalProduct());
+                Integer flag = optionalProductNumberPurchases.get(s.getOptionalProduct());
                 if (flag != null) {
                     flag += s.getNumPurchases();
                 } else {
                     flag = s.getNumPurchases();
                 }
-                optionalProductIntegerMap.put(s.getOptionalProduct(), flag);
+                optionalProductNumberPurchases.put(s.getOptionalProduct(), flag);
+            }
+
+            List<Pair<ServicePackage, Double>> averageOptionalServicePackage = new ArrayList<>();
+
+            for (Map.Entry<ServicePackage, Pair<Integer, Integer>> s : servicePackagePairMap.entrySet()) {
+                averageOptionalServicePackage.add(new Pair<ServicePackage, Double>(s.getKey(), (double) (s.getValue().getObject1() / s.getValue().getObject2())));
             }
 
             List<Order> suspendedOrders = reportService.getSuspendedOrder();
@@ -83,6 +89,8 @@ public class Report extends HttpServletThymeleaf {
             ctx.setVariable("user", request.getSession().getAttribute("user"));
             ctx.setVariable("numberPurchases", numberPurchases);
             ctx.setVariable("numberPurchasesForValidityPeriod", numberPurchasesForValidityPeriod);
+            ctx.setVariable("averageOptionalServicePackage", averageOptionalServicePackage);
+            ctx.setVariable("optionalProductNumberPurchases", optionalProductNumberPurchases);
             ctx.setVariable("amountPurchases", amountPurchases);
             ctx.setVariable("suspendedOrder", suspendedOrders);
             ctx.setVariable("insolventCustomer", insolventCustomer);
