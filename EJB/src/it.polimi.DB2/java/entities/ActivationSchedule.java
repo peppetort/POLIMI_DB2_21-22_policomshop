@@ -2,6 +2,7 @@ package entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Table(name = "activation_schedule", schema = "db2_project")
@@ -10,12 +11,12 @@ public class ActivationSchedule implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "id_package", nullable = false)
-    private ServicePackage servicePackage;
-    @ManyToOne
-    @JoinColumn(name = "id_offer", nullable = false)
-    private Offer offer;
+    @Temporal(TemporalType.DATE)
+    @Column(name = "activation_date", nullable = false)
+    private Date activationDate;
+    @Temporal(TemporalType.DATE)
+    @Column(name = "deactivation_date", nullable = false)
+    private Date deactivationDate;
     @ManyToOne
     @JoinColumn(name = "id_order", nullable = false)
     private Order order;
@@ -23,20 +24,20 @@ public class ActivationSchedule implements Serializable {
     public ActivationSchedule() {
     }
 
-    public ServicePackage getServicePackage() {
-        return servicePackage;
+    public Date getActivationDate() {
+        return activationDate;
     }
 
-    public void setServicePackage(ServicePackage servicePackage) {
-        this.servicePackage = servicePackage;
+    public void setActivationDate(Date activationDate) {
+        this.activationDate = activationDate;
     }
 
-    public Offer getOffer() {
-        return offer;
+    public Date getDeactivationDate() {
+        return deactivationDate;
     }
 
-    public void setOffer(Offer offer) {
-        this.offer = offer;
+    public void setDeactivationDate(Date deactivationDate) {
+        this.deactivationDate = deactivationDate;
     }
 
     public Order getOrder() {

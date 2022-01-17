@@ -17,7 +17,7 @@ public class AuditCustomer {
     @Column(name = "date")
     private Date lastRejection;
     @ManyToOne
-    @JoinColumn(name = "id_customer", referencedColumnName = "id")
+    @JoinColumn(name = "id_customer", nullable = false)
     private Customer customer;
 
     public AuditCustomer() {

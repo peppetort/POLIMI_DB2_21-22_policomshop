@@ -37,11 +37,9 @@ public class BuyService implements Serializable {
     private ServicePackage servicePackage;
     private Map<OptionalProduct, Boolean> optionalProductBooleanMap;
 
-    public void initOrder(Long idService) throws PersistenceException, ServicePackageException {
+    public void initOrder(ServicePackage servicePackage) throws PersistenceException, ServicePackageException {
         order = new Order();
         optionalProductBooleanMap = new HashMap<>();
-        ServicePackage servicePackage = em.find(ServicePackage.class, idService);
-        if (servicePackage == null) throw new ServicePackageException("Service Pacakge not found");
         this.servicePackage = servicePackage;
         for (OptionalProduct o : servicePackage.getOptionalProductList()) {
             optionalProductBooleanMap.put(o, Boolean.FALSE);
@@ -67,6 +65,7 @@ public class BuyService implements Serializable {
         for (OptionalProduct o : servicePackage.getOptionalProductList()) {
             optionalProductBooleanMap.put(o, Boolean.FALSE);
         }
+        order.getOptionalProductSet().clear();
 
         if (order.getOffer() != null) {
             order.setTotalMonthlyFee(order.getOffer().getMonthlyFee());
@@ -85,8 +84,8 @@ public class BuyService implements Serializable {
             }
             double tot = order.getTotalMonthlyFee();
             order.setTotalMonthlyFee(tot + optionalProduct.getMonthlyFee());
+            order.getOptionalProductSet().add(optionalProduct);
         }
-        order.addOptionalProducts(optionalProductBooleanMap.entrySet().parallelStream().filter(Map.Entry::getValue).map(Map.Entry::getKey).collect(Collectors.toSet()));
     }
 
     public void setStartDate(Date date) {

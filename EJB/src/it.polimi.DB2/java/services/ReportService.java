@@ -17,35 +17,35 @@ public class ReportService {
     @PersistenceContext(unitName = "db2_project")
     EntityManager em;
 
-    public Map<Offer, Long> getTotalPurchasePerPackageAndValidityPeriod() {
-        try {
-            Map<Offer, Long> stat = new HashMap<>();
-            List<Offer> offerList = em.createQuery("select o from Offer o order by o.servicePackage.id", Offer.class).getResultList();
+//    public Map<Offer, Long> getTotalPurchasePerPackageAndValidityPeriod() {
+//        try {
+//            Map<Offer, Long> stat = new HashMap<>();
+//            List<Offer> offerList = em.createQuery("select o from Offer o order by o.servicePackage.id", Offer.class).getResultList();
+//
+//            for (Offer o : offerList) {
+//                Long numberOfPurchasedOffer = em.createQuery("select count(a) from ActivationSchedule a where a.offer.id = :offerId ", Long.class).setParameter("offerId", o.getId()).getSingleResult();
+//                stat.put(o, numberOfPurchasedOffer);
+//            }
+//
+//            return stat;
+//        } catch (PersistenceException e) {
+//            throw new BadRequestException();
+//        }
+//    }
 
-            for (Offer o : offerList) {
-                Long numberOfPurchasedOffer = em.createQuery("select count(a) from ActivationSchedule a where a.offer.id = :offerId ", Long.class).setParameter("offerId", o.getId()).getSingleResult();
-                stat.put(o, numberOfPurchasedOffer);
-            }
-
-            return stat;
-        } catch (PersistenceException e) {
-            throw new BadRequestException();
-        }
-    }
-
-    public List<PackagePurchasesStatistics> getAllStatPackagePurchases() {
+    public List<PackagePurchasesStatistics> getAllStatPackagePurchases() throws PersistenceException{
         return em.createQuery("select stat from PackagePurchasesStatistics stat", PackagePurchasesStatistics.class).getResultList();
     }
 
-    public List<PackageOptionalStatistics> getAllStatPackageOptional() {
+    public List<PackageOptionalStatistics> getAllStatPackageOptional() throws PersistenceException {
         return em.createQuery("select stat from PackageOptionalStatistics stat", PackageOptionalStatistics.class).getResultList();
     }
 
-    public List<AuditCustomer> getAllAuditCustomer() {
+    public List<AuditCustomer> getAllAuditCustomer() throws PersistenceException{
         return em.createQuery("select ac from AuditCustomer ac", AuditCustomer.class).getResultList();
     }
 
-    public List<Order> getSuspendedOrder() {
+    public List<Order> getSuspendedOrder() throws PersistenceException{
         return em.createQuery("select o from Order o where o.status = ?1", Order.class).setParameter(1, Order.State.PAYMENT_FAILED).getResultList();
     }
 }

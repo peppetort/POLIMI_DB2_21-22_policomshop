@@ -1,5 +1,6 @@
 package controllers;
 
+import entities.ServicePackage;
 import exception.ServicePackageException;
 import org.thymeleaf.context.WebContext;
 import services.BuyService;
@@ -37,13 +38,13 @@ public class GetPackageDetails extends HttpServletThymeleaf {
 
             String servicePackageIdParam = request.getParameter("id_sp");
             Long servicePackageId = Long.parseLong(servicePackageIdParam);
-            packageService.findById(servicePackageId);
+            ServicePackage servicePackage = packageService.findById(servicePackageId);
 
             InitialContext ic = new InitialContext();
             // Retrieve the EJB using JNDI lookup
             buyService = (BuyService) ic.lookup("java:module/BuyService");
             request.getSession().setAttribute("BuyService", buyService);
-            buyService.initOrder(servicePackageId);
+            buyService.initOrder(servicePackage);
 
 
             renderPage(request, response, buyService, null);
