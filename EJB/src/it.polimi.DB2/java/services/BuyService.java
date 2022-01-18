@@ -129,7 +129,7 @@ public class BuyService implements Serializable {
             order.setStatus(Order.State.PAYMENT_FAILED);
             customer.addOneFailedPayment();
             if (customer.isAudit()) {
-                AuditCustomer a = new AuditCustomer(customer, order.getTotalMonthlyFee(), order.getCreationDate());
+                AuditCustomer a = new AuditCustomer(customer, order.getTotalMonthlyFee());
                 em.persist(a);
             }
             em.merge(customer);

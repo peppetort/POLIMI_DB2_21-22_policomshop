@@ -23,10 +23,10 @@ public class AuditCustomer {
     public AuditCustomer() {
     }
 
-    public AuditCustomer(Customer customer, double amount, Date date) {
+    public AuditCustomer(Customer customer, double amount) {
         this.customer = customer;
         this.amount = amount;
-        this.date = date;
+        this.date = new Date();
     }
 
     public double getAmount() {
