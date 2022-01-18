@@ -10,7 +10,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.BadRequestException;
 import java.io.IOException;
 
 @WebServlet(name = "CreateOptionalProduct", urlPatterns = "/CreateOptionalProduct")
@@ -39,10 +38,10 @@ public class CreateOptionalProduct extends HttpServlet {
             optionalProdService.createNewOptionalProduct(name, monthlyFee);
 
             response.sendRedirect(getServletContext().getContextPath());
-        }catch (NumberFormatException | OptionalProductException e){
+        } catch (NumberFormatException | OptionalProductException e) {
             request.getSession().setAttribute("errorMessageOptionalProduct", e.getMessage());
             response.sendRedirect(getServletContext().getContextPath());
-        }catch (PersistenceException e){
+        } catch (PersistenceException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }

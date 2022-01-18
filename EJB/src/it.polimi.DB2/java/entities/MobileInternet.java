@@ -13,6 +13,7 @@ public class MobileInternet extends Service {
     private int nGigabytes;
     @Column(name = "fee")
     private double feeGigabytes;
+
     public int getnGigabytes() {
         return nGigabytes;
     }

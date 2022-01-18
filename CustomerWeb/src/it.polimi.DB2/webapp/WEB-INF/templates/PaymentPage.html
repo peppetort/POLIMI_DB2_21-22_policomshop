@@ -17,14 +17,14 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light"
      th:replace="fragments/navbar :: navbar">
 </nav>
-<main role="main" class="container" style="text-align: center">
+<main class="container" role="main" style="text-align: center">
 
 
     <div class="starter-template" style="margin-top: 40px">
-        <h1 th:if="${result == true}" style="color: green">Payment completed</h1>
-        <h1 th:if="${result == false}" style="color: darkred">Payment failed</h1>
-        <p th:if="${result == true}" class="lead">Thanks for your purchase</p>
-        <p th:if="${result == false}" class="lead">You can retry from your <a href="/Customer">Home Page</a></p>
+        <h1 style="color: green" th:if="${result == true}">Payment completed</h1>
+        <h1 style="color: darkred" th:if="${result == false}">Payment failed</h1>
+        <p class="lead" th:if="${result == true}">Thanks for your purchase</p>
+        <p class="lead" th:if="${result == false}">You can retry from your <a href="/Customer">Home Page</a></p>
     </div>
 </main>
 </body>

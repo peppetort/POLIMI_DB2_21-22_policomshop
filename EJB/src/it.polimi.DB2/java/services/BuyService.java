@@ -1,7 +1,6 @@
 package services;
 
 import entities.*;
-import exception.ServicePackageException;
 import utils.PaymentRevisionBot;
 
 import javax.ejb.Remove;
@@ -36,7 +35,7 @@ public class BuyService implements Serializable {
     private ServicePackage servicePackage;
     private Map<OptionalProduct, Boolean> optionalProductBooleanMap;
 
-    public void initOrder(ServicePackage servicePackage) throws PersistenceException, ServicePackageException {
+    public void initOrder(ServicePackage servicePackage) throws PersistenceException {
         order = new Order();
         optionalProductBooleanMap = new HashMap<>();
         this.servicePackage = servicePackage;

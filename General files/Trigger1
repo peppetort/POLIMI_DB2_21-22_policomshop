@@ -21,6 +21,5 @@ create trigger UpdateAmountOptionalStat_AFTER_INSERT
     after insert on order_to_optional_product
     for each row
 begin
-
     update stat_service_package set amount_for_optional_prods = amount_for_optional_prods + (select monthly_fee from optional_product where id = new.id_optional_product);
 end;

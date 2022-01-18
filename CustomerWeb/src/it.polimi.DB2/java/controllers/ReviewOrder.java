@@ -1,6 +1,6 @@
 package controllers;
 
-import entities.*;
+import entities.Customer;
 import org.thymeleaf.context.WebContext;
 import services.BuyService;
 

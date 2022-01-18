@@ -1,6 +1,5 @@
 package controllers;
 
-import entities.Customer;
 import exception.UserExeption;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.util.StringUtils;

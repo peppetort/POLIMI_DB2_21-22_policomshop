@@ -17,7 +17,7 @@ public class ReportService {
     @PersistenceContext(unitName = "db2_project")
     EntityManager em;
 
-    public List<PackagePurchasesStatistics> getAllStatPackagePurchases() throws PersistenceException{
+    public List<PackagePurchasesStatistics> getAllStatPackagePurchases() throws PersistenceException {
         return em.createQuery("select stat from PackagePurchasesStatistics stat", PackagePurchasesStatistics.class).getResultList();
     }
 
@@ -25,11 +25,11 @@ public class ReportService {
         return em.createQuery("select stat from PackageOptionalStatistics stat", PackageOptionalStatistics.class).getResultList();
     }
 
-    public List<AuditCustomer> getAllAuditCustomer() throws PersistenceException{
+    public List<AuditCustomer> getAllAuditCustomer() throws PersistenceException {
         return em.createQuery("select ac from AuditCustomer ac", AuditCustomer.class).getResultList();
     }
 
-    public List<Order> getSuspendedOrder() throws PersistenceException{
+    public List<Order> getSuspendedOrder() throws PersistenceException {
         return em.createQuery("select o from Order o where o.status = ?1", Order.class).setParameter(1, Order.State.PAYMENT_FAILED).getResultList();
     }
 }

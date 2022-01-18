@@ -46,7 +46,7 @@ public class UserService {
         throw new UserExeption("User not found");
     }
 
-    public Customer registerNewUser(String username, String email, String psw) throws PersistenceException, UserExeption {
+    public void registerNewUser(String username, String email, String psw) throws PersistenceException, UserExeption {
         Customer newUser = new Customer();
         newUser.setEmail(email);
         newUser.setPassword(psw);
@@ -55,11 +55,10 @@ public class UserService {
             em.persist(newUser);
             em.flush();
         } catch (PersistenceException e) {
-            if (e.getCause().getMessage().contains("java.sql.SQLIntegrityConstraintViolationException")){
+            if (e.getCause().getMessage().contains("java.sql.SQLIntegrityConstraintViolationException")) {
                 throw new UserExeption("User already exists");
             }
             throw new PersistenceException();
         }
-        return newUser;
     }
 }

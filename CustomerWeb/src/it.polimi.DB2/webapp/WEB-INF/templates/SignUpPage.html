@@ -128,10 +128,6 @@
             margin: 0 auto;
         }
 
-        .form-signin .checkbox {
-            font-weight: 400;
-        }
-
         .form-signin .form-control {
             position: relative;
             box-sizing: border-box;
@@ -162,21 +158,21 @@
 </head>
 
 <body class="text-center">
-<form class="form-signin" action="SignUp" method="post">
+<form action="SignUp" class="form-signin" method="post">
 
-    <a href="/Customer"><img class="mb-4" src="images/logo.png" alt=""  width="250"></a>
+    <a href="/Customer"><img alt="" class="mb-4" src="images/logo.png" width="250"></a>
     <h1 class="h3 mb-3 font-weight-normal">Customer SignUp</h1>
-    <label for="inputEmail" class="sr-only">Email address</label>
-    <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email address" required
-           autofocus>
-    <label for="inputUsername" class="sr-only">Username</label>
-    <input type="text" id="inputUsername" name="username" class="form-control" placeholder="Username" required
-           autofocus>
-    <label for="inputPassword" class="sr-only">Password</label>
-    <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
+    <label class="sr-only" for="inputEmail">Email address</label>
+    <input autofocus class="form-control" id="inputEmail" name="email" placeholder="Email address" required
+           type="email">
+    <label class="sr-only" for="inputUsername">Username</label>
+    <input autofocus class="form-control" id="inputUsername" name="username" placeholder="Username" required
+           type="text">
+    <label class="sr-only" for="inputPassword">Password</label>
+    <input class="form-control" id="inputPassword" name="password" placeholder="Password" required type="password">
     <p class="small fw-bold mt-2 pt-1 mb-0">Do you have an account? <a href="SignIn">Login</a>
     </p>
-    <a class="small" style="color: grey" href="/Employee">If you are an Employee click here</a>
+    <a class="small" href="/Employee" style="color: grey">If you are an Employee click here</a>
     <button class="btn btn-lg btn-primary btn-block" style="margin-top: 20px" type="submit">Sign in</button>
     <p class="text-danger" th:text="${errorMsg}">
     <p class="mt-5 mb-3 text-muted">&copy; 2021-2022</p>

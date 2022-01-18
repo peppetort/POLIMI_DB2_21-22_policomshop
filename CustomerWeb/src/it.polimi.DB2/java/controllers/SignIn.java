@@ -46,7 +46,7 @@ public class SignIn extends HttpServletThymeleaf {
             response.sendRedirect(servlet);
         } catch (UserExeption e) {
             renderPage(request, response, e.getMessage(), paymentInProgress != null);
-        }catch (PersistenceException e){
+        } catch (PersistenceException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }

@@ -50,22 +50,17 @@ public class Order implements Serializable {
         this.id = id;
     }
 
-    public void setCreationDate(Date creationDate) {
-        if (this.creationDate != null) throw new IllegalCallerException();
-        this.creationDate = creationDate;
-    }
-
     public Date getActivationDate() {
         return activationDate;
+    }
+
+    public void setActivationDate(Date startDate) {
+        this.activationDate = startDate;
     }
 
     public String getStartDateString() {
         if (activationDate == null) return null;
         return new SimpleDateFormat("yyyy-MM-dd").format(activationDate);
-    }
-
-    public void setActivationDate(Date startDate) {
-        this.activationDate = startDate;
     }
 
     public Date getDeactivationDate() {
@@ -76,24 +71,29 @@ public class Order implements Serializable {
         this.deactivationDate = deactivationDate;
     }
 
-    public void setStatus(State status) {
-        this.status = status;
-    }
-
     public State getStatus() {
         return status;
     }
 
-    public void setTotalMonthlyFee(double totalMonthlyFee) {
-        this.totalMonthlyFee = totalMonthlyFee;
+    public void setStatus(State status) {
+        this.status = status;
     }
 
     public double getTotalMonthlyFee() {
         return totalMonthlyFee;
     }
 
+    public void setTotalMonthlyFee(double totalMonthlyFee) {
+        this.totalMonthlyFee = totalMonthlyFee;
+    }
+
     public Date getCreationDate() {
         return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        if (this.creationDate != null) throw new IllegalCallerException();
+        this.creationDate = creationDate;
     }
 
     public Offer getOffer() {

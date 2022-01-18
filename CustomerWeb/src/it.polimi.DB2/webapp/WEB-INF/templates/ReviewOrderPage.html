@@ -55,8 +55,8 @@
                             <div th:if="${!buyService.getOptionalProduct().isEmpty()}">
                                 <b>Optional products:</b>
                                 <ul>
-                                    <li th:each="optProd: ${buyService.getOptionalProduct()}"
-                                        class="list-group-item" th:if="${optProd.value}">
+                                    <li class="list-group-item"
+                                        th:each="optProd: ${buyService.getOptionalProduct()}" th:if="${optProd.value}">
                                         <div style="display: flex;justify-content: space-between;">
                                             <b th:text="${optProd.key.getName()}">Optional prod name</b>
                                             <p>+<span
@@ -70,10 +70,11 @@
                             <div class=" text-center text-lg-start mt-4 pt-2"
                                  style="display: flex;justify-content: space-between;">
 
-                                <span style="font-size: 35px"><b th:text="${buyService.getOrder().getTotalMonthlyFee() + ' '}">35€</b> <span>&euro;/month</span></span>
-                                <a class="btn btn-primary btn-lg" th:href="@{/Payment}"
-                                   th:if="${user!=null}"
-                                   style="padding-left: 2.5rem; padding-right: 2.5rem;">Buy
+                                <span style="font-size: 35px"><b
+                                        th:text="${buyService.getOrder().getTotalMonthlyFee() + ' '}">35€</b> <span>&euro;/month</span></span>
+                                <a class="btn btn-primary btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem;"
+                                   th:href="@{/Payment}"
+                                   th:if="${user!=null}">Buy
                                 </a>
                                 <a th:href="@{/SignIn(paymentInProgress=true)}" th:unless="${user!=null}">Login to
                                     buy</a>

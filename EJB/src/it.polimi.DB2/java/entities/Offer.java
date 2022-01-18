@@ -47,8 +47,7 @@ public class Offer implements Serializable {
         return active;
     }
 
-
-    public ServicePackage getServicePackage(){
+    public ServicePackage getServicePackage() {
         return servicePackage;
     }
 

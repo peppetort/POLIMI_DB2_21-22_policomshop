@@ -12,7 +12,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-import javax.ws.rs.BadRequestException;
 import java.util.ArrayList;
 import java.util.List;
 

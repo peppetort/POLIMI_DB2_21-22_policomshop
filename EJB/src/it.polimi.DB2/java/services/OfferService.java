@@ -1,13 +1,11 @@
 package services;
 
 import entities.Offer;
-import entities.OptionalProduct;
 import entities.ServicePackage;
 import exception.OfferException;
 
 import javax.ejb.Stateless;
 import javax.persistence.*;
-import javax.ws.rs.BadRequestException;
 
 @Stateless
 public class OfferService {

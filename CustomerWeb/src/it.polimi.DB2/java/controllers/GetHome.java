@@ -3,7 +3,6 @@ package controllers;
 import entities.Customer;
 import entities.Order;
 import entities.ServicePackage;
-import exception.OrderException;
 import org.thymeleaf.context.WebContext;
 import services.OrderService;
 import services.PackageService;

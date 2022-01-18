@@ -7,7 +7,6 @@ import exception.ServiceException;
 import exception.ServicePackageException;
 import org.thymeleaf.util.StringUtils;
 import services.OfferService;
-import services.OptionalProductService;
 import services.PackageService;
 import utils.Pair;
 
@@ -28,8 +27,6 @@ public class CreateServicePackage extends HttpServlet {
 
     @EJB(name = "PackageService")
     PackageService packageService;
-    @EJB(name = "OptionalProdService")
-    OptionalProductService optionalProdService;
     @EJB(name = "OfferService")
     OfferService offerService;
 

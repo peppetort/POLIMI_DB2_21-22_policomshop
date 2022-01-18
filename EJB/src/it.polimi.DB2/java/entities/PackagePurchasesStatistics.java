@@ -44,6 +44,7 @@ public class PackagePurchasesStatistics {
         return servicePackage;
     }
 
+    @SuppressWarnings("FieldCanBeLocal")
     public static class PackageValidityPeriod implements Serializable {
         private Long idPackage;
         private int validityPeriod;

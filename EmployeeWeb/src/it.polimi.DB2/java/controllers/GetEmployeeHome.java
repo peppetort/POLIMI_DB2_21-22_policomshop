@@ -10,13 +10,12 @@ import javax.persistence.PersistenceException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.BadRequestException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet(name="GetEmployeeHome", urlPatterns = "/")
-public class GetEmployeeHome extends HttpServletThymeleaf{
+@WebServlet(name = "GetEmployeeHome", urlPatterns = "/")
+public class GetEmployeeHome extends HttpServletThymeleaf {
 
     @EJB(beanName = "PackageService")
     PackageService packageService;
@@ -42,11 +41,11 @@ public class GetEmployeeHome extends HttpServletThymeleaf{
             String errorMessageServicePackage = (String) request.getSession().getAttribute("errorMessageServicePackage");
             String errorMessageOptionalProduct = (String) request.getSession().getAttribute("errorMessageOptionalProduct");
 
-            if(errorMessageOptionalProduct != null){
+            if (errorMessageOptionalProduct != null) {
                 request.getSession().removeAttribute("errorMessageOptionalProduct");
             }
 
-            if(errorMessageServicePackage != null){
+            if (errorMessageServicePackage != null) {
                 request.getSession().removeAttribute("errorMessageServicePackage");
             }
 
@@ -60,7 +59,7 @@ public class GetEmployeeHome extends HttpServletThymeleaf{
             ctx.setVariable("errorMesSp", errorMessageServicePackage);
             ctx.setVariable("errorMesOp", errorMessageOptionalProduct);
             templateEngine.process("HomePage", ctx, response.getWriter());
-        }catch (PersistenceException e){
+        } catch (PersistenceException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }

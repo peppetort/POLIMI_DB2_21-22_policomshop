@@ -58,7 +58,7 @@ public class SetOrder extends HttpServletThymeleaf {
 
             if (optionalProductIdListParam != null) {
                 buyService.setOptionalProducts(Arrays.stream(optionalProductIdListParam).map(Integer::parseInt).collect(Collectors.toList()));
-            }else {
+            } else {
                 buyService.setOptionalProducts(new ArrayList<>());
             }
 

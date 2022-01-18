@@ -1,7 +1,7 @@
 package exception;
 
-public class OrderException extends Exception{
+public class OrderException extends Exception {
     public OrderException(String message) {
-        super(message == null ? "Order not found": message);
+        super(message == null ? "Order not found" : message);
     }
 }

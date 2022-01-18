@@ -42,10 +42,10 @@ public class Report extends HttpServletThymeleaf {
 
                 if (amountPurchases.containsKey(s.getServicePackage())) {
                     Pair<Double, Double> temp = amountPurchases.get(s.getServicePackage());
-                    Pair<Double, Double> newPair = new Pair(temp.getObject1() + s.getTotalMonthlyFee(), temp.getObject2() + s.getAmountForOptionalProds());
+                    Pair<Double, Double> newPair = new Pair<>(temp.getObject1() + s.getTotalMonthlyFee(), temp.getObject2() + s.getAmountForOptionalProds());
                     amountPurchases.put(s.getServicePackage(), newPair);
                 } else {
-                    Pair<Double, Double> newPair = new Pair(s.getTotalMonthlyFee(), s.getAmountForOptionalProds());
+                    Pair<Double, Double> newPair = new Pair<>(s.getTotalMonthlyFee(), s.getAmountForOptionalProds());
                     amountPurchases.put(s.getServicePackage(), newPair);
                 }
             }
@@ -90,7 +90,7 @@ public class Report extends HttpServletThymeleaf {
             ctx.setVariable("insolventCustomer", insolventCustomer);
             ctx.setVariable("auditCustomers", auditCustomers);
             templateEngine.process("ReportPage", ctx, response.getWriter());
-        }catch (PersistenceException e){
+        } catch (PersistenceException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
